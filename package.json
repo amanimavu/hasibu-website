@@ -1,9 +1,12 @@
 {
   "name": "hasibu-website",
   "version": "1.0.0",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "check": "astro check"
   },
   "keywords": [],
   "author": "",
@@ -16,8 +19,10 @@
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "astro": "^6.4.7",
+    "astro-icon": "^1.1.5",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "tailwindcss": "^4.3.1"
-  }
+  },
+  "type": "module"
 }
