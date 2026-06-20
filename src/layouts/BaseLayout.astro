@@ -1,54 +1,32 @@
 ---
 import "../styles/global.css";
 import SEO from "../components/SEO.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
 
 interface Props {
-  title: string;
-  description?: string;
+    title: string;
+    description?: string;
 }
 const { title, description } = Astro.props;
-
-const nav = [
-  { href: "/product", label: "Product" },
-  { href: "/solutions", label: "Solutions" },
-  { href: "/pricing", label: "Pricing" },
-  { href: "/resources/blog", label: "Resources" },
-  { href: "/company/about", label: "Company" },
-];
 ---
+
 <!doctype html>
 <html lang="en" class="scroll-smooth">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
-    <SEO title={title} description={description} />
-  </head>
-  <body class="min-h-screen bg-white font-sans text-slate-800 antialiased">
-    <header class="border-b border-slate-100">
-      <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-        <a href="/" class="text-xl font-bold text-brand-dark">HASIBU</a>
-        <nav class="hidden gap-6 md:flex">
-          {nav.map((n) => (
-            <a href={n.href} class="text-sm text-slate-600 hover:text-brand">{n.label}</a>
-          ))}
-        </nav>
-        <div class="flex items-center gap-3">
-          <a href="/get-started/signup" class="text-sm text-slate-600 hover:text-brand">Login</a>
-          <a href="/get-started/signup" class="rounded-lg bg-brand px-4 py-2 text-sm font-medium text-white hover:opacity-90">Get Started</a>
-        </div>
-      </div>
-    </header>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="generator" content={Astro.generator} />
+        <SEO title={title} description={description} />
+    </head>
+    <body class="min-h-screen bg-white font-sans text-slate-800 antialiased">
+        <Header />
 
-    <main>
-      <slot />
-    </main>
+        <main class="overflow-clip">
+            <slot />
+        </main>
 
-    <footer class="mt-24 border-t border-slate-100 bg-slate-50">
-      <div class="mx-auto max-w-6xl px-4 py-12 text-sm text-slate-500">
-        <p>&copy; {new Date().getFullYear()} Hasibu. All-in-one ERP &amp; POS built for Africa.</p>
-      </div>
-    </footer>
-  </body>
+        <Footer />
+    </body>
 </html>
