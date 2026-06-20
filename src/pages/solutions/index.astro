@@ -1,30 +1,86 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { Icon } from "astro-icon/components";
+import { industries, roles } from "../../data/solutions";
 
-const industries = [
-  "retail", "restaurant-cafe", "wholesale-distribution",
-  "manufacturing", "services", "supermarket", "pharmacy",
+const axes = [
+    { title: "By industry", subtitle: "Built for how your sector trades", list: industries },
+    { title: "By role", subtitle: "However you spend your day", list: roles },
 ];
-const roles = ["business-owner", "cashier", "accountant", "distributor"];
-
-const label = (s: string) => s.split("-").map((w) => w[0]!.toUpperCase() + w.slice(1)).join(" ");
 ---
-<BaseLayout title="Solutions — Hasibu" description="Hasibu by industry and by role.">
-  <section class="mx-auto max-w-6xl px-4 py-20">
-    <h1 class="text-4xl font-bold text-brand-dark">Solutions</h1>
 
-    <h2 class="mt-12 text-sm font-semibold uppercase tracking-wide text-brand">By industry</h2>
-    <div class="mt-4 grid gap-4 md:grid-cols-3">
-      {industries.map((s) => (
-        <a href={`/solutions/${s}`} class="rounded-xl border border-slate-100 p-5 hover:shadow-md">{label(s)}</a>
-      ))}
-    </div>
+<BaseLayout
+    title="Solutions — Hasibu"
+    description="Hasibu for your business. Solutions by industry (retail, restaurant, wholesale, manufacturing, services, supermarket, pharmacy) and by role (owner, cashier, accountant, distributor)."
+>
+    <!-- Hero -->
+    <section
+        class="bg-linear-to-b from-blue-50/70 via-white to-white pt-28 pb-12 lg:pt-36 lg:pb-16"
+    >
+        <div class="mx-auto max-w-3xl px-6 text-center">
+            <span
+                class="inline-flex items-center gap-2 rounded-full bg-blue-100/70 px-3 py-1.5 text-xs font-semibold text-brand"
+            >
+                <span class="size-1.5 rounded-full bg-brand"></span>
+                Solutions
+            </span>
+            <h1
+                class="mt-6 text-4xl font-bold leading-[1.1] tracking-tight text-brand-dark sm:text-5xl"
+            >
+                One platform,<br />
+                <span class="text-brand">shaped to your business.</span>
+            </h1>
+            <p class="mx-auto mt-6 max-w-xl text-lg text-slate-500">
+                The same Hasibu, framed for the way your sector trades and the
+                job you do every day.
+            </p>
+        </div>
+    </section>
 
-    <h2 class="mt-12 text-sm font-semibold uppercase tracking-wide text-brand">By role</h2>
-    <div class="mt-4 grid gap-4 md:grid-cols-3">
-      {roles.map((s) => (
-        <a href={`/solutions/${s}`} class="rounded-xl border border-slate-100 p-5 hover:shadow-md">{label(s)}</a>
-      ))}
-    </div>
-  </section>
+    <!-- Axes -->
+    <section class="bg-white pb-20 lg:pb-28">
+        <div class="mx-auto max-w-6xl space-y-16 px-6">
+            {
+                axes.map((axis) => (
+                    <div>
+                        <div class="flex items-baseline justify-between gap-4">
+                            <h2 class="text-2xl font-bold tracking-tight text-brand-dark">
+                                {axis.title}
+                            </h2>
+                            <span class="text-sm text-slate-400">
+                                {axis.subtitle}
+                            </span>
+                        </div>
+                        <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                            {axis.list.map((s) => (
+                                <a
+                                    href={`/solutions/${s.slug}`}
+                                    class="group flex items-start gap-4 rounded-2xl border border-slate-100 bg-white p-6 transition hover:border-blue-100 hover:shadow-lg hover:shadow-blue-500/5"
+                                >
+                                    <span class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-brand">
+                                        <Icon name={s.icon} class="size-6" />
+                                    </span>
+                                    <span>
+                                        <span class="block font-semibold text-brand-dark">
+                                            {s.name}
+                                        </span>
+                                        <span class="mt-1 block text-sm text-slate-500">
+                                            {s.tagline}
+                                        </span>
+                                        <span class="mt-2 inline-flex items-center gap-1 text-sm font-medium text-brand">
+                                            Explore
+                                            <Icon
+                                                name="material-symbols:arrow-forward-rounded"
+                                                class="size-4 transition-transform group-hover:translate-x-0.5"
+                                            />
+                                        </span>
+                                    </span>
+                                </a>
+                            ))}
+                        </div>
+                    </div>
+                ))
+            }
+        </div>
+    </section>
 </BaseLayout>

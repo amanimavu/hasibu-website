@@ -1,47 +1,169 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { directus, readItems } from "../../lib/directus";
-import type { Solution } from "../../lib/directus";
+import { Icon } from "astro-icon/components";
+import { allSolutions } from "../../data/solutions";
 
-type Seed = Pick<Solution, "slug" | "name" | "axis" | "summary">;
-
-// Dual-axis from the sitemap: by industry + by role. One template, one route.
-export async function getStaticPaths() {
-  const seed: Seed[] = [
-    { slug: "retail", name: "Retail", axis: "industry", summary: null },
-    { slug: "restaurant-cafe", name: "Restaurant & Café", axis: "industry", summary: null },
-    { slug: "wholesale-distribution", name: "Wholesale & Distribution", axis: "industry", summary: null },
-    { slug: "manufacturing", name: "Manufacturing", axis: "industry", summary: null },
-    { slug: "services", name: "Services", axis: "industry", summary: null },
-    { slug: "supermarket", name: "Supermarket", axis: "industry", summary: null },
-    { slug: "pharmacy", name: "Pharmacy", axis: "industry", summary: null },
-    { slug: "business-owner", name: "Business Owner", axis: "role", summary: null },
-    { slug: "cashier", name: "Cashier", axis: "role", summary: null },
-    { slug: "accountant", name: "Accountant", axis: "role", summary: null },
-    { slug: "distributor", name: "Distributor", axis: "role", summary: null },
-  ];
-
-  let solutions: Seed[] = seed;
-  try {
-    const data = await directus.request(
-      readItems("solutions", { filter: { status: { _eq: "published" } } })
-    );
-    if (data.length) solutions = data;
-  } catch {
-    console.warn("[solutions/[slug]] Directus unavailable, using seed list.");
-  }
-
-  return solutions.map((s) => ({ params: { slug: s.slug }, props: { solution: s } }));
+export function getStaticPaths() {
+    return allSolutions.map((s) => ({ params: { slug: s.slug }, props: { solution: s } }));
 }
 
 const { solution } = Astro.props;
+const axisLabel = solution.axis === "industry" ? "By industry" : "By role";
 ---
-<BaseLayout title={`${solution.name} — Hasibu Solutions`} description={solution.summary ?? undefined}>
-  <section class="mx-auto max-w-4xl px-4 py-20">
-    <a href="/solutions" class="text-sm text-brand">← All solutions</a>
-    <p class="mt-4 text-xs uppercase tracking-wide text-slate-400">By {solution.axis}</p>
-    <h1 class="mt-2 text-4xl font-bold text-brand-dark">Hasibu for {solution.name}</h1>
-    {solution.summary && <p class="mt-4 text-lg text-slate-600">{solution.summary}</p>}
-    <a href="/get-started/demo" class="mt-8 inline-block rounded-lg bg-brand px-6 py-3 font-medium text-white">Book a Demo</a>
-  </section>
+
+<BaseLayout
+    title={`Hasibu for ${solution.name}`}
+    description={solution.intro}
+>
+    <!-- Hero -->
+    <section
+        class="relative overflow-clip bg-linear-60 from-[#F8FAFC] from-0% via-[#FFFFFF] via-50% to-[#EFF6FF]/40 to-100% flex min-h-screen lg:flex-col lg:justify-center lg:pt-20"
+    >
+        <div
+            class="absolute aspect-square w-96 -right-20 -top-48 rounded-full bg-[#DBEAFE]/15 blur-xl"
+        >
+        </div>
+        <div
+            class="mx-auto grid w-full max-w-6xl items-center gap-12 px-6 pt-28 pb-16 lg:grid-cols-2 lg:gap-20 lg:py-12"
+        >
+            <!-- Copy -->
+            <div>
+                <span
+                    class="inline-flex items-center gap-2 rounded-full bg-blue-100/70 px-3 py-1.5 text-xs font-semibold text-brand"
+                >
+                    <Icon name={solution.icon} class="size-3.5" />
+                    Solutions · {axisLabel}
+                </span>
+
+                <h1
+                    class="mt-6 text-4xl font-bold leading-[1.05] tracking-tight text-brand-dark sm:text-5xl lg:text-6xl"
+                >
+                    Hasibu for<br />
+                    <span class="text-brand">{solution.name}.</span>
+                </h1>
+
+                <p class="mt-6 max-w-lg text-lg text-slate-500">
+                    {solution.intro}
+                </p>
+
+                <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+                    <a
+                        href="/get-started/signup"
+                        class="inline-flex items-center justify-center rounded-lg bg-brand px-6 py-3 font-medium text-white shadow-sm transition hover:opacity-90"
+                    >
+                        Start Free Trial
+                    </a>
+                    <a
+                        href="/get-started/demo"
+                        class="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-6 py-3 font-medium text-slate-700 transition hover:border-brand hover:text-brand"
+                    >
+                        <Icon
+                            name="material-symbols:play-circle-outline"
+                            class="size-5"
+                        />
+                        Book a Demo
+                    </a>
+                </div>
+            </div>
+
+            <!-- Placeholder screenshot -->
+            <div class="lg:justify-self-end">
+                <div
+                    class="w-full max-w-xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl"
+                >
+                    <div
+                        class="flex items-center gap-1.5 border-b border-slate-100 px-4 py-3"
+                    >
+                        <span class="size-3 rounded-full bg-red-400"></span>
+                        <span class="size-3 rounded-full bg-amber-400"></span>
+                        <span class="size-3 rounded-full bg-green-400"></span>
+                        <span class="ml-3 text-xs text-slate-400">
+                            app.hasibu.africa
+                        </span>
+                    </div>
+                    <img
+                        src="https://placehold.co/600x400"
+                        alt={`Hasibu for ${solution.name} screenshot placeholder`}
+                        width="600"
+                        height="400"
+                        loading="eager"
+                        class="aspect-[4/3] w-full object-cover"
+                    />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tailored points -->
+    <section class="bg-white py-20 lg:py-28">
+        <div class="mx-auto max-w-6xl px-6">
+            <div class="mx-auto max-w-2xl text-center">
+                <h2
+                    class="text-3xl font-bold tracking-tight text-brand-dark sm:text-4xl"
+                >
+                    What {solution.name} get from Hasibu.
+                </h2>
+                <p class="mt-4 text-slate-500">
+                    The modules that matter most, ready out of the box.
+                </p>
+            </div>
+
+            <div class="mt-14 grid gap-6 sm:grid-cols-2">
+                {
+                    solution.points.map((p) => (
+                        <a
+                            href={p.href}
+                            class="group flex flex-col rounded-2xl border border-slate-100 bg-white p-6 transition hover:border-blue-100 hover:shadow-lg hover:shadow-blue-500/5"
+                        >
+                            <div class="flex size-11 items-center justify-center rounded-xl bg-blue-50 text-brand">
+                                <Icon name={p.icon} class="size-6" />
+                            </div>
+                            <h3 class="mt-4 inline-flex items-center gap-1 text-lg font-semibold text-brand-dark">
+                                {p.title}
+                                <Icon
+                                    name="material-symbols:arrow-forward-rounded"
+                                    class="size-4 text-slate-300 transition-transform group-hover:translate-x-0.5 group-hover:text-brand"
+                                />
+                            </h3>
+                            <p class="mt-2 text-sm leading-relaxed text-slate-500">
+                                {p.desc}
+                            </p>
+                        </a>
+                    ))
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="bg-white pb-20 lg:pb-28">
+        <div class="mx-auto max-w-6xl px-6">
+            <div
+                class="flex flex-col gap-6 rounded-2xl bg-linear-to-r from-blue-50 to-blue-100/50 p-8 md:flex-row md:items-center md:justify-between lg:p-10"
+            >
+                <div>
+                    <h2 class="text-2xl font-bold text-brand-dark">
+                        See Hasibu for {solution.name.toLowerCase()}.
+                    </h2>
+                    <p class="mt-2 text-slate-500">
+                        Start free for 14 days. No credit card required.
+                    </p>
+                </div>
+                <div class="flex flex-col gap-3 sm:flex-row">
+                    <a
+                        href="/get-started/signup"
+                        class="inline-flex items-center justify-center rounded-lg bg-brand px-6 py-3 text-sm font-medium text-white shadow-sm transition hover:opacity-90"
+                    >
+                        Start Free Trial
+                    </a>
+                    <a
+                        href="/get-started/demo"
+                        class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-6 py-3 text-sm font-medium text-brand-dark transition hover:border-brand hover:text-brand"
+                    >
+                        Book a Demo
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
 </BaseLayout>
