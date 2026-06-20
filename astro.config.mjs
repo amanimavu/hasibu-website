@@ -12,6 +12,8 @@ export default defineConfig({
   output: "static",
   integrations: [react(), icon()],
   vite: {
-    plugins: [tailwindcss()],
+    // Cast: Astro 6 uses rolldown-vite, so @tailwindcss/vite's Plugin type
+    // (from a different vite install) doesn't structurally match. Runtime is fine.
+    plugins: [/** @type {any} */ (tailwindcss())],
   },
 });
