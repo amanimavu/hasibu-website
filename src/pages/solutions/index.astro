@@ -1,0 +1,30 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const industries = [
+  "retail", "restaurant-cafe", "wholesale-distribution",
+  "manufacturing", "services", "supermarket", "pharmacy",
+];
+const roles = ["business-owner", "cashier", "accountant", "distributor"];
+
+const label = (s: string) => s.split("-").map((w) => w[0]!.toUpperCase() + w.slice(1)).join(" ");
+---
+<BaseLayout title="Solutions — Hasibu" description="Hasibu by industry and by role.">
+  <section class="mx-auto max-w-6xl px-4 py-20">
+    <h1 class="text-4xl font-bold text-brand-dark">Solutions</h1>
+
+    <h2 class="mt-12 text-sm font-semibold uppercase tracking-wide text-brand">By industry</h2>
+    <div class="mt-4 grid gap-4 md:grid-cols-3">
+      {industries.map((s) => (
+        <a href={`/solutions/${s}`} class="rounded-xl border border-slate-100 p-5 hover:shadow-md">{label(s)}</a>
+      ))}
+    </div>
+
+    <h2 class="mt-12 text-sm font-semibold uppercase tracking-wide text-brand">By role</h2>
+    <div class="mt-4 grid gap-4 md:grid-cols-3">
+      {roles.map((s) => (
+        <a href={`/solutions/${s}`} class="rounded-xl border border-slate-100 p-5 hover:shadow-md">{label(s)}</a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

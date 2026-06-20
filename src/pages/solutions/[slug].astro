@@ -1,0 +1,47 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { directus, readItems } from "../../lib/directus";
+import type { Solution } from "../../lib/directus";
+
+type Seed = Pick<Solution, "slug" | "name" | "axis" | "summary">;
+
+// Dual-axis from the sitemap: by industry + by role. One template, one route.
+export async function getStaticPaths() {
+  const seed: Seed[] = [
+    { slug: "retail", name: "Retail", axis: "industry", summary: null },
+    { slug: "restaurant-cafe", name: "Restaurant & Café", axis: "industry", summary: null },
+    { slug: "wholesale-distribution", name: "Wholesale & Distribution", axis: "industry", summary: null },
+    { slug: "manufacturing", name: "Manufacturing", axis: "industry", summary: null },
+    { slug: "services", name: "Services", axis: "industry", summary: null },
+    { slug: "supermarket", name: "Supermarket", axis: "industry", summary: null },
+    { slug: "pharmacy", name: "Pharmacy", axis: "industry", summary: null },
+    { slug: "business-owner", name: "Business Owner", axis: "role", summary: null },
+    { slug: "cashier", name: "Cashier", axis: "role", summary: null },
+    { slug: "accountant", name: "Accountant", axis: "role", summary: null },
+    { slug: "distributor", name: "Distributor", axis: "role", summary: null },
+  ];
+
+  let solutions: Seed[] = seed;
+  try {
+    const data = await directus.request(
+      readItems("solutions", { filter: { status: { _eq: "published" } } })
+    );
+    if (data.length) solutions = data;
+  } catch {
+    console.warn("[solutions/[slug]] Directus unavailable, using seed list.");
+  }
+
+  return solutions.map((s) => ({ params: { slug: s.slug }, props: { solution: s } }));
+}
+
+const { solution } = Astro.props;
+---
+<BaseLayout title={`${solution.name} — Hasibu Solutions`} description={solution.summary ?? undefined}>
+  <section class="mx-auto max-w-4xl px-4 py-20">
+    <a href="/solutions" class="text-sm text-brand">← All solutions</a>
+    <p class="mt-4 text-xs uppercase tracking-wide text-slate-400">By {solution.axis}</p>
+    <h1 class="mt-2 text-4xl font-bold text-brand-dark">Hasibu for {solution.name}</h1>
+    {solution.summary && <p class="mt-4 text-lg text-slate-600">{solution.summary}</p>}
+    <a href="/get-started/demo" class="mt-8 inline-block rounded-lg bg-brand px-6 py-3 font-medium text-white">Book a Demo</a>
+  </section>
+</BaseLayout>

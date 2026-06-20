@@ -1,0 +1,27 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const modules = [
+  { slug: "pos", name: "Point of Sale" },
+  { slug: "inventory", name: "Inventory" },
+  { slug: "accounting", name: "Accounting" },
+  { slug: "trade", name: "Hasibu Trade" },
+  { slug: "reports", name: "Reports" },
+  { slug: "online-store", name: "Online Store" },
+  { slug: "supplier-portal", name: "Supplier Portal" },
+  { slug: "multi-location", name: "Multi-Location" },
+];
+---
+<BaseLayout title="Product — Hasibu" description="Explore the Hasibu platform modules.">
+  <section class="mx-auto max-w-6xl px-4 py-20">
+    <h1 class="text-4xl font-bold text-brand-dark">Product</h1>
+    <div class="mt-10 grid gap-6 md:grid-cols-3">
+      {modules.map((m) => (
+        <a href={`/product/${m.slug}`} class="rounded-xl border border-slate-100 p-6 hover:shadow-md">
+          <h2 class="font-semibold text-brand-dark">{m.name}</h2>
+          <p class="mt-2 text-sm text-brand">Explore module →</p>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

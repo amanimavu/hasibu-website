@@ -1,0 +1,45 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { directus, readItems } from "../../lib/directus";
+import type { ProductModule } from "../../lib/directus";
+
+type Seed = Pick<ProductModule, "slug" | "name" | "problem" | "outcome">;
+
+// SSG: one page per module. Content from Directus `product_modules`.
+// Falls back to a seed list so `npm run build` works before the CMS is populated.
+export async function getStaticPaths() {
+  const seed: Seed[] = [
+    { slug: "pos", name: "Point of Sale", problem: null, outcome: null },
+    { slug: "inventory", name: "Inventory", problem: null, outcome: null },
+    { slug: "accounting", name: "Accounting", problem: null, outcome: null },
+    { slug: "trade", name: "Hasibu Trade", problem: null, outcome: null },
+    { slug: "reports", name: "Reports", problem: null, outcome: null },
+    { slug: "online-store", name: "Online Store", problem: null, outcome: null },
+    { slug: "supplier-portal", name: "Supplier Portal", problem: null, outcome: null },
+    { slug: "multi-location", name: "Multi-Location", problem: null, outcome: null },
+  ];
+
+  let modules: Seed[] = seed;
+  try {
+    const data = await directus.request(
+      readItems("product_modules", { filter: { status: { _eq: "published" } } })
+    );
+    if (data.length) modules = data;
+  } catch {
+    console.warn("[product/[module]] Directus unavailable, using seed list.");
+  }
+
+  return modules.map((m) => ({ params: { module: m.slug }, props: { module: m } }));
+}
+
+const { module } = Astro.props;
+---
+<BaseLayout title={`${module.name} — Hasibu`} description={module.problem ?? undefined}>
+  <section class="mx-auto max-w-4xl px-4 py-20">
+    <a href="/product" class="text-sm text-brand">← All modules</a>
+    <h1 class="mt-4 text-4xl font-bold text-brand-dark">{module.name}</h1>
+    {module.problem && <p class="mt-4 text-lg text-slate-600">{module.problem}</p>}
+    {module.outcome && <p class="mt-4 text-slate-500">{module.outcome}</p>}
+    <a href="/get-started/demo" class="mt-8 inline-block rounded-lg bg-brand px-6 py-3 font-medium text-white">Book a Demo</a>
+  </section>
+</BaseLayout>
