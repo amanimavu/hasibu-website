@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
-/* Hasibu brand tokens. Tailwind v4 exposes these as utilities, e.g. bg-brand. */
+/* Hasibu brand tokens (from logo SVG). Tailwind v4 exposes these as utilities, e.g. bg-brand. */
 @theme {
-  --color-brand: #2563eb;
-  --color-brand-dark: #1e293b;
+  --color-brand: #0066ff;
+  --color-brand-dark: #2e313c;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 }
