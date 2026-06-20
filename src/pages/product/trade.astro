@@ -1,0 +1,210 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { Icon } from "astro-icon/components";
+
+// Trust chips under the hero copy.
+const chips = [
+    { label: "B2B network", icon: "hugeicons:distribution", color: "text-blue-600" },
+    { label: "Supplier catalogs", icon: "hugeicons:shopping-basket-01", color: "text-teal-600" },
+    { label: "Restock orders", icon: "hugeicons:shopping-cart-01", color: "text-amber-500" },
+    { label: "Into inventory", icon: "hugeicons:package", color: "text-green-600" },
+];
+
+// Content sourced from the real Hasibu Trade / Supplier Portal model. Copy avoids em dashes by preference.
+const features = [
+    {
+        title: "A connected B2B network",
+        icon: "hugeicons:distribution",
+        desc: "Hasibu Trade links manufacturers and distributors to the retailers who stock them, all inside one account.",
+    },
+    {
+        title: "Order from your suppliers",
+        icon: "hugeicons:shopping-cart-01",
+        desc: "Retailers browse supplier catalogs and place restock orders without ever leaving Hasibu.",
+    },
+    {
+        title: "Run distribution from the Supplier Portal",
+        icon: "hugeicons:user-group",
+        desc: "Suppliers manage their retailers, price lists and incoming orders from one place.",
+    },
+    {
+        title: "Orders into inventory",
+        icon: "hugeicons:package",
+        desc: "Accepted orders flow into stock, so a restock updates your on-hand automatically.",
+    },
+    {
+        title: "From maker to shelf",
+        icon: "hugeicons:factory",
+        desc: "Goods are tracked from the manufacturers and distributors who supply them down to the shop that sells them.",
+    },
+    {
+        title: "One account, both sides",
+        icon: "hugeicons:agreement-01",
+        desc: "Sell to retailers and buy from suppliers from the same Hasibu business.",
+    },
+];
+---
+
+<BaseLayout
+    title="Hasibu Trade Network — Hasibu"
+    description="The B2B trade network connecting African manufacturers and distributors to the retailers who stock them. Supplier catalogs, restock orders, and distribution management."
+>
+    <!-- Hero -->
+    <section
+        class="relative overflow-clip bg-linear-60 from-[#F8FAFC] from-0% via-[#FFFFFF] via-50% to-[#EFF6FF]/40 to-100% flex min-h-screen lg:flex-col lg:justify-center lg:pt-20"
+    >
+        <div
+            class="absolute aspect-square w-96 -right-20 -top-48 rounded-full bg-[#DBEAFE]/15 blur-xl"
+        >
+        </div>
+        <div
+            class="mx-auto grid w-full max-w-6xl items-center gap-12 px-6 pt-28 pb-16 lg:grid-cols-2 lg:gap-20 lg:py-12"
+        >
+            <!-- Copy -->
+            <div>
+                <span
+                    class="inline-flex items-center gap-2 rounded-full bg-blue-100/70 px-3 py-1.5 text-xs font-semibold text-brand"
+                >
+                    <span class="size-1.5 rounded-full bg-brand"></span>
+                    Hasibu Trade
+                </span>
+
+                <h1
+                    class="mt-6 text-4xl font-bold leading-[1.05] tracking-tight text-brand-dark sm:text-5xl lg:text-6xl"
+                >
+                    Where suppliers and<br />
+                    <span class="text-brand">retailers meet.</span>
+                </h1>
+
+                <p class="mt-6 max-w-lg text-lg text-slate-500">
+                    Hasibu Trade connects manufacturers, distributors and the
+                    shops that stock them, so restocking happens inside the same
+                    system you already run.
+                </p>
+
+                <div class="mt-6 flex flex-wrap gap-2.5">
+                    {
+                        chips.map((c) => (
+                            <span class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-600">
+                                <Icon name={c.icon} class={`size-4 ${c.color}`} />
+                                {c.label}
+                            </span>
+                        ))
+                    }
+                </div>
+
+                <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+                    <a
+                        href="/get-started/signup"
+                        class="inline-flex items-center justify-center rounded-lg bg-brand px-6 py-3 font-medium text-white shadow-sm transition hover:opacity-90"
+                    >
+                        Start Free Trial
+                    </a>
+                    <a
+                        href="/get-started/demo"
+                        class="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-6 py-3 font-medium text-slate-700 transition hover:border-brand hover:text-brand"
+                    >
+                        <Icon
+                            name="material-symbols:play-circle-outline"
+                            class="size-5"
+                        />
+                        Book a Demo
+                    </a>
+                </div>
+            </div>
+
+            <!-- Placeholder screenshot (swap for a real Hasibu Trade image later) -->
+            <div class="lg:justify-self-end">
+                <div
+                    class="w-full max-w-xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl"
+                >
+                    <div
+                        class="flex items-center gap-1.5 border-b border-slate-100 px-4 py-3"
+                    >
+                        <span class="size-3 rounded-full bg-red-400"></span>
+                        <span class="size-3 rounded-full bg-amber-400"></span>
+                        <span class="size-3 rounded-full bg-green-400"></span>
+                        <span class="ml-3 text-xs text-slate-400">
+                            app.hasibu.africa/trade
+                        </span>
+                    </div>
+                    <img
+                        src="https://placehold.co/600x400"
+                        alt="Hasibu Trade screenshot placeholder"
+                        width="600"
+                        height="400"
+                        loading="eager"
+                        class="aspect-[4/3] w-full object-cover"
+                    />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="bg-white py-20 lg:py-28">
+        <div class="mx-auto max-w-6xl px-6">
+            <div class="mx-auto max-w-2xl text-center">
+                <h2
+                    class="text-3xl font-bold tracking-tight text-brand-dark sm:text-4xl"
+                >
+                    Buy and sell in one place.
+                </h2>
+                <p class="mt-4 text-slate-500">
+                    Hasibu Trade connects the people who make and distribute
+                    goods to the shops that sell them, inside one account.
+                </p>
+            </div>
+
+            <div class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {
+                    features.map((f) => (
+                        <article class="flex flex-col rounded-2xl border border-slate-100 bg-white p-6 transition hover:border-blue-100 hover:shadow-lg hover:shadow-blue-500/5">
+                            <div class="flex size-11 items-center justify-center rounded-xl bg-blue-50 text-brand">
+                                <Icon name={f.icon} class="size-6" />
+                            </div>
+                            <h3 class="mt-4 text-lg font-semibold text-brand-dark">
+                                {f.title}
+                            </h3>
+                            <p class="mt-2 text-sm leading-relaxed text-slate-500">
+                                {f.desc}
+                            </p>
+                        </article>
+                    ))
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="bg-white pb-20 lg:pb-28">
+        <div class="mx-auto max-w-6xl px-6">
+            <div
+                class="flex flex-col gap-6 rounded-2xl bg-linear-to-r from-blue-50 to-blue-100/50 p-8 md:flex-row md:items-center md:justify-between lg:p-10"
+            >
+                <div>
+                    <h2 class="text-2xl font-bold text-brand-dark">
+                        Join the trade network.
+                    </h2>
+                    <p class="mt-2 text-slate-500">
+                        Start free for 14 days. No credit card required.
+                    </p>
+                </div>
+                <div class="flex flex-col gap-3 sm:flex-row">
+                    <a
+                        href="/get-started/signup"
+                        class="inline-flex items-center justify-center rounded-lg bg-brand px-6 py-3 text-sm font-medium text-white shadow-sm transition hover:opacity-90"
+                    >
+                        Start Free Trial
+                    </a>
+                    <a
+                        href="/get-started/demo"
+                        class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-6 py-3 text-sm font-medium text-brand-dark transition hover:border-brand hover:text-brand"
+                    >
+                        Book a Demo
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</BaseLayout>
