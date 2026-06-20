@@ -1,0 +1,62 @@
+---
+import { Icon } from "astro-icon/components";
+
+// `color` holds full literal classes so Tailwind generates them (no dynamic names).
+const methods = [
+    { label: "M-Pesa Daraja", icon: "material-symbols:smartphone", color: "bg-green-50 text-green-600" },
+    { label: "Airtel Money", icon: "material-symbols:call", color: "bg-red-50 text-red-500" },
+    { label: "MTN MoMo", icon: "material-symbols:signal-cellular-alt", color: "bg-amber-50 text-amber-500" },
+    { label: "Visa / Mastercard", icon: "material-symbols:credit-card", color: "bg-blue-50 text-blue-600" },
+    { label: "Bank Transfer", icon: "material-symbols:account-balance", color: "bg-orange-50 text-orange-500" },
+    { label: "Flutterwave", icon: "material-symbols:account-balance-wallet", color: "bg-purple-50 text-purple-600" },
+    { label: "Paystack", icon: "material-symbols:payments-outline", color: "bg-teal-50 text-teal-600" },
+];
+---
+
+<section class="bg-slate-50 py-20 lg:py-28">
+    <div class="mx-auto max-w-5xl px-6">
+        <!-- Heading -->
+        <div class="text-center">
+            <span
+                class="inline-block rounded-full bg-blue-50 px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-brand"
+            >
+                Payments &amp; Integrations
+            </span>
+            <h2
+                class="mt-4 text-2xl font-bold tracking-tight text-brand-dark sm:text-3xl"
+            >
+                Accepts every payment method Africans use.
+            </h2>
+        </div>
+
+        <!-- Method pills -->
+        <div class="mx-auto mt-12 flex max-w-4xl flex-wrap justify-center gap-4">
+            {
+                methods.map((m) => (
+                    <div class="flex items-center gap-2.5 rounded-xl border border-slate-200 bg-white px-4 py-3">
+                        <span
+                            class={`flex size-8 items-center justify-center rounded-lg ${m.color}`}
+                        >
+                            <Icon name={m.icon} class="size-5" />
+                        </span>
+                        <span class="text-sm font-medium text-slate-700">
+                            {m.label}
+                        </span>
+                    </div>
+                ))
+            }
+
+            <a
+                href="/integrations"
+                class="flex items-center gap-2.5 rounded-xl border border-slate-200 bg-white px-4 py-3 transition hover:border-brand"
+            >
+                <span
+                    class="flex size-8 items-center justify-center rounded-lg bg-slate-100 text-slate-400"
+                >
+                    <Icon name="material-symbols:add" class="size-5" />
+                </span>
+                <span class="text-sm font-medium text-slate-400">+18 more</span>
+            </a>
+        </div>
+    </div>
+</section>

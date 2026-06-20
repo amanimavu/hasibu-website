@@ -1,0 +1,110 @@
+---
+import { Icon } from "astro-icon/components";
+
+// Avatars not provided yet → fall back to a person icon.
+// When photos arrive, add `avatar` (imported image) to a testimonial and the
+// template will render it instead of the icon.
+const testimonials = [
+    {
+        rating: 5,
+        quote: "We went from managing stock on paper to real-time inventory across 3 branches. Hasibu's POS integrates directly with M-Pesa — it's been a game changer for our daily reconciliation.",
+        name: "Amina Wanjiru",
+        meta: "CEO, Tujuane Supermart · Nairobi, Kenya",
+    },
+    {
+        rating: 5,
+        featured: true,
+        quote: "Our accountant used to spend 3 days on monthly reports. With Hasibu's accounting module, it's done in an hour — including VAT returns and payroll. The compliance piece alone justifies the cost.",
+        name: "Emeka Obi",
+        meta: "MD, Lagos Fresh Co. · Lagos, Nigeria",
+    },
+    {
+        rating: 4.5,
+        quote: "We're a distribution company with agents in 6 cities. Hasibu's multi-currency and sales CRM modules help us track everything in GHS and USD simultaneously. Scaling has never been this smooth.",
+        name: "Ama Kofi-Ababio",
+        meta: "Founder, Accra Distributors · Ghana",
+    },
+];
+
+const starIcon = (rating: number, i: number) => {
+    if (i + 1 <= Math.floor(rating)) return "material-symbols:star";
+    if (i < rating) return "material-symbols:star-half";
+    return "material-symbols:star-outline";
+};
+---
+
+<section class="bg-white py-20 lg:py-28">
+    <div class="mx-auto max-w-6xl px-6">
+        <!-- Heading -->
+        <div class="mx-auto max-w-2xl text-center">
+            <span
+                class="inline-block rounded-full bg-blue-50 px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-brand"
+            >
+                Customer Stories
+            </span>
+            <h2
+                class="mt-4 text-3xl font-bold tracking-tight text-brand-dark sm:text-4xl"
+            >
+                Businesses like yours<br class="hidden sm:block" /> already run on
+                Hasibu.
+            </h2>
+        </div>
+
+        <!-- Cards -->
+        <div class="mt-14 grid items-start gap-6 lg:grid-cols-3">
+            {
+                testimonials.map((t) => (
+                    <figure
+                        class={`flex flex-col rounded-2xl p-6 ${
+                            t.featured
+                                ? "bg-brand-dark text-white shadow-xl lg:-my-4 lg:py-10"
+                                : "border border-slate-200 bg-white"
+                        }`}
+                    >
+                        <div class="flex gap-0.5 text-amber-400">
+                            {Array.from({ length: 5 }).map((_, i) => (
+                                <Icon
+                                    name={starIcon(t.rating, i)}
+                                    class="size-4"
+                                />
+                            ))}
+                        </div>
+
+                        <blockquote
+                            class={`mt-4 text-sm leading-relaxed ${t.featured ? "text-slate-200" : "text-slate-600"}`}
+                        >
+                            "{t.quote}"
+                        </blockquote>
+
+                        <figcaption class="mt-6 flex items-center gap-3">
+                            <span
+                                class={`flex size-10 items-center justify-center rounded-full ${t.featured ? "bg-white/10 text-white/70" : "bg-slate-100 text-slate-400"}`}
+                            >
+                                <Icon
+                                    name="material-symbols:person-outline"
+                                    class="size-6"
+                                />
+                            </span>
+                            <span class="text-sm">
+                                <span
+                                    class={`block font-semibold ${t.featured ? "text-white" : "text-brand-dark"}`}
+                                >
+                                    {t.name}
+                                </span>
+                                <span
+                                    class={
+                                        t.featured
+                                            ? "text-slate-400"
+                                            : "text-slate-400"
+                                    }
+                                >
+                                    {t.meta}
+                                </span>
+                            </span>
+                        </figcaption>
+                    </figure>
+                ))
+            }
+        </div>
+    </div>
+</section>

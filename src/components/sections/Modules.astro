@@ -1,0 +1,130 @@
+---
+import { Icon } from "astro-icon/components";
+
+// Marketing module cards (home overview). Swap for Directus `product_modules` later.
+// `href` points to a product route where one exists, else the product hub.
+const modules = [
+    {
+        name: "Inventory",
+        icon: "material-symbols:inventory-2-outline",
+        desc: "Real-time stock tracking across multiple warehouses. Auto-reorder alerts and batch/expiry management.",
+        href: "/product/inventory",
+    },
+    {
+        name: "Point of Sale",
+        icon: "material-symbols:point-of-sale",
+        desc: "Blazing-fast POS for retail and hospitality. Supports cash, card, M-Pesa, Airtel Money and MTN MoMo.",
+        href: "/product/pos",
+    },
+    {
+        name: "Accounting",
+        icon: "material-symbols:account-balance-outline",
+        desc: "Double-entry bookkeeping, VAT/tax compliance, automated financial reports and bank reconciliation.",
+        href: "/product/accounting",
+    },
+    {
+        name: "Sales & CRM",
+        icon: "material-symbols:trending-up-rounded",
+        desc: "Pipeline management, customer profiles, invoicing, and sales-team performance tracking in real time.",
+        href: "/product",
+    },
+    {
+        name: "Multi-Currency",
+        icon: "material-symbols:currency-exchange",
+        desc: "KES, NGN, GHS, UGX, TZS, ZAR and more. Live exchange rates, FX hedging reports, and local compliance.",
+        href: "/product",
+        highlight: true,
+        currencies: ["KES", "NGN", "GHS", "ZAR", "+25 more"],
+    },
+    {
+        name: "HR & Payroll",
+        icon: "material-symbols:badge-outline",
+        desc: "Employee records, attendance tracking, payroll with local tax rules (PAYE, NHIF, NSSF), and leave management.",
+        href: "/product",
+    },
+];
+---
+
+<section class="bg-white py-20 lg:py-28">
+    <div class="mx-auto max-w-6xl px-6">
+        <div class="mx-auto max-w-2xl text-center">
+            <span
+                class="inline-block rounded-full bg-blue-50 px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-brand"
+            >
+                Platform Modules
+            </span>
+            <h2
+                class="mt-3 text-3xl font-bold tracking-tight text-brand-dark sm:text-4xl"
+            >
+                Everything your business needs,<br class="hidden sm:block" /> in one
+                place.
+            </h2>
+            <p class="mt-4 text-slate-500">
+                Six core modules designed for the African SME. No complexity, no
+                bloat — just tools that work.
+            </p>
+        </div>
+
+        <div
+            class="mt-14 grid gap-px overflow-hidden bg-slate-200 sm:grid-cols-2 lg:grid-cols-3"
+        >
+            {
+                modules.map((m) =>
+                    m.highlight ? (
+                        <article class="flex flex-col bg-brand p-6 text-white lg:p-8">
+                            <div class="flex size-11 items-center justify-center rounded-xl bg-white/15">
+                                <Icon name={m.icon} class="size-6" />
+                            </div>
+                            <h3 class="mt-4 text-lg font-semibold">{m.name}</h3>
+                            <p class="mt-2 text-sm leading-relaxed text-blue-50/90">
+                                {m.desc}
+                            </p>
+                            <div class="mt-4 flex flex-wrap gap-2">
+                                {m.currencies?.map((c) => (
+                                    <span class="rounded-md bg-white/15 px-2 py-1 text-xs font-medium">
+                                        {c}
+                                    </span>
+                                ))}
+                            </div>
+                        </article>
+                    ) : (
+                        <article class="group flex flex-col bg-white p-6 transition hover:bg-slate-50/70 lg:p-8">
+                            <div class="flex size-11 items-center justify-center rounded-xl bg-blue-50 text-brand">
+                                <Icon name={m.icon} class="size-6" />
+                            </div>
+                            <h3 class="mt-4 text-lg font-semibold text-brand-dark">
+                                {m.name}
+                            </h3>
+                            <p class="mt-2 text-sm leading-relaxed text-slate-500">
+                                {m.desc}
+                            </p>
+                            <a
+                                href={m.href}
+                                class="mt-4 inline-flex items-center gap-1 text-sm font-medium text-brand"
+                            >
+                                Explore module
+                                <Icon
+                                    name="material-symbols:arrow-forward-rounded"
+                                    class="size-4 transition-transform group-hover:translate-x-0.5"
+                                />
+                            </a>
+                        </article>
+                    ),
+                )
+            }
+        </div>
+
+        <div class="mt-12 text-center">
+            <a
+                href="/product"
+                class="group inline-flex items-center gap-2 rounded-lg border border-slate-200 px-6 py-3 text-sm font-medium text-brand-dark transition hover:border-brand hover:text-brand bg-white"
+            >
+                View all modules and integrations
+                <Icon
+                    name="material-symbols:arrow-forward-rounded"
+                    class="size-4 transition-transform group-hover:translate-x-1.5"
+                />
+            </a>
+        </div>
+    </div>
+</section>

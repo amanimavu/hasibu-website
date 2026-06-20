@@ -1,0 +1,258 @@
+---
+import { Icon } from "astro-icon/components";
+
+// Annual prices ≈ 20% off monthly. Swap for Directus `pricing_tiers` + per-country currency later.
+const tiers = [
+    {
+        name: "Starter",
+        blurb: "For micro and solo-run businesses just getting started.",
+        monthly: { price: "$19", billed: "Billed monthly · ~KES 2,470/mo" },
+        annual: { price: "$15", billed: "Billed annually · ~KES 1,980/mo" },
+        cta: {
+            label: "Start Free Trial",
+            href: "/get-started/signup",
+            style: "outline",
+        },
+        features: [
+            { label: "1 location", included: true },
+            { label: "POS & Inventory (basic)", included: true },
+            { label: "Up to 3 users", included: true },
+            { label: "Mobile money integrations", included: true },
+            { label: "Accounting module", included: false },
+            { label: "Multi-currency", included: false },
+            { label: "HR & Payroll", included: false },
+        ],
+    },
+    {
+        name: "Growth",
+        popular: true,
+        blurb: "For growing SMEs with multiple staff and locations.",
+        monthly: { price: "$49", billed: "Billed monthly · ~KES 6,370/mo" },
+        annual: { price: "$39", billed: "Billed annually · ~KES 5,070/mo" },
+        cta: {
+            label: "Start Free Trial",
+            href: "/get-started/signup",
+            style: "solid",
+        },
+        features: [
+            "Up to 5 locations",
+            "Full POS & Inventory",
+            "Up to 20 users",
+            "Accounting & invoicing",
+            "Multi-currency support",
+            "Sales CRM",
+            "HR & Payroll",
+        ].map((label) => ({ label, included: true })),
+    },
+    {
+        name: "Enterprise",
+        blurb: "For distributors, chains, and enterprise SMEs.",
+        monthly: { price: "$129", billed: "Billed monthly · ~KES 16,770/mo" },
+        annual: { price: "$103", billed: "Billed annually · ~KES 13,390/mo" },
+        cta: {
+            label: "Contact Sales",
+            href: "/get-started/contact-sales",
+            style: "dark",
+        },
+        features: [
+            "Unlimited locations",
+            "All modules included",
+            "Unlimited users",
+            "HR, Payroll & compliance",
+            "Custom API integrations",
+            "Dedicated account manager",
+            "SLA & priority support",
+        ].map((label) => ({ label, included: true })),
+    },
+];
+
+const ctaClass: Record<string, string> = {
+    outline: "border border-brand text-brand hover:bg-brand hover:text-white",
+    solid: "bg-brand text-white shadow-sm hover:opacity-90",
+    dark: "border border-slate-300 text-brand-dark hover:border-brand hover:text-brand",
+};
+---
+
+<section class="bg-slate-50 py-20 lg:py-28">
+    <div class="mx-auto max-w-6xl px-6">
+        <!-- Heading -->
+        <div class="mx-auto max-w-2xl text-center">
+            <span
+                class="inline-block rounded-full bg-blue-50 px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-brand"
+            >
+                Pricing
+            </span>
+            <h2
+                class="mt-3 text-3xl font-bold tracking-tight text-brand-dark sm:text-4xl"
+            >
+                Simple, transparent pricing<br class="hidden sm:block" /> for every
+                stage.
+            </h2>
+            <p class="mt-4 text-slate-500">
+                No hidden fees. Pay in your local currency. Cancel anytime.
+            </p>
+        </div>
+
+        <!-- Billing toggle -->
+        <div class="mt-8 flex items-center justify-center gap-3">
+            <span
+                id="lbl-monthly"
+                class="text-sm font-medium text-brand-dark transition-colors"
+            >
+                Monthly
+            </span>
+            <button
+                id="billing-toggle"
+                type="button"
+                role="switch"
+                aria-checked="false"
+                aria-label="Toggle annual billing"
+                class="relative h-6 w-11 rounded-full bg-brand transition-colors"
+            >
+                <span
+                    id="billing-knob"
+                    class="absolute left-0.5 top-0.5 size-5 rounded-full bg-white shadow transition-transform"
+                ></span>
+            </button>
+            <span
+                id="lbl-annual"
+                class="text-sm font-medium text-slate-400 transition-colors"
+            >
+                Annual
+            </span>
+            <span
+                class="rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700"
+            >
+                Save 20%
+            </span>
+        </div>
+
+        <!-- Cards -->
+        <div class="mt-12 grid items-start gap-6 lg:grid-cols-3">
+            {
+                tiers.map((t) => (
+                    <article
+                        class={`relative flex flex-col rounded-2xl bg-white p-8 ${
+                            t.popular
+                                ? "border-2 border-brand shadow-xl shadow-blue-500/10 lg:-my-4 lg:py-12"
+                                : "border border-slate-200"
+                        }`}
+                    >
+                        {t.popular && (
+                            <span class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-brand px-3 py-1 text-xs font-medium text-white">
+                                Most Popular
+                            </span>
+                        )}
+
+                        <h3 class="text-lg font-semibold text-brand-dark">
+                            {t.name}
+                        </h3>
+                        <p class="mt-2 text-sm text-slate-500">{t.blurb}</p>
+
+                        <p class="mt-6">
+                            <span
+                                class="text-4xl font-bold text-brand-dark"
+                                data-price
+                                data-monthly={t.monthly.price}
+                                data-annual={t.annual.price}
+                            >
+                                {t.monthly.price}
+                            </span>
+                            <span class="text-sm font-normal text-slate-400">
+                                {" "}
+                                /month
+                            </span>
+                        </p>
+                        <p
+                            class="mt-1 text-xs text-slate-400"
+                            data-billed
+                            data-monthly={t.monthly.billed}
+                            data-annual={t.annual.billed}
+                        >
+                            {t.monthly.billed}
+                        </p>
+
+                        <a
+                            href={t.cta.href}
+                            class={`mt-6 inline-flex items-center justify-center gap-1.5 rounded-lg px-4 py-2.5 text-sm font-medium transition ${ctaClass[t.cta.style]}`}
+                        >
+                            {t.cta.label}
+                            {t.cta.style === "solid" && (
+                                <Icon
+                                    name="material-symbols:arrow-forward-rounded"
+                                    class="size-4"
+                                />
+                            )}
+                        </a>
+
+                        <ul class="mt-8 space-y-3 border-t border-slate-100 pt-6">
+                            {t.features.map((f) => (
+                                <li class="flex items-center gap-2 text-sm">
+                                    <Icon
+                                        name="material-symbols:check-rounded"
+                                        class={`size-4 shrink-0 ${f.included ? "text-brand" : "text-slate-300"}`}
+                                    />
+                                    <span
+                                        class={
+                                            f.included
+                                                ? "text-slate-600"
+                                                : "text-slate-300"
+                                        }
+                                    >
+                                        {f.label}
+                                    </span>
+                                </li>
+                            ))}
+                        </ul>
+                    </article>
+                ))
+            }
+        </div>
+
+        <!-- Currency note -->
+        <p class="mt-10 text-center text-xs text-slate-400">
+            All prices shown in USD. View pricing in{" "}
+            {
+                ["KES", "TZS", "RWF", "ZAR"].map((c, i) => (
+                    <>
+                        {i > 0 && <span> · </span>}
+                        <a
+                            href="#"
+                            class="font-medium text-brand hover:underline"
+                        >
+                            {c}
+                        </a>
+                    </>
+                ))
+            }
+        </p>
+    </div>
+</section>
+
+<script>
+    const toggle = document.getElementById("billing-toggle");
+    const knob = document.getElementById("billing-knob");
+    const lblMonthly = document.getElementById("lbl-monthly");
+    const lblAnnual = document.getElementById("lbl-annual");
+
+    const setMode = (annual: boolean) => {
+        toggle?.setAttribute("aria-checked", String(annual));
+        knob?.classList.toggle("translate-x-5", annual);
+        lblMonthly?.classList.toggle("text-brand-dark", !annual);
+        lblMonthly?.classList.toggle("text-slate-400", annual);
+        lblAnnual?.classList.toggle("text-brand-dark", annual);
+        lblAnnual?.classList.toggle("text-slate-400", !annual);
+
+        const key = annual ? "annual" : "monthly";
+        document
+            .querySelectorAll<HTMLElement>("[data-price], [data-billed]")
+            .forEach((el) => {
+                const val = el.dataset[key];
+                if (val) el.textContent = val;
+            });
+    };
+
+    toggle?.addEventListener("click", () => {
+        setMode(toggle.getAttribute("aria-checked") !== "true");
+    });
+</script>

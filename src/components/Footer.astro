@@ -1,0 +1,177 @@
+---
+import { Icon } from "astro-icon/components";
+import { Image } from "astro:assets";
+import logoLight from "../assets/images/brand/hasibu-brand-light.svg";
+
+const product = [
+    { label: "Inventory", href: "/product/inventory" },
+    { label: "Point of Sale", href: "/product/pos" },
+    { label: "Accounting", href: "/product/accounting" },
+    { label: "Sales & CRM", href: "/product" },
+    { label: "HR & Payroll", href: "/product" },
+    { label: "Multi-Currency", href: "/product" },
+    { label: "Payments & Integrations", href: "/integrations" },
+];
+
+const company = [
+    { label: "About Us", href: "/company/about" },
+    { label: "Careers", href: "/company/careers" },
+    { label: "Press", href: "/company/press" },
+    { label: "Partners", href: "/company/partners" },
+    { label: "Contact Us", href: "/company/contact" },
+    { label: "Security & Trust", href: "/trust/security" },
+];
+
+const legal = [
+    { label: "Privacy Policy", href: "/trust/privacy" },
+    { label: "Terms of Service", href: "/trust/terms" },
+    { label: "Data Protection", href: "/trust/data-protection" },
+    { label: "Sitemap", href: "/sitemap.xml" },
+];
+
+const languages = ["EN", "FR", "SW", "RW"];
+const countries = ["🇰🇪 Kenya", "🇷🇼 Rwanda", "🇨🇩 DR Congo"];
+
+const socials = [
+    { label: "TikTok", icon: "hugeicons:tiktok", href: "#" },
+    { label: "Instagram", icon: "hugeicons:instagram", href: "#" },
+    { label: "Facebook", icon: "hugeicons:facebook-01", href: "#" },
+    { label: "LinkedIn", icon: "hugeicons:linkedin-01", href: "#" },
+];
+
+const year = new Date().getFullYear();
+---
+
+<footer class="bg-brand-dark text-slate-400">
+    <div class="mx-auto max-w-6xl px-6 py-16">
+        <div
+            class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1.2fr]"
+        >
+            <!-- Brand -->
+            <div>
+                <Image src={logoLight} alt="Hasibu" width="150" />
+                <p class="mt-5 max-w-xs text-sm leading-relaxed">
+                    The all-in-one ERP and POS platform built for Africa's
+                    growing businesses. Local-first, globally ready.
+                </p>
+                <div class="mt-6 flex gap-3">
+                    {
+                        socials.map((s) => (
+                            <a
+                                href={s.href}
+                                aria-label={s.label}
+                                class="flex size-9 items-center justify-center rounded-lg bg-white/5 text-slate-300 transition hover:bg-white/10 hover:text-white"
+                            >
+                                <Icon name={s.icon} class="size-5" />
+                            </a>
+                        ))
+                    }
+                </div>
+            </div>
+
+            <!-- Product -->
+            <div>
+                <h3 class="text-sm font-semibold text-white">Product</h3>
+                <ul class="mt-4 space-y-3">
+                    {
+                        product.map((l) => (
+                            <li>
+                                <a
+                                    href={l.href}
+                                    class="text-sm transition hover:text-white"
+                                >
+                                    {l.label}
+                                </a>
+                            </li>
+                        ))
+                    }
+                </ul>
+            </div>
+
+            <!-- Company -->
+            <div>
+                <h3 class="text-sm font-semibold text-white">Company</h3>
+                <ul class="mt-4 space-y-3">
+                    {
+                        company.map((l) => (
+                            <li>
+                                <a
+                                    href={l.href}
+                                    class="text-sm transition hover:text-white"
+                                >
+                                    {l.label}
+                                </a>
+                            </li>
+                        ))
+                    }
+                </ul>
+            </div>
+
+            <!-- Global / Local -->
+            <div>
+                <h3 class="text-sm font-semibold text-white">Global / Local</h3>
+
+                <p class="mt-4 text-xs font-medium uppercase tracking-wide text-slate-500">
+                    Language
+                </p>
+                <div class="mt-2 grid grid-cols-2 gap-2">
+                    {
+                        languages.map((lang, i) => (
+                            <button
+                                type="button"
+                                class={`rounded-md px-4 py-1.5 text-sm font-medium transition ${
+                                    i === 0
+                                        ? "bg-brand text-white"
+                                        : "bg-white/5 text-slate-300 hover:bg-white/10"
+                                }`}
+                            >
+                                {lang}
+                            </button>
+                        ))
+                    }
+                </div>
+
+                <p class="mt-5 text-xs font-medium uppercase tracking-wide text-slate-500">
+                    Country
+                </p>
+                <div class="relative mt-2">
+                    <select
+                        aria-label="Select country"
+                        class="w-full appearance-none rounded-md bg-white/5 px-3 py-2 text-sm text-slate-200 outline-none transition hover:bg-white/10"
+                    >
+                        {countries.map((c) => <option class="bg-brand-dark">{c}</option>)}
+                    </select>
+                    <Icon
+                        name="material-symbols:keyboard-arrow-down"
+                        class="pointer-events-none absolute right-2 top-1/2 size-5 -translate-y-1/2 text-slate-400"
+                    />
+                </div>
+
+                <div class="mt-6 space-y-3">
+                    <a href="/resources/help" class="block text-sm transition hover:text-white">
+                        Help Center
+                    </a>
+                    <a href="/developers/status" class="block text-sm transition hover:text-white">
+                        System Status
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom bar -->
+        <div
+            class="mt-12 flex flex-col gap-4 border-t border-white/10 pt-8 text-xs text-slate-500 md:flex-row md:items-center md:justify-between"
+        >
+            <p>&copy; {year} Hasibu Inc. All rights reserved. Built for Africa.</p>
+            <div class="flex flex-wrap gap-x-6 gap-y-2">
+                {
+                    legal.map((l) => (
+                        <a href={l.href} class="transition hover:text-white">
+                            {l.label}
+                        </a>
+                    ))
+                }
+            </div>
+        </div>
+    </div>
+</footer>

@@ -1,0 +1,49 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/sections/Hero.astro";
+import Modules from "../components/sections/Modules.astro";
+import Pricing from "../components/sections/Pricing.astro";
+import CustomerStories from "../components/sections/CustomerStories.astro";
+import CTABanner from "../components/sections/CTABanner.astro";
+import Payments from "../components/sections/Payments.astro";
+
+const stats = [
+    { value: "2,400+", label: "Active SMEs" },
+    { value: "30+", label: "African Countries" },
+    { value: "$240M+", label: "Transactions Processed" },
+    { value: "99.9%", label: "Uptime SLA" },
+];
+---
+
+<BaseLayout
+    title="Hasibu — Built for the way Africa actually runs"
+    description="One platform for inventory, POS, accounting, HR, and sales — with local currencies, mobile money, and compliance built for 30+ African markets."
+>
+    <Hero />
+
+    <Modules />
+
+    <!-- Stats -->
+    <section class="bg-brand-dark py-16 text-white">
+        <div
+            class="mx-auto grid max-w-6xl grid-cols-2 gap-8 px-4 md:grid-cols-4"
+        >
+            {
+                stats.map((s) => (
+                    <div class="text-center">
+                        <p class="text-4xl font-bold">{s.value}</p>
+                        <p class="mt-1 text-sm text-slate-400">{s.label}</p>
+                    </div>
+                ))
+            }
+        </div>
+    </section>
+
+    <Pricing />
+
+    <CustomerStories />
+
+    <CTABanner />
+
+    <Payments />
+</BaseLayout>
