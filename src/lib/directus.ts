@@ -83,26 +83,44 @@ export interface Testimonial {
     country: string | null;
 }
 
-export interface PricingTier {
-    id: string;
-    name: string;
-    sort: number;
-    features: string[] | null;
+export interface PricingFeature {
+    label: string;
+    included: boolean;
 }
 
-const url = import.meta.env.DIRECTUS_URL;
+export interface PricingTier {
+    id: string;
+    status: "published" | "draft" | "archived";
+    sort: number;
+    name: string;
+    blurb: string | null;
+    price_monthly: string; // e.g. "$49"
+    price_annual: string; // e.g. "$39"
+    billed_monthly: string; // e.g. "Billed monthly"
+    billed_annual: string; // e.g. "Billed annually"
+    popular: boolean;
+    cta_label: string;
+    cta_href: string;
+    cta_style: "outline" | "solid" | "dark";
+    features: PricingFeature[] | null;
+}
+
+const url = import.meta.env.DIRECTUS_URL ?? "";
 const token = import.meta.env.DIRECTUS_TOKEN;
 
 if (!url) {
-    throw new Error(
-        "DIRECTUS_URL is not set. Copy .env.example to .env and fill it in.",
+    // Don't hard-throw: SSG pages catch read failures and fall back to seed data,
+    // so the site still builds before the CMS is wired up.
+    console.warn(
+        "[directus] DIRECTUS_URL is not set; CMS reads will fail and pages will use fallback data.",
     );
 }
 
 /** Typed Directus client. Used at build time for SSG. */
+const base = url || "http://localhost:8055";
 export const directus = token
-    ? createDirectus<Schema>(url).with(staticToken(token)).with(rest())
-    : createDirectus<Schema>(url).with(rest());
+    ? createDirectus<Schema>(base).with(staticToken(token)).with(rest())
+    : createDirectus<Schema>(base).with(rest());
 
 export { readItems, readItem, readSingleton };
 

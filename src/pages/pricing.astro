@@ -1,0 +1,167 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PricingSection from "../components/sections/Pricing.astro";
+import { Icon } from "astro-icon/components";
+
+const faqs = [
+    {
+        icon: "material-symbols:rocket-launch-outline",
+        q: "Is there a free trial?",
+        a: "Yes. Every plan starts with a 14-day free trial and no credit card required. You only pay once the trial ends and you choose to continue.",
+    },
+    {
+        icon: "material-symbols:swap-horiz-rounded",
+        q: "Can I change plans later?",
+        a: "Yes. Upgrade or downgrade whenever your business changes, and your billing adjusts from the next cycle.",
+    },
+    {
+        icon: "material-symbols:payments-outline",
+        q: "Which payment methods can I pay with?",
+        a: "Pay with M-Pesa, Airtel Money, MTN MoMo or card, the same rails your own customers use.",
+    },
+    {
+        icon: "material-symbols:currency-exchange",
+        q: "Do I pay in my local currency?",
+        a: "Yes. Pricing is shown and charged in your local currency for the market you operate in.",
+    },
+    {
+        icon: "material-symbols:event-busy-outline",
+        q: "What happens if I cancel?",
+        a: "You can cancel anytime. Your business stays active until the end of the period you have already paid for.",
+    },
+    {
+        icon: "material-symbols:upload-file-outline",
+        q: "Can I bring my existing data?",
+        a: "Yes. You can bulk-import your products and customers, so you are up and running without re-keying everything.",
+    },
+];
+
+// Show this many before the "Load more" button appears.
+const FAQ_LIMIT = 4;
+const hasMoreFaqs = faqs.length > FAQ_LIMIT;
+---
+
+<BaseLayout
+    title="Pricing — Hasibu"
+    description="Simple, transparent Hasibu pricing. Start with a 14-day free trial, pay in your local currency, and cancel anytime."
+>
+    <PricingSection />
+
+    <!-- FAQ -->
+    <section class="bg-white py-20 lg:py-28">
+        <div class="mx-auto max-w-6xl px-6">
+            <!-- Header -->
+            <div class="mx-auto max-w-2xl text-center">
+                <h2
+                    class="text-3xl font-bold tracking-tight text-brand-dark sm:text-4xl"
+                >
+                    Frequently Asked Questions
+                </h2>
+                <p class="mt-3 text-slate-500">
+                    Quick answers to common questions. Can't find what you need? <a
+                        href="/company/contact"
+                        class="font-medium text-brand hover:underline"
+                        >Talk to our team</a
+                    >.
+                </p>
+            </div>
+
+            <!-- Grid with faint gridlines via the gap-px technique -->
+            <div
+                id="faq-grid"
+                class="mt-9 grid gap-px overflow-hidden bg-linear-to-b from-slate-200 to-transparent sm:grid-cols-2"
+            >
+                {
+                    faqs.map((f, i) => (
+                        <div
+                            data-extra={i >= FAQ_LIMIT ? "true" : undefined}
+                            class:list={[
+                                "overflow-hidden bg-white transition-all duration-300 ease-out sm:px-8",
+                                i >= FAQ_LIMIT
+                                    ? "max-h-0 py-0 opacity-0"
+                                    : "py-7",
+                            ]}
+                        >
+                            <h3 class="font-semibold text-brand-dark">{f.q}</h3>
+                            <p class="mt-1.5 text-sm leading-relaxed text-slate-500">
+                                {f.a}
+                            </p>
+                        </div>
+                    ))
+                }
+            </div>
+
+            {
+                hasMoreFaqs && (
+                    <div class="mt-12 text-center">
+                        <button
+                            id="faq-load-more"
+                            type="button"
+                            data-expanded="false"
+                            class="inline-flex items-center gap-1.5 text-sm font-medium text-brand transition hover:text-brand-dark"
+                        >
+                            <span data-label>Load more</span>
+                            <Icon
+                                name="material-symbols:keyboard-arrow-down"
+                                class="size-4"
+                            />
+                        </button>
+                    </div>
+                )
+            }
+        </div>
+    </section>
+
+    <script>
+        const btn = document.getElementById("faq-load-more");
+        btn?.addEventListener("click", () => {
+            const expanded = btn.getAttribute("data-expanded") === "true";
+            const next = !expanded;
+            btn.setAttribute("data-expanded", String(next));
+            const extras = document.querySelectorAll<HTMLElement>(
+                "#faq-grid [data-extra]",
+            );
+            const collapsed = ["max-h-0", "py-0", "opacity-0"];
+            const open = ["max-h-96", "py-7", "opacity-100"];
+            extras.forEach((el) => {
+                el.classList.remove(...(next ? collapsed : open));
+                el.classList.add(...(next ? open : collapsed));
+            });
+            const label = btn.querySelector("[data-label]");
+            if (label) label.textContent = next ? "Show less" : "Load more";
+            btn.querySelector("svg")?.classList.toggle("rotate-180", next);
+        });
+    </script>
+
+    <!-- CTA -->
+    <section class="bg-white pb-20 lg:pb-28">
+        <div class="mx-auto max-w-6xl px-6">
+            <div
+                class="flex flex-col gap-6 rounded-2xl bg-linear-to-r from-blue-50 to-blue-100/50 p-8 md:flex-row md:items-center md:justify-between lg:p-10"
+            >
+                <div>
+                    <h2 class="text-2xl font-bold text-brand-dark">
+                        Try Hasibu free for 14 days.
+                    </h2>
+                    <p class="mt-2 text-slate-500">
+                        No credit card required. Cancel anytime.
+                    </p>
+                </div>
+                <div class="flex flex-col gap-3 sm:flex-row">
+                    <a
+                        href="https://app.hasibu.africa/signup"
+                        class="inline-flex items-center justify-center rounded-lg bg-brand px-6 py-3 text-sm font-medium text-white shadow-sm transition hover:opacity-90"
+                    >
+                        Start Free Trial
+                    </a>
+                    <a
+                        href="/get-started/demo"
+                        class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-6 py-3 text-sm font-medium text-brand-dark transition hover:border-brand hover:text-brand"
+                    >
+                        Book a Demo
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</BaseLayout>
