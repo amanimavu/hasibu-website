@@ -1,0 +1,177 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { Icon } from "astro-icon/components";
+import { Image } from "astro:assets";
+import aboutHero from "../../assets/images/desktop/african-american-business-person-walks-through-modern-factory-small.jpg";
+import africaArt from "../../assets/images/africa-line-art.svg";
+
+const values = [
+    {
+        icon: "hugeicons:globe-02",
+        title: "Built for Africa",
+        desc: "We design for how African businesses actually trade, starting in Kenya, Rwanda and DR Congo, not by porting tools built for somewhere else.",
+    },
+    {
+        icon: "hugeicons:smart-phone-01",
+        title: "Mobile money native",
+        desc: "M-Pesa, Airtel Money and MTN MoMo are first-class, because that is how your customers already pay.",
+    },
+    {
+        icon: "hugeicons:dashboard-square-02",
+        title: "One platform",
+        desc: "POS, inventory, accounting and more share one system, so your numbers stay in step without spreadsheets in between.",
+    },
+    {
+        icon: "hugeicons:store-01",
+        title: "Made for SMEs",
+        desc: "From a single shop to a chain of branches, the platform grows with you instead of forcing you onto something heavier.",
+    },
+];
+
+// Marketing figures (from the design, not yet confirmed against live data).
+const stats = [
+    { value: "2,400+", label: "Active SMEs" },
+    { value: "3", label: "Markets live (KE, RW, CD)" },
+    { value: "$240M+", label: "Transactions processed" },
+    { value: "99.9%", label: "Uptime SLA" },
+];
+---
+
+<BaseLayout
+    title="About — Hasibu"
+    description="Hasibu builds the all-in-one ERP and POS platform for African SMEs, with mobile money, multi-currency and local compliance at the core."
+>
+    <!-- Hero -->
+    <section
+        class="bg-linear-60 from-[#F8FAFC] from-0% via-[#FFFFFF] via-50% to-[#EFF6FF]/40 to-100% relative overflow-clip pt-28 pb-20 lg:pt-36 lg:pb-28"
+    >
+        <div
+            class="absolute aspect-square w-96 -left-20 -top-45 rounded-full bg-[#DBEAFE]/10 blur-xl"
+        >
+        </div>
+
+        <div
+            class="mx-auto grid max-w-6xl items-center gap-12 px-6 lg:grid-cols-2 lg:gap-16"
+        >
+            <!-- Copy -->
+            <div>
+                <h1
+                    class="text-4xl font-bold leading-[1.1] tracking-tight text-brand-dark sm:text-5xl"
+                >
+                    The opposite approach to business software.
+                </h1>
+                <div class="mt-6 space-y-5 leading-relaxed text-slate-500">
+                    <p>
+                        Most business software in Africa was built somewhere
+                        else and translated later. Payments that ignore mobile
+                        money, tax rules from another country, and prices in a
+                        currency you do not earn in. Teams end up stitching
+                        tools together and rekeying numbers between them.
+                    </p>
+                    <p>
+                        Hasibu takes the opposite approach. One platform runs
+                        the counter, the stockroom and the books, with M-Pesa,
+                        Airtel and MTN at the till, multi-currency where you
+                        need it, and KRA eTIMS fiscalization handled as you
+                        trade.
+                    </p>
+                </div>
+                <blockquote
+                    class="mt-6 border-l-4 border-brand pl-4 font-medium text-brand-dark italic"
+                >
+                    It is the system we wished African SMEs already had.
+                </blockquote>
+            </div>
+
+            <!-- Image with floating card -->
+            <div class="relative lg:justify-self-end">
+                <Image
+                    src={aboutHero}
+                    alt="A business professional reviewing operations on a tablet in a modern facility"
+                    class="aspect-4/5 w-full max-w-md rounded-2xl object-cover shadow-xl"
+                    loading="eager"
+                />
+            </div>
+        </div>
+    </section>
+
+    <!-- Values -->
+    <section class="bg-white pt-12 pb-20 lg:pt-20 lg:pb-28">
+        <div class="mx-auto max-w-6xl px-6">
+            <div class="mx-auto max-w-2xl text-center">
+                <h2
+                    class="text-3xl font-bold tracking-tight text-brand-dark sm:text-4xl"
+                >
+                    What we build around
+                </h2>
+            </div>
+            <div class="mt-14 grid gap-6 lg:grid-cols-3 lg:grid-rows-2">
+                <!-- Feature card with faint brand-blue Africa line-art -->
+                <article
+                    class="relative flex flex-col overflow-hidden rounded-2xl bg-blue-50 p-8 lg:row-span-2"
+                >
+                    <div
+                        class="pointer-events-none absolute -right-16 -bottom-12 size-80 bg-brand opacity-20"
+                        style={`mask:url(${africaArt.src}) center/contain no-repeat;-webkit-mask:url(${africaArt.src}) center/contain no-repeat;`}
+                    >
+                    </div>
+                    <div class="relative z-10 flex h-full flex-col">
+                        <h3 class="text-2xl font-bold text-brand">
+                            {values[0].title}
+                        </h3>
+                        <p class="mt-3 max-w-xs leading-relaxed text-slate-600">
+                            {values[0].desc}
+                        </p>
+                    </div>
+                </article>
+
+                <!-- Remaining cards (last spans wide, with a full-height icon) -->
+                {
+                    values.slice(1).map((v, i) =>
+                        i === values.length - 2 ? (
+                            <article class="flex items-center gap-6 rounded-2xl border border-slate-100 bg-white p-6 lg:col-span-2">
+                                <div class="flex aspect-square w-28 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-brand">
+                                    <Icon name={v.icon} class="size-14" />
+                                </div>
+                                <div class="flex flex-col justify-center">
+                                    <h3 class="text-lg font-semibold text-brand-dark">
+                                        {v.title}
+                                    </h3>
+                                    <p class="mt-2 text-sm leading-relaxed text-slate-500">
+                                        {v.desc}
+                                    </p>
+                                </div>
+                            </article>
+                        ) : (
+                            <article class="flex flex-col rounded-2xl border border-slate-100 bg-white p-6">
+                                <div class="flex size-11 items-center justify-center rounded-xl bg-blue-50 text-brand">
+                                    <Icon name={v.icon} class="size-6" />
+                                </div>
+                                <h3 class="mt-4 text-lg font-semibold text-brand-dark">
+                                    {v.title}
+                                </h3>
+                                <p class="mt-2 text-sm leading-relaxed text-slate-500">
+                                    {v.desc}
+                                </p>
+                            </article>
+                        ),
+                    )
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <!-- <section class="bg-brand-dark py-16 text-white">
+        <div class="mx-auto grid max-w-6xl grid-cols-2 gap-8 px-6 md:grid-cols-4">
+            {
+                stats.map((s) => (
+                    <div class="text-center">
+                        <p class="text-4xl font-bold">{s.value}</p>
+                        <p class="mt-1 text-sm text-slate-400">{s.label}</p>
+                    </div>
+                ))
+            }
+        </div>
+    </section> -->
+</BaseLayout>
