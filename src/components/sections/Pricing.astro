@@ -1,18 +1,32 @@
 ---
 import { Icon } from "astro-icon/components";
+import { directus, readItems } from "../../lib/directus";
+import type { PricingTier } from "../../lib/directus";
 
-// Annual prices ≈ 20% off monthly. Swap for Directus `pricing_tiers` + per-country currency later.
-const tiers = [
+interface Feature {
+    label: string;
+    included: boolean;
+}
+interface Row {
+    name: string;
+    blurb: string;
+    monthly: { price: string; billed: string };
+    annual: { price: string; billed: string };
+    popular: boolean;
+    cta: { label: string; href: string; style: "outline" | "solid" | "dark" };
+    features: Feature[];
+}
+
+// Fallback seed (sample numbers). Real plans come from Directus `pricing_tiers`.
+// Owners haven't finalized plans yet and there may be up to 5.
+const seed: Row[] = [
     {
         name: "Starter",
         blurb: "For micro and solo-run businesses just getting started.",
-        monthly: { price: "$19", billed: "Billed monthly · ~KES 2,470/mo" },
-        annual: { price: "$15", billed: "Billed annually · ~KES 1,980/mo" },
-        cta: {
-            label: "Start Free Trial",
-            href: "/get-started/signup",
-            style: "outline",
-        },
+        monthly: { price: "$19", billed: "Billed monthly" },
+        annual: { price: "$15", billed: "Billed annually" },
+        popular: false,
+        cta: { label: "Start Free Trial", href: "/get-started/signup", style: "outline" },
         features: [
             { label: "1 location", included: true },
             { label: "POS & Inventory (basic)", included: true },
@@ -25,15 +39,11 @@ const tiers = [
     },
     {
         name: "Growth",
-        popular: true,
         blurb: "For growing SMEs with multiple staff and locations.",
-        monthly: { price: "$49", billed: "Billed monthly · ~KES 6,370/mo" },
-        annual: { price: "$39", billed: "Billed annually · ~KES 5,070/mo" },
-        cta: {
-            label: "Start Free Trial",
-            href: "/get-started/signup",
-            style: "solid",
-        },
+        monthly: { price: "$49", billed: "Billed monthly" },
+        annual: { price: "$39", billed: "Billed annually" },
+        popular: true,
+        cta: { label: "Start Free Trial", href: "/get-started/signup", style: "solid" },
         features: [
             "Up to 5 locations",
             "Full POS & Inventory",
@@ -47,13 +57,10 @@ const tiers = [
     {
         name: "Enterprise",
         blurb: "For distributors, chains, and enterprise SMEs.",
-        monthly: { price: "$129", billed: "Billed monthly · ~KES 16,770/mo" },
-        annual: { price: "$103", billed: "Billed annually · ~KES 13,390/mo" },
-        cta: {
-            label: "Contact Sales",
-            href: "/get-started/contact-sales",
-            style: "dark",
-        },
+        monthly: { price: "$129", billed: "Billed monthly" },
+        annual: { price: "$103", billed: "Billed annually" },
+        popular: false,
+        cta: { label: "Contact Sales", href: "/get-started/contact-sales", style: "dark" },
         features: [
             "Unlimited locations",
             "All modules included",
@@ -65,6 +72,46 @@ const tiers = [
         ].map((label) => ({ label, included: true })),
     },
 ];
+
+// Build-time fetch from Directus, falling back to the seed.
+let rows: Row[] = seed;
+let usingSeed = true;
+try {
+    const data = (await directus.request(
+        readItems("pricing_tiers", {
+            filter: { status: { _eq: "published" } },
+            sort: ["sort"],
+        }),
+    )) as PricingTier[];
+    if (data.length) {
+        rows = data.map((t) => ({
+            name: t.name,
+            blurb: t.blurb ?? "",
+            monthly: { price: t.price_monthly, billed: t.billed_monthly },
+            annual: { price: t.price_annual, billed: t.billed_annual },
+            popular: t.popular,
+            cta: { label: t.cta_label, href: t.cta_href, style: t.cta_style },
+            features: t.features ?? [],
+        }));
+        usingSeed = false;
+    }
+} catch {
+    console.warn("[Pricing] Directus unavailable, using seed pricing.");
+}
+
+// Up to 5 plans: show 3 by default, reveal the rest. The window is centered on the
+// popular plan when there is one, otherwise on the median, so popular is never hidden.
+const n = rows.length;
+const popularIdx = rows.findIndex((r) => r.popular);
+let start = 0;
+if (n > 3) {
+    start =
+        popularIdx >= 0
+            ? Math.min(Math.max(popularIdx - 1, 0), n - 3)
+            : Math.floor((n - 3) / 2);
+}
+const view = rows.map((r, i) => ({ ...r, primary: i >= start && i < start + 3 }));
+const hasExtra = n > 3;
 
 const ctaClass: Record<string, string> = {
     outline: "border border-brand text-brand hover:bg-brand hover:text-white",
@@ -127,16 +174,22 @@ const ctaClass: Record<string, string> = {
             </span>
         </div>
 
-        <!-- Cards -->
-        <div class="mt-12 grid items-start gap-6 lg:grid-cols-3">
+        <!-- Cards: flex-wrap centers any count from 1 to 5 -->
+        <div
+            id="pricing-cards"
+            class="mt-12 flex flex-wrap items-start justify-center gap-6"
+        >
             {
-                tiers.map((t) => (
+                view.map((t) => (
                     <article
-                        class={`relative flex flex-col rounded-2xl bg-white p-8 ${
+                        data-extra={t.primary ? undefined : "true"}
+                        class:list={[
+                            "relative flex w-full flex-col rounded-2xl bg-white p-8 sm:w-80",
                             t.popular
                                 ? "border-2 border-brand shadow-xl shadow-blue-500/10 lg:-my-4 lg:py-12"
-                                : "border border-slate-200"
-                        }`}
+                                : "border border-slate-200",
+                            !t.primary && "hidden",
+                        ]}
                     >
                         {t.popular && (
                             <span class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-brand px-3 py-1 text-xs font-medium text-white">
@@ -192,13 +245,7 @@ const ctaClass: Record<string, string> = {
                                         name="material-symbols:check-rounded"
                                         class={`size-4 shrink-0 ${f.included ? "text-brand" : "text-slate-300"}`}
                                     />
-                                    <span
-                                        class={
-                                            f.included
-                                                ? "text-slate-600"
-                                                : "text-slate-300"
-                                        }
-                                    >
+                                    <span class={f.included ? "text-slate-600" : "text-slate-300"}>
                                         {f.label}
                                     </span>
                                 </li>
@@ -209,27 +256,38 @@ const ctaClass: Record<string, string> = {
             }
         </div>
 
-        <!-- Currency note -->
-        <p class="mt-10 text-center text-xs text-slate-400">
-            All prices shown in USD. View pricing in{" "}
-            {
-                ["KES", "TZS", "RWF", "ZAR"].map((c, i) => (
-                    <>
-                        {i > 0 && <span> · </span>}
-                        <a
-                            href="#"
-                            class="font-medium text-brand hover:underline"
-                        >
-                            {c}
-                        </a>
-                    </>
-                ))
-            }
-        </p>
+        {
+            hasExtra && (
+                <div class="mt-10 text-center">
+                    <button
+                        id="see-all-plans"
+                        type="button"
+                        class="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-5 py-2.5 text-sm font-medium text-brand-dark transition hover:border-brand hover:text-brand"
+                        data-expanded="false"
+                        data-count={n}
+                    >
+                        <span data-label>See all {n} plans</span>
+                        <Icon
+                            name="material-symbols:keyboard-arrow-down"
+                            class="size-4"
+                        />
+                    </button>
+                </div>
+            )
+        }
+
+        {
+            usingSeed && (
+                <p class="mt-8 text-center text-xs text-slate-400">
+                    Sample pricing. Final plans are managed in the CMS.
+                </p>
+            )
+        }
     </div>
 </section>
 
 <script>
+    // Billing monthly / annual toggle
     const toggle = document.getElementById("billing-toggle");
     const knob = document.getElementById("billing-knob");
     const lblMonthly = document.getElementById("lbl-monthly");
@@ -242,7 +300,6 @@ const ctaClass: Record<string, string> = {
         lblMonthly?.classList.toggle("text-slate-400", annual);
         lblAnnual?.classList.toggle("text-brand-dark", annual);
         lblAnnual?.classList.toggle("text-slate-400", !annual);
-
         const key = annual ? "annual" : "monthly";
         document
             .querySelectorAll<HTMLElement>("[data-price], [data-billed]")
@@ -251,8 +308,22 @@ const ctaClass: Record<string, string> = {
                 if (val) el.textContent = val;
             });
     };
+    toggle?.addEventListener("click", () =>
+        setMode(toggle.getAttribute("aria-checked") !== "true"),
+    );
 
-    toggle?.addEventListener("click", () => {
-        setMode(toggle.getAttribute("aria-checked") !== "true");
+    // See all plans
+    const seeAll = document.getElementById("see-all-plans");
+    seeAll?.addEventListener("click", () => {
+        const expanded = seeAll.getAttribute("data-expanded") === "true";
+        const next = !expanded;
+        seeAll.setAttribute("data-expanded", String(next));
+        document
+            .querySelectorAll<HTMLElement>("#pricing-cards [data-extra]")
+            .forEach((el) => el.classList.toggle("hidden", !next));
+        const label = seeAll.querySelector("[data-label]");
+        const count = seeAll.getAttribute("data-count");
+        if (label) label.textContent = next ? "Show fewer" : `See all ${count} plans`;
+        seeAll.querySelector("svg")?.classList.toggle("rotate-180", next);
     });
 </script>
