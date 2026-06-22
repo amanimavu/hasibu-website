@@ -6,3 +6,12 @@
   --color-brand-dark: #2e313c;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 }
+
+/* Component-level vars (not Tailwind tokens) live outside @theme. */
+:root {
+  /* Mask for the hero text panel: fades top, bottom and right to transparent,
+     solid on the left. Two gradients intersected (both must be opaque). */
+  --hero-mask:
+    linear-gradient(to bottom, transparent 0, black 15% 85%, transparent 100%),
+    linear-gradient(to right, black 0 50%, transparent 100%);
+}
