@@ -1,7 +1,8 @@
 ---
 import { Image } from "astro:assets";
 import { Icon } from "astro-icon/components";
-import dashboard from "../../assets/images/desktop/right_dashboard_mockup.png";
+import dashboardDesktop from "../../assets/images/desktop/screenshots/hasibu-dashboard.png";
+import dashboardMobile from "../../assets/images/mobile/screenshots/hasibu-dashboard.png";
 import brushStroke from "../../assets/images/brush_stroke.svg";
 ---
 
@@ -16,11 +17,49 @@ import brushStroke from "../../assets/images/brush_stroke.svg";
         class="absolute aspect-square w-48 -left-10 top-[85%] rounded-full bg-[#DBEAFE]/20 blur-xl"
     >
     </div>
-    <div
-        class="relative z-10 mx-auto grid max-w-6xl items-center gap-12 px-6 pt-24 pb-20 lg:grid-cols-2 lg:pt-28 lg:pb-3 border-b border-b-neutral-200"
-    >
-        <!-- Left: copy -->
-        <div>
+
+    <div class="pt-20">
+        <!-- Real dashboard screenshot: below the copy on mobile, offset left on desktop -->
+        <div class="relative z-9 mt-8 max-w-5xl px-6 lg:absolute lg:top-30">
+            <!-- Desktop: framed in a browser chrome -->
+            <div
+                class="mr-10 hidden overflow-hidden rounded-2xl border border-slate-200 shadow-2xl sm:block"
+            >
+                <div
+                    class="flex items-center gap-1.5 border-b border-slate-100 bg-white px-4 py-3"
+                >
+                    <span class="size-3 rounded-full bg-red-400"></span>
+                    <span class="size-3 rounded-full bg-amber-400"></span>
+                    <span class="size-3 rounded-full bg-green-400"></span>
+                    <span class="ml-3 text-xs text-slate-400">
+                        business.hasibu.africa
+                    </span>
+                </div>
+                <Image
+                    src={dashboardDesktop}
+                    alt="Hasibu dashboard showing revenue, orders, low stock alerts and recent mobile-money transactions"
+                    class="w-full"
+                    loading="eager"
+                />
+            </div>
+
+            <!-- Mobile -->
+            <Image
+                src={dashboardMobile}
+                alt="Hasibu dashboard on mobile"
+                class="mx-auto w-full max-w-75 rounded-2xl border border-slate-200 shadow-xl sm:hidden"
+                loading="eager"
+            />
+        </div>
+
+        <!-- Copy (right, faded glass panel like the product heroes) -->
+        <div class="relative z-10 ml-auto max-w-3xl px-6 p-15">
+            <!-- Faded white panel behind the text (top/bottom/left dissolve) -->
+            <div
+                class="pointer-events-none absolute inset-0 -z-10 bg-linear-to-r from-white from-0% to-transparent to-100% backdrop-blur-lg mask-(--hero-mask) mask-intersect [-webkit-mask-image:var(--hero-mask)] [-webkit-mask-composite:source-in]"
+            >
+            </div>
+
             <span
                 class="inline-flex items-center gap-1.5 rounded-full bg-blue-100/70 px-3 py-1 text-xs font-semibold tracking-wide text-brand"
             >
@@ -46,7 +85,7 @@ import brushStroke from "../../assets/images/brush_stroke.svg";
             <p class="mt-6 max-w-lg text-lg text-slate-500">
                 One platform for inventory, POS, accounting, HR, and sales —
                 with local currencies, mobile money, and compliance built for
-                30+ African markets.
+                Kenya, Rwanda and DR Congo.
             </p>
 
             <div class="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -70,7 +109,7 @@ import brushStroke from "../../assets/images/brush_stroke.svg";
 
             <!-- Social proof -->
             <div
-                class="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-slate-500"
+                class="mt-6 pb-2 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-slate-500"
             >
                 <span class="flex items-center gap-1.5">
                     <span class="flex text-amber-400">
@@ -91,18 +130,9 @@ import brushStroke from "../../assets/images/brush_stroke.svg";
                 </span>
             </div>
         </div>
-
-        <!-- Right: dashboard mockup (Live sync + "30 countries" card are baked into the image) -->
-        <div class="justify-self-center lg:justify-self-end">
-            <Image
-                src={dashboard}
-                alt="Hasibu dashboard showing revenue, orders, low stock alerts and recent mobile-money transactions"
-                class="mx-auto w-full max-w-md lg:max-w-xl"
-                loading="eager"
-            />
-        </div>
     </div>
-    <div
+
+    <!-- <div
         class="flex gap-5 flex-col text-center pb-6 lg:border-none border-b border-b-neutral-200"
     >
         <h5 class="uppercase text-sm font-semibold text-neutral-400 mt-4">
@@ -140,5 +170,5 @@ import brushStroke from "../../assets/images/brush_stroke.svg";
                 <span class="font-medium text-lg">Tujuane Mart</span>
             </div>
         </div>
-    </div>
+    </div> -->
 </section>
