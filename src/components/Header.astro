@@ -1,7 +1,7 @@
 ---
 import { Icon } from "astro-icon/components";
 import { Image } from "astro:assets";
-import brandLogo from "../assets/images/brand/official-banner.svg";
+import brandLogo from "../assets/images/brand/hasibu-brand-black.svg";
 
 // Simple nav links (Product has its own mega menu, handled separately).
 const nav = [
@@ -51,14 +51,21 @@ const mega = [
                 icon: "hugeicons:hand-bag-01",
             },
             {
-                label: "Reports & Analytics",
-                href: "/product/reports",
-                icon: "hugeicons:analytics-01",
-            },
-            {
                 label: "Payroll",
                 href: "/product/payroll",
                 icon: "hugeicons:wallet-01",
+            },
+        ],
+    },
+    {
+        title: "Insights",
+        color: "text-sky-600",
+        icon: "hugeicons:analytics-01",
+        items: [
+            {
+                label: "Reports & Analytics",
+                href: "/product/reports",
+                icon: "hugeicons:analytics-01",
             },
         ],
     },
@@ -86,7 +93,7 @@ const mega = [
         items: [
             {
                 label: "Integrations",
-                href: "/integrations",
+                href: "/product/integrations",
                 icon: "hugeicons:plug-01",
             },
         ],
@@ -166,7 +173,7 @@ const mega = [
         class="invisible absolute left-0 top-full hidden w-full opacity-0 transition-opacity duration-200 lg:block"
     >
         <div class="border-t border-slate-100 bg-white shadow-xl">
-            <div class="mx-auto grid max-w-6xl grid-cols-4 gap-8 px-6 py-8">
+            <div class="mx-auto grid max-w-6xl grid-cols-5 gap-8 px-6 py-8">
                 {
                     mega.map((col) => (
                         <div>

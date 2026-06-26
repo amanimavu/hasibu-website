@@ -1,6 +1,9 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { Icon } from "astro-icon/components";
+import ProductHero from "../../components/ProductHero.astro";
+import reportsDesktop from "../../assets/images/desktop/screenshots/hasibu-reports-module.png";
+import reportsMobile from "../../assets/images/mobile/screenshots/hasibu-report-module.png";
 
 // Trust chips under the hero copy.
 const chips = [
@@ -49,97 +52,24 @@ const features = [
     title="Reports & Analytics — Hasibu"
     description="Reporting for African SMEs. Live dashboards, filterable reports, branded PDF and spreadsheet exports, financial statements, and per-location or consolidated views."
 >
-    <!-- Hero -->
-    <section
-        class="relative overflow-clip bg-linear-60 from-[#F8FAFC] from-0% via-[#FFFFFF] via-50% to-[#EFF6FF]/40 to-100% flex min-h-screen lg:flex-col lg:justify-center lg:pt-20"
+    <ProductHero
+        badge="Reports & Analytics"
+        chips={chips}
+        desktopImg={reportsDesktop}
+        mobileImg={reportsMobile}
+        imgAlt="Hasibu reports module: dashboards, exports and statements"
+        toolbarUrl="business.hasibu.africa/reports"
     >
-        <div
-            class="absolute aspect-square w-96 -right-20 -top-48 rounded-full bg-[#DBEAFE]/15 blur-xl"
-        >
-        </div>
-        <div
-            class="mx-auto grid w-full max-w-6xl items-center gap-12 px-6 pt-28 pb-16 lg:grid-cols-2 lg:gap-20 lg:py-12"
-        >
-            <!-- Copy -->
-            <div>
-                <span
-                    class="inline-flex items-center gap-2 rounded-full bg-blue-100/70 px-3 py-1.5 text-xs font-semibold text-brand"
-                >
-                    <span class="size-1.5 rounded-full bg-brand"></span>
-                    Reports & Analytics
-                </span>
-
-                <h1
-                    class="mt-6 text-4xl font-bold leading-[1.05] tracking-tight text-brand-dark sm:text-5xl lg:text-6xl"
-                >
-                    Numbers you<br />
-                    <span class="text-brand">can act on.</span>
-                </h1>
-
-                <p class="mt-6 max-w-lg text-lg text-slate-500">
-                    See sales, stock and finance across every branch in one
-                    place, filter to the answer you need, and export it as a
-                    branded report in a click.
-                </p>
-
-                <div class="mt-6 flex flex-wrap gap-2.5">
-                    {
-                        chips.map((c) => (
-                            <span class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-600">
-                                <Icon name={c.icon} class={`size-4 ${c.color}`} />
-                                {c.label}
-                            </span>
-                        ))
-                    }
-                </div>
-
-                <div class="mt-8 flex flex-col gap-3 sm:flex-row">
-                    <a
-                        href="https://app.hasibu.africa/signup"
-                        class="inline-flex items-center justify-center rounded-lg bg-brand px-6 py-3 font-medium text-white shadow-sm transition hover:opacity-90"
-                    >
-                        Start Free Trial
-                    </a>
-                    <a
-                        href="/get-started/demo"
-                        class="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-6 py-3 font-medium text-slate-700 transition hover:border-brand hover:text-brand"
-                    >
-                        <Icon
-                            name="material-symbols:play-circle-outline"
-                            class="size-5"
-                        />
-                        Book a Demo
-                    </a>
-                </div>
-            </div>
-
-            <!-- Placeholder screenshot (swap for a real Hasibu reports image later) -->
-            <div class="lg:justify-self-end">
-                <div
-                    class="w-full max-w-xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl"
-                >
-                    <div
-                        class="flex items-center gap-1.5 border-b border-slate-100 px-4 py-3"
-                    >
-                        <span class="size-3 rounded-full bg-red-400"></span>
-                        <span class="size-3 rounded-full bg-amber-400"></span>
-                        <span class="size-3 rounded-full bg-green-400"></span>
-                        <span class="ml-3 text-xs text-slate-400">
-                            app.hasibu.africa/reports
-                        </span>
-                    </div>
-                    <img
-                        src="https://placehold.co/600x400"
-                        alt="Hasibu reports screenshot placeholder"
-                        width="600"
-                        height="400"
-                        loading="eager"
-                        class="aspect-[4/3] w-full object-cover"
-                    />
-                </div>
-            </div>
-        </div>
-    </section>
+        <Fragment slot="title">
+            Numbers you<br />
+            <span class="text-brand">can act on.</span>
+        </Fragment>
+        <Fragment slot="blurb">
+            See sales, stock and finance across every branch in one place,
+            filter to the answer you need, and export it as a branded report
+            in a click.
+        </Fragment>
+    </ProductHero>
 
     <!-- Features -->
     <section class="bg-white py-20 lg:py-28">

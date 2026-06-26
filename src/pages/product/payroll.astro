@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { Icon } from "astro-icon/components";
-import { Image } from "astro:assets";
+import ProductHero from "../../components/ProductHero.astro";
 import payrollDesktop from "../../assets/images/desktop/screenshots/hasibu-payroll-module.png";
 import payrollMobile from "../../assets/images/mobile/screenshots/hasibu-payroll-module.png";
 
@@ -63,110 +63,27 @@ const features = [
     title="Payroll — Hasibu"
     description="Run payroll for African SMEs. Salary runs, payslips, PAYE, NHIF and NSSF deductions, commissions, salary advances and employee loans, all in one place."
 >
-    <!-- Hero -->
-    <section
-        class="relative overflow-clip bg-linear-60 from-[#F8FAFC] from-0% via-[#FFFFFF] via-50% to-[#EFF6FF]/40 to-100% pt-28 pb-20 lg:min-h-screen lg:pt-20 lg:pb-24"
+    <ProductHero
+        badge="Payroll"
+        chips={chips}
+        desktopImg={payrollDesktop}
+        mobileImg={payrollMobile}
+        imgAlt="Hasibu payroll module: salaries, commissions, advances and payroll runs"
+        toolbarUrl="business.hasibu.africa/finance/payroll"
     >
-        <div
-            class="absolute aspect-square w-96 -right-20 -top-48 rounded-full bg-[#DBEAFE]/15 blur-xl"
-        >
-        </div>
-
-        <!-- Copy (centered) -->
-        <div class="relative z-10 ml-auto max-w-3xl px-6 p-15">
-            <!-- Faded white panel behind the text (top/bottom/right dissolve) -->
-            <div
-                class="pointer-events-none absolute inset-0 -z-10 bg-linear-to-r from-white from-0% to-transparent to-100% backdrop-blur-lg mask-(--hero-mask) mask-intersect [-webkit-mask-image:var(--hero-mask)] [-webkit-mask-composite:source-in]"
-            >
-            </div>
-
-            <span
-                class="inline-flex items-center gap-2 rounded-full bg-blue-100/70 px-3 py-1.5 text-xs font-semibold text-brand"
-            >
-                <span class="size-1.5 rounded-full bg-brand"></span>
-                Payroll
-            </span>
-
-            <h1
-                class="mt-6 text-4xl font-bold leading-[1.05] tracking-tight text-brand-dark sm:text-5xl lg:text-6xl"
-            >
-                Pay your team,<br />
-                <span class="text-brand">down to the deduction.</span>
-            </h1>
-
-            <p class="mt-6 max-w-xl text-lg text-slate-500">
-                Run salaries, generate payslips, and handle PAYE, NHIF and NSSF,
-                plus commissions, advances and loans, all from one place inside
-                Hasibu.
-            </p>
-
-            <div class="mt-6 flex flex-wrap gap-2.5">
-                {
-                    chips.map((c) => (
-                        <span class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-600">
-                            <Icon name={c.icon} class={`size-4 ${c.color}`} />
-                            {c.label}
-                        </span>
-                    ))
-                }
-            </div>
-
-            <div class="mt-8 flex flex-col gap-3 sm:flex-row">
-                <a
-                    href="https://app.hasibu.africa/signup"
-                    class="inline-flex items-center justify-center rounded-lg bg-brand px-6 py-3 font-medium text-white shadow-sm transition hover:opacity-90"
-                >
-                    Start Free Trial
-                </a>
-                <a
-                    href="/get-started/demo"
-                    class="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-6 py-3 font-medium text-slate-700 transition hover:border-brand hover:text-brand"
-                >
-                    <Icon
-                        name="material-symbols:play-circle-outline"
-                        class="size-5"
-                    />
-                    Book a Demo
-                </a>
-            </div>
-        </div>
-
-        <!-- Real payroll module screenshot (large, framed) -->
-        <div class="absolute top-20 z-9 mt-14 max-w-5xl px-6 lg:mt-20">
-            <!-- Desktop: framed in a browser chrome -->
-            <div
-                class="hidden overflow-hidden rounded-2xl border border-slate-200 shadow-2xl sm:block ml-10"
-            >
-                <div
-                    class="flex items-center gap-1.5 border-b border-slate-100 bg-white px-4 py-3"
-                >
-                    <span class="size-3 rounded-full bg-red-400"></span>
-                    <span class="size-3 rounded-full bg-amber-400"></span>
-                    <span class="size-3 rounded-full bg-green-400"></span>
-                    <span class="ml-3 text-xs text-slate-400">
-                        business.hasibu.africa/finance/payroll
-                    </span>
-                </div>
-                <Image
-                    src={payrollDesktop}
-                    alt="Hasibu payroll module: salaries, commissions, advances and payroll runs"
-                    class="w-full"
-                    loading="eager"
-                />
-            </div>
-
-            <!-- Mobile -->
-            <Image
-                src={payrollMobile}
-                alt="Hasibu payroll module on mobile"
-                class="mx-auto w-full max-w-75 rounded-2xl border border-slate-200 shadow-xl sm:hidden"
-                loading="eager"
-            />
-        </div>
-    </section>
+        <Fragment slot="title">
+            Pay your team,<br />
+            <span class="text-brand">down to the deduction.</span>
+        </Fragment>
+        <Fragment slot="blurb">
+            Run salaries, generate payslips, and handle PAYE, NHIF and NSSF,
+            plus commissions, advances and loans, all from one place inside
+            Hasibu.
+        </Fragment>
+    </ProductHero>
 
     <!-- Features -->
-    <section class="bg-white py-20 lg:py-28">
+    <section class="bg-slate-100 py-20 lg:py-28">
         <div class="mx-auto max-w-6xl px-6">
             <div class="mx-auto max-w-2xl text-center">
                 <h2
@@ -183,8 +100,8 @@ const features = [
             <div class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {
                     features.map((f) => (
-                        <article class="flex flex-col rounded-2xl border border-slate-100 bg-white p-6 transition hover:border-blue-100 hover:shadow-lg hover:shadow-blue-500/5">
-                            <div class="flex size-11 items-center justify-center rounded-xl bg-blue-50 text-brand">
+                        <article class="flex flex-col rounded-2xl bg-slate-100 p-6 shadow-[6px_6px_12px_#c9cfdd,-6px_-6px_12px_#ffffff] transition hover:shadow-[8px_8px_16px_#c2c9d9,-8px_-8px_16px_#ffffff]">
+                            <div class="flex size-11 items-center justify-center rounded-xl bg-slate-100 text-brand shadow-[inset_3px_3px_6px_#c9cfdd,inset_-3px_-3px_6px_#ffffff]">
                                 <Icon name={f.icon} class="size-6" />
                             </div>
                             <h3 class="mt-4 text-lg font-semibold text-brand-dark">
@@ -202,7 +119,7 @@ const features = [
 
     <!-- CTA -->
     <section class="bg-white pb-20 lg:pb-28">
-        <div class="mx-auto max-w-6xl px-6">
+        <div class="mx-auto max-w-6xl px-6 translate-y-[45%]">
             <div
                 class="flex flex-col gap-6 rounded-2xl bg-linear-to-r from-blue-50 to-blue-100/50 p-8 md:flex-row md:items-center md:justify-between lg:p-10"
             >

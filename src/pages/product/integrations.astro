@@ -1,0 +1,38 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ProductHero from "../../components/ProductHero.astro";
+import integrationsDesktop from "../../assets/images/desktop/screenshots/hasibu-integrations-module.png";
+import integrationsMobile from "../../assets/images/mobile/screenshots/hasibu-integrations-module.png";
+
+// Confirmed integrations only.
+const chips = [
+    { label: "M-Pesa native", icon: "material-symbols:smartphone", color: "text-green-600" },
+    { label: "Airtel & MTN MoMo", icon: "material-symbols:account-balance-wallet", color: "text-amber-500" },
+    { label: "Pesapal & card", icon: "material-symbols:credit-card", color: "text-blue-600" },
+    { label: "KRA eTIMS", icon: "material-symbols:receipt-long", color: "text-teal-600" },
+];
+---
+
+<BaseLayout
+    title="Payments & Integrations — Hasibu"
+    description="The payment rails and compliance connections Hasibu supports: M-Pesa Daraja, Airtel Money, MTN MoMo, Pesapal, card, and KRA eTIMS fiscalization."
+>
+    <ProductHero
+        badge="Payments & Integrations"
+        chips={chips}
+        desktopImg={integrationsDesktop}
+        mobileImg={integrationsMobile}
+        imgAlt="Hasibu integrations: M-Pesa, Airtel, MTN, Pesapal, card and KRA eTIMS"
+        toolbarUrl="business.hasibu.africa/integrations"
+    >
+        <Fragment slot="title">
+            The rails Africa<br />
+            <span class="text-brand">actually pays on.</span>
+        </Fragment>
+        <Fragment slot="blurb">
+            M-Pesa, Airtel Money, MTN MoMo, card and KRA eTIMS, wired into
+            Hasibu and assigned to the right location, so payments and
+            compliance just work.
+        </Fragment>
+    </ProductHero>
+</BaseLayout>
