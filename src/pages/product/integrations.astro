@@ -1,15 +1,123 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
 import ProductHero from "../../components/ProductHero.astro";
 import integrationsDesktop from "../../assets/images/desktop/screenshots/hasibu-integrations-module.png";
 import integrationsMobile from "../../assets/images/mobile/screenshots/hasibu-integrations-module.png";
 
+import mpesa from "../../assets/images/integrations/mpesa.svg";
+import airtel from "../../assets/images/integrations/airtel-money.svg";
+import mtn from "../../assets/images/integrations/mtn-momo.svg";
+import kopokopo from "../../assets/images/integrations/kopokopo.svg";
+import pesapal from "../../assets/images/integrations/pesapal.svg";
+import uberEats from "../../assets/images/integrations/uber-eats.svg";
+import bolt from "../../assets/images/integrations/bolt-food.svg";
+import glovo from "../../assets/images/integrations/glovo.svg";
+import whatsapp from "../../assets/images/integrations/whatsapp.svg";
+
 // Confirmed integrations only.
 const chips = [
-    { label: "M-Pesa native", icon: "material-symbols:smartphone", color: "text-green-600" },
-    { label: "Airtel & MTN MoMo", icon: "material-symbols:account-balance-wallet", color: "text-amber-500" },
-    { label: "Pesapal & card", icon: "material-symbols:credit-card", color: "text-blue-600" },
-    { label: "KRA eTIMS", icon: "material-symbols:receipt-long", color: "text-teal-600" },
+    {
+        label: "M-Pesa native",
+        icon: "material-symbols:smartphone",
+        color: "text-green-600",
+    },
+    {
+        label: "Airtel & MTN MoMo",
+        icon: "material-symbols:account-balance-wallet",
+        color: "text-amber-500",
+    },
+    {
+        label: "Pesapal & card",
+        icon: "material-symbols:credit-card",
+        color: "text-blue-600",
+    },
+    {
+        label: "KRA eTIMS",
+        icon: "material-symbols:receipt-long",
+        color: "text-teal-600",
+    },
+];
+
+// Filter tabs (segmented control). "All" is the default.
+const filters = ["All", "Payments", "Delivery", "Messaging"];
+
+// One write-up per integration shown in the landing page's Payments & Integrations
+// section. `category` drives the filter. Copy avoids em dashes.
+const integrations = [
+    {
+        name: "M-Pesa (Daraja)",
+        match: "M-Pesa",
+        category: "Payments",
+        img: mpesa,
+        imgClass: "max-h-8",
+        desc: "Lipa Na M-Pesa is built into checkout. The cashier or storefront raises an STK push, the customer approves on their phone, and the payment confirms against the sale through Safaricom's Daraja API before the receipt prints, with no manual matching of till numbers afterwards.",
+    },
+    {
+        name: "Airtel Money",
+        match: "Airtel Money",
+        category: "Payments",
+        img: airtel,
+        imgClass: "max-h-10",
+        desc: "Accept Airtel Money beside M-Pesa on the same checkout, so a customer on either network pays the same way. The collection lands against the sale and reconciles into your finance accounts with the rest of the day's takings.",
+    },
+    {
+        name: "MTN MoMo",
+        match: "MTN Mobile Money",
+        category: "Payments",
+        img: mtn,
+        imgClass: "max-h-10",
+        desc: "MTN Mobile Money collection for the markets where MoMo is the dominant wallet, so the same Hasibu checkout works in Rwanda and the wider region, settled into the same payment flow as M-Pesa and Airtel.",
+    },
+    {
+        name: "KopoKopo",
+        match: "KopoKopo",
+        category: "Payments",
+        img: kopokopo,
+        imgClass: "max-h-9",
+        desc: "Route M-Pesa merchant collections through KopoKopo and have them flow straight into Hasibu, so settled payments reconcile into your ledger instead of sitting in a separate dashboard.",
+    },
+    {
+        name: "Pesapal",
+        match: "Pesapal",
+        category: "Payments",
+        img: pesapal,
+        imgClass: "max-h-7",
+        desc: "Card and mobile money through Pesapal, including Sabi POS terminal payments routed into Hasibu. Useful where you want a single gateway covering cards alongside the local wallets.",
+    },
+    {
+        name: "Uber Eats",
+        match: "Uber Eats",
+        category: "Delivery",
+        img: uberEats,
+        imgClass: "max-h-6",
+        desc: "Receive Uber Eats orders straight into Hasibu, so online food orders queue beside your counter sales instead of on a separate tablet. They draw from the same menu and stock, so what is sold out in store is sold out online.",
+    },
+    {
+        name: "Bolt Food",
+        match: "Bolt Food",
+        category: "Delivery",
+        img: bolt,
+        imgClass: "max-h-6",
+        desc: "Bolt Food orders flow into Hasibu ready to prepare and fulfil, using the same items and prices as your POS. Sales post to the same reports, so platform revenue sits next to in-store revenue.",
+    },
+    {
+        name: "Glovo",
+        match: "Glovo",
+        category: "Delivery",
+        img: glovo,
+        imgClass: "max-h-7",
+        desc: "Glovo orders arrive in Hasibu with no extra device to watch. Each order is prepared and fulfilled from the right location and counted against the same inventory as everything else you sell.",
+    },
+    {
+        name: "WhatsApp",
+        match: "WhatsApp",
+        category: "Messaging",
+        img: whatsapp,
+        imgClass: "max-h-7",
+        desc: "Reach customers on WhatsApp for receipts, order updates and storefront conversations through the WhatsApp Business platform, so the channel they already use connects back to their orders in Hasibu.",
+    },
 ];
 ---
 
@@ -35,4 +143,164 @@ const chips = [
             compliance just work.
         </Fragment>
     </ProductHero>
+
+    <!-- Per-integration write-ups -->
+    <section class="bg-white py-20 lg:py-28">
+        <div class="mx-auto max-w-6xl px-6">
+            <div class="mx-auto max-w-2xl text-center">
+                <h2
+                    class="text-3xl font-bold tracking-tight text-brand-dark sm:text-4xl"
+                >
+                    Every connection, in plain terms.
+                </h2>
+                <p class="mt-4 text-slate-500">
+                    What each integration does and how it fits into the way you
+                    already sell, collect and reconcile inside Hasibu.
+                </p>
+            </div>
+
+            <!-- Filter tabs (segmented control) -->
+            <div class="mt-10 flex justify-center">
+                <div
+                    class="inline-flex divide-x divide-slate-300 overflow-hidden rounded-lg border border-slate-300 text-sm font-medium"
+                >
+                    {
+                        filters.map((f, i) => (
+                            <button
+                                type="button"
+                                data-filter={f}
+                                aria-pressed={i === 0 ? "true" : "false"}
+                                class="integration-tab px-4 py-2 text-slate-700 transition hover:bg-slate-50 aria-pressed:bg-slate-900 aria-pressed:text-white"
+                            >
+                                {f}
+                            </button>
+                        ))
+                    }
+                </div>
+            </div>
+
+            <!-- Integration grid (hairline dividers, Modules style) -->
+            <div
+                id="integration-grid"
+                class="mt-12 grid gap-px overflow-hidden rounded-2xl bg-slate-200 sm:grid-cols-2 lg:grid-cols-3"
+            >
+                {
+                    integrations.map((it) => {
+                        const i = it.desc.indexOf(it.match);
+                        return (
+                            <article
+                                class="integration-card flex flex-col bg-white p-6 transition hover:bg-slate-50/70 lg:p-8"
+                                data-category={it.category}
+                            >
+                                <div class="flex h-10 items-center">
+                                    <Image
+                                        src={it.img}
+                                        alt={it.name}
+                                        class={`w-auto object-contain ${it.imgClass}`}
+                                        loading="lazy"
+                                    />
+                                </div>
+                                <p class="mt-5 text-sm leading-relaxed text-slate-500">
+                                    {i === -1 ? (
+                                        it.desc
+                                    ) : (
+                                        <Fragment>
+                                            {it.desc.slice(0, i)}
+                                            <strong class="font-semibold text-brand-dark">
+                                                {it.match}
+                                            </strong>
+                                            {it.desc.slice(i + it.match.length)}
+                                        </Fragment>
+                                    )}
+                                </p>
+                            </article>
+                        );
+                    })
+                }
+
+                <!-- CTA filler: occupies the first hanging cell. Shown/hidden by script. -->
+                <a
+                    id="integration-cta"
+                    href="/company/contact"
+                    class="integration-cta hidden flex-col justify-center bg-blue-50/60 p-6 transition hover:bg-blue-50 lg:col-span-2 lg:p-8"
+                >
+                    <div
+                        class="flex size-11 items-center justify-center rounded-xl bg-white text-brand"
+                    >
+                        <Icon name="hugeicons:plug-01" class="size-6" />
+                    </div>
+                    <h3 class="mt-4 text-lg font-semibold text-brand-dark">
+                        Need another integration?
+                    </h3>
+                    <p class="mt-2 text-sm leading-relaxed text-slate-500">
+                        Tell us the tool you already run on and we will look at
+                        wiring it into Hasibu.
+                    </p>
+                    <span
+                        class="mt-3 inline-flex items-center gap-1 text-sm font-medium text-brand"
+                    >
+                        Request it
+                        <Icon
+                            name="material-symbols:arrow-forward-rounded"
+                            class="size-4"
+                        />
+                    </span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const grid = document.getElementById("integration-grid")!;
+        const cta = document.getElementById("integration-cta")!;
+        const tabs =
+            document.querySelectorAll<HTMLButtonElement>(".integration-tab");
+        const cards =
+            document.querySelectorAll<HTMLElement>(".integration-card");
+
+        // Current column count, matched to the Tailwind grid breakpoints.
+        const columns = () => {
+            if (window.matchMedia("(min-width: 1024px)").matches) return 3;
+            if (window.matchMedia("(min-width: 640px)").matches) return 2;
+            return 1;
+        };
+
+        // Fill the hanging cells of the last row with the CTA. If two cells hang
+        // (only possible at 3 columns), the CTA spans both.
+        const layout = () => {
+            const visible = [...cards].filter(
+                (c) => !c.classList.contains("hidden"),
+            ).length;
+            const cols = columns();
+            const rem = visible % cols;
+            const empties = rem === 0 ? 0 : cols - rem;
+
+            if (empties > 0) {
+                cta.classList.remove("hidden");
+                cta.classList.add("flex");
+                cta.classList.toggle("lg:col-span-2", empties === 2);
+            } else {
+                cta.classList.add("hidden");
+                cta.classList.remove("flex");
+            }
+        };
+
+        tabs.forEach((tab) =>
+            tab.addEventListener("click", () => {
+                const filter = tab.dataset.filter;
+                tabs.forEach((t) =>
+                    t.setAttribute("aria-pressed", String(t === tab)),
+                );
+                cards.forEach((card) => {
+                    const show =
+                        filter === "All" || card.dataset.category === filter;
+                    card.classList.toggle("hidden", !show);
+                });
+                layout();
+            }),
+        );
+
+        layout();
+        window.addEventListener("resize", layout, { passive: true });
+    </script>
 </BaseLayout>
