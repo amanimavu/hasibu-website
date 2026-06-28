@@ -91,14 +91,19 @@ const {
                 data-tour-trigger
                 class="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-6 py-3 font-medium text-slate-700 transition hover:border-brand hover:text-brand"
             >
-                <Icon name="material-symbols:play-circle-outline" class="size-5" />
+                <Icon
+                    name="material-symbols:play-circle-outline"
+                    class="size-5"
+                />
                 Watch 2 min tour
             </button>
         </div>
     </div>
 
     <!-- Real module screenshot: below the copy on mobile, offset on desktop -->
-    <div class="relative z-9 mt-8 max-w-5xl px-6 lg:absolute lg:top-20 lg:mt-20">
+    <div
+        class="relative z-9 mt-8 max-w-5xl px-6 lg:absolute lg:top-20 lg:mt-20"
+    >
         <!-- Desktop: framed in a browser chrome -->
         <div
             class="hidden overflow-hidden rounded-2xl border border-slate-200 shadow-2xl sm:block ml-10"
@@ -111,7 +116,14 @@ const {
                 <span class="size-3 rounded-full bg-green-400"></span>
                 <span class="ml-3 text-xs text-slate-400">{toolbarUrl}</span>
             </div>
-            <Image src={desktopImg} alt={imgAlt} class="w-full" loading="eager" />
+            <Image
+                src={desktopImg}
+                alt={imgAlt}
+                class="w-full"
+                priority
+                width={1280}
+                densities={[1, 2]}
+            />
         </div>
 
         <!-- Mobile -->
@@ -119,7 +131,9 @@ const {
             src={mobileImg}
             alt={imgAlt}
             class="mx-auto w-full max-w-75 rounded-2xl border border-slate-200 shadow-xl sm:hidden"
-            loading="eager"
+            priority
+            width={400}
+            densities={[1, 2]}
         />
     </div>
 </section>

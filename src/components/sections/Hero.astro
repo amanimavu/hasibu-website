@@ -39,7 +39,9 @@ import brushStroke from "../../assets/images/brush_stroke.svg";
                     src={dashboardDesktop}
                     alt="Hasibu dashboard showing revenue, orders, low stock alerts and recent mobile-money transactions"
                     class="w-full"
-                    loading="eager"
+                    priority
+                    width={1280}
+                    densities={[1, 2]}
                 />
             </div>
 
@@ -48,7 +50,9 @@ import brushStroke from "../../assets/images/brush_stroke.svg";
                 src={dashboardMobile}
                 alt="Hasibu dashboard on mobile"
                 class="mx-auto w-full max-w-75 rounded-2xl border border-slate-200 shadow-xl sm:hidden"
-                loading="eager"
+                priority
+                width={400}
+                densities={[1, 2]}
             />
         </div>
 
@@ -77,7 +81,6 @@ import brushStroke from "../../assets/images/brush_stroke.svg";
                         alt=""
                         aria-hidden="true"
                         class="pointer-events-none absolute -bottom-2 left-0 -z-10 w-full"
-                        loading="eager"
                     />
                 </span> runs.
             </h1>
