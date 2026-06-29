@@ -19,45 +19,8 @@ import brushStroke from "../../assets/images/brush_stroke.svg";
     </div>
 
     <div class="pt-20">
-        <!-- Real dashboard screenshot: below the copy on mobile, offset left on desktop -->
-        <div class="relative z-9 mt-8 max-w-5xl px-6 lg:absolute lg:top-30">
-            <!-- Desktop: framed in a browser chrome -->
-            <div
-                class="mr-10 hidden overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 shadow-2xl sm:block"
-            >
-                <div
-                    class="flex items-center gap-1.5 border-b border-slate-100 bg-white px-4 py-3"
-                >
-                    <span class="size-3 rounded-full bg-red-400"></span>
-                    <span class="size-3 rounded-full bg-amber-400"></span>
-                    <span class="size-3 rounded-full bg-green-400"></span>
-                    <span class="ml-3 text-xs text-slate-400">
-                        business.hasibu.africa
-                    </span>
-                </div>
-                <Image
-                    src={dashboardDesktop}
-                    alt="Hasibu dashboard showing revenue, orders, low stock alerts and recent mobile-money transactions"
-                    class="w-full"
-                    priority
-                    width={1280}
-                    densities={[1, 2]}
-                />
-            </div>
-
-            <!-- Mobile -->
-            <Image
-                src={dashboardMobile}
-                alt="Hasibu dashboard on mobile"
-                class="mx-auto w-full max-w-75 rounded-2xl border border-slate-200 bg-slate-100 shadow-xl sm:hidden"
-                priority
-                width={400}
-                densities={[1, 2]}
-            />
-        </div>
-
         <!-- Copy (right, faded glass panel like the product heroes) -->
-        <div class="relative z-10 ml-auto max-w-3xl px-6 p-15">
+        <div class="relative z-10 ml-auto max-w-3xl px-6 py-15 not-sm:py-5">
             <!-- Faded white panel behind the text (top/bottom/left dissolve) -->
             <div
                 class="pointer-events-none absolute inset-0 -z-10 bg-linear-to-r from-white from-0% to-transparent to-100% backdrop-blur-lg mask-(--hero-mask) mask-intersect [-webkit-mask-image:var(--hero-mask)] [-webkit-mask-composite:source-in]"
@@ -132,6 +95,45 @@ import brushStroke from "../../assets/images/brush_stroke.svg";
                     No credit card required
                 </span>
             </div>
+        </div>
+
+        <!-- Real dashboard screenshot: below the copy on mobile, offset left on desktop -->
+        <div
+            class="relative z-9 mt-8 max-w-5xl px-6 lg:absolute lg:top-30 not-sm:pb-10"
+        >
+            <!-- Desktop: framed in a browser chrome -->
+            <div
+                class="mr-10 hidden overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 shadow-2xl sm:block"
+            >
+                <div
+                    class="flex items-center gap-1.5 border-b border-slate-100 bg-white px-4 py-3"
+                >
+                    <span class="size-3 rounded-full bg-red-400"></span>
+                    <span class="size-3 rounded-full bg-amber-400"></span>
+                    <span class="size-3 rounded-full bg-green-400"></span>
+                    <span class="ml-3 text-xs text-slate-400">
+                        business.hasibu.africa
+                    </span>
+                </div>
+                <Image
+                    src={dashboardDesktop}
+                    alt="Hasibu dashboard showing revenue, orders, low stock alerts and recent mobile-money transactions"
+                    class="w-full"
+                    priority
+                    width={1280}
+                    densities={[1, 2]}
+                />
+            </div>
+
+            <!-- Mobile -->
+            <Image
+                src={dashboardMobile}
+                alt="Hasibu dashboard on mobile"
+                class="mx-auto w-full max-w-75 rounded-2xl border border-slate-200 bg-slate-100 shadow-xl sm:hidden"
+                priority
+                width={400}
+                densities={[1, 2]}
+            />
         </div>
     </div>
 
