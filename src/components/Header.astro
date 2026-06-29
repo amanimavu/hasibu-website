@@ -225,7 +225,7 @@ const mega = [
     </div>
     <aside
         id="menu-panel"
-        class="absolute right-0 top-0 flex h-full w-72 max-w-[80%] translate-x-full flex-col bg-white p-6 shadow-xl transition-transform duration-300"
+        class="absolute right-0 top-0 flex h-full w-72 max-w-[80%] translate-x-full flex-col overflow-y-auto overscroll-contain bg-white p-6 shadow-xl transition-transform duration-300"
     >
         <div class="flex justify-end">
             <button
@@ -239,6 +239,47 @@ const mega = [
         </div>
 
         <nav class="mt-8 flex flex-col">
+            <!-- Product (collapsible, mirrors the desktop mega menu) -->
+            <details class="group border-b border-slate-100">
+                <summary
+                    class="flex cursor-pointer list-none items-center justify-between py-3 text-base font-medium text-slate-700 transition hover:text-brand [&::-webkit-details-marker]:hidden"
+                >
+                    Product
+                    <Icon
+                        name="material-symbols:keyboard-arrow-down"
+                        class="size-5 text-slate-400 transition-transform group-open:rotate-180"
+                    />
+                </summary>
+                <div class="pb-4">
+                    {mega.map((col) => (
+                        <div class="mt-5 first:mt-3">
+                            <span
+                                class={`flex items-center gap-2 text-xs font-semibold uppercase tracking-wide ${col.color}`}
+                            >
+                                <Icon name={col.icon} class="size-4" />
+                                {col.title}
+                            </span>
+                            <ul class="mt-2 space-y-1 pl-1">
+                                {col.items.map((it) => (
+                                    <li>
+                                        <a
+                                            href={it.href}
+                                            data-nav-link
+                                            class="flex items-center gap-2 py-1.5 text-sm text-slate-600 transition hover:text-brand"
+                                        >
+                                            <Icon
+                                                name={it.icon}
+                                                class="size-4 text-slate-400"
+                                            />
+                                            {it.label}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))}
+                </div>
+            </details>
             {
                 nav.map((n) => (
                     <a
