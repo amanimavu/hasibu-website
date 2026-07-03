@@ -1,0 +1,114 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { Icon } from "astro-icon/components";
+import GridDecor from "../../components/GridDecor.astro";
+
+// Step-by-step guides. Topics map to real Hasibu workflows.
+const guides = [
+    {
+        icon: "hugeicons:smart-phone-01",
+        title: "Set up Lipa Na M-Pesa",
+        meta: "5 steps",
+        desc: "Connect your till to Daraja so customers pay by STK push and collections reconcile to the sale.",
+    },
+    {
+        icon: "hugeicons:package-process",
+        title: "Run your first stock count",
+        meta: "6 steps",
+        desc: "Count physical stock against the system and post the adjustment, branch by branch.",
+    },
+    {
+        icon: "hugeicons:invoice-01",
+        title: "Open the books",
+        meta: "4 steps",
+        desc: "Set up your chart of accounts so sales and cost of goods post themselves as you trade.",
+    },
+    {
+        icon: "hugeicons:user-group",
+        title: "Add staff and POS PINs",
+        meta: "4 steps",
+        desc: "Invite your team, set per-location roles, and issue PINs for fast till switching.",
+    },
+    {
+        icon: "hugeicons:shield-energy",
+        title: "Fiscalize with KRA eTIMS",
+        meta: "3 steps",
+        desc: "Switch on eTIMS so every sale and return is fiscalized without extra work.",
+    },
+    {
+        icon: "hugeicons:wallet-01",
+        title: "Run payroll",
+        meta: "5 steps",
+        desc: "Set salaries and deductions, run the period, and generate payslips for your team.",
+    },
+];
+---
+
+<BaseLayout
+    title="Guides & Tutorials — Hasibu"
+    description="Step-by-step guides for setting up and running Hasibu: M-Pesa, stock counts, accounting, payroll, eTIMS and more."
+>
+    <!-- Header -->
+    <section
+        class="relative overflow-clip bg-linear-to-b from-blue-50/70 via-white to-white pt-28 pb-12 lg:pt-36 lg:pb-16"
+    >
+        <GridDecor />
+        <div class="relative mx-auto max-w-3xl px-6 text-center">
+            <span
+                class="inline-flex items-center gap-2 rounded-full bg-blue-100/70 px-3 py-1.5 text-xs font-semibold text-brand"
+            >
+                <span class="size-1.5 rounded-full bg-brand"></span>
+                Guides & Tutorials
+            </span>
+            <h1
+                class="mt-6 text-4xl font-bold leading-[1.1] tracking-tight text-brand-dark sm:text-5xl"
+            >
+                Set up Hasibu, <span class="text-brand">step by step.</span>
+            </h1>
+            <p class="mx-auto mt-6 max-w-xl text-lg text-slate-500">
+                Short, practical walkthroughs for the things you will do most
+                when getting your business running.
+            </p>
+        </div>
+    </section>
+
+    <!-- Guides grid (grid style) -->
+    <section class="bg-white pb-20 lg:pb-28">
+        <div class="mx-auto max-w-6xl px-6">
+            <div
+                class="grid gap-px overflow-hidden rounded-2xl bg-slate-200 sm:grid-cols-2 lg:grid-cols-3"
+            >
+                {
+                    guides.map((g) => (
+                        <a
+                            href="/resources/guides"
+                            class="group flex flex-col bg-white p-6 transition hover:bg-slate-50/70 lg:p-8"
+                        >
+                            <div class="flex items-center justify-between">
+                                <div class="flex size-11 items-center justify-center rounded-xl bg-blue-50 text-brand">
+                                    <Icon name={g.icon} class="size-6" />
+                                </div>
+                                <span class="text-xs font-medium text-slate-400">
+                                    {g.meta}
+                                </span>
+                            </div>
+                            <h2 class="mt-4 text-lg font-semibold text-brand-dark">
+                                {g.title}
+                            </h2>
+                            <p class="mt-2 text-sm leading-relaxed text-slate-500">
+                                {g.desc}
+                            </p>
+                            <span class="mt-4 inline-flex items-center gap-1 text-sm font-medium text-brand">
+                                Read guide
+                                <Icon
+                                    name="material-symbols:arrow-forward-rounded"
+                                    class="size-4 transition-transform group-hover:translate-x-0.5"
+                                />
+                            </span>
+                        </a>
+                    ))
+                }
+            </div>
+        </div>
+    </section>
+</BaseLayout>

@@ -1,0 +1,108 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { Icon } from "astro-icon/components";
+import GridDecor from "../../../components/GridDecor.astro";
+import { releases, styleFor } from "../../../data/changelog";
+
+export function getStaticPaths() {
+    return releases.map((release, i) => ({
+        params: { slug: release.slug },
+        props: { release, next: releases[i - 1], prev: releases[i + 1] },
+    }));
+}
+
+const { release, prev, next } = Astro.props;
+const s = styleFor(release.tag);
+---
+
+<BaseLayout
+    title={`${release.title} — Changelog`}
+    description={release.summary}
+>
+    <!-- Header -->
+    <section
+        class="relative overflow-clip bg-linear-to-b from-blue-50/70 via-white to-white pt-28 pb-10 lg:pt-36 lg:pb-12"
+    >
+        <GridDecor />
+        <div class="relative mx-auto max-w-3xl px-6">
+            <a
+                href="/resources/changelog"
+                class="group inline-flex items-center gap-1 text-sm font-medium text-slate-500 transition hover:text-brand"
+            >
+                <Icon
+                    name="material-symbols:arrow-back-rounded"
+                    class="size-4 transition-transform group-hover:-translate-x-0.5"
+                />
+                Changelog
+            </a>
+
+            <div class="mt-6 flex flex-wrap items-center gap-3">
+                <span
+                    class="text-xs font-semibold uppercase tracking-wider text-slate-400"
+                >
+                    {release.date}
+                </span>
+                <span
+                    class="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold"
+                >
+                    <span class={`size-1.5 rounded-full ${s.dot}`}></span>
+                    <span class={s.accent}>{release.tag}</span>
+                </span>
+            </div>
+
+            <h1
+                class="mt-3 text-3xl font-bold leading-tight tracking-tight text-brand-dark sm:text-4xl"
+            >
+                {release.title}
+            </h1>
+            <p class="mt-4 text-lg leading-relaxed text-slate-500">
+                {release.summary}
+            </p>
+        </div>
+    </section>
+
+    <!-- Body -->
+    <section class="bg-white pb-20 lg:pb-28">
+        <div class="mx-auto max-w-3xl px-6">
+            <div class="space-y-5 leading-relaxed text-slate-600">
+                {release.body.map((p) => <p>{p}</p>)}
+            </div>
+
+            <!-- Prev / next -->
+            <div
+                class="mt-14 flex flex-col gap-4 border-t border-slate-100 pt-8 sm:flex-row sm:justify-between"
+            >
+                {
+                    prev ? (
+                        <a
+                            href={`/resources/changelog/${prev.slug}`}
+                            class="group inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition hover:text-brand"
+                        >
+                            <Icon
+                                name="material-symbols:arrow-back-rounded"
+                                class="size-4 transition-transform group-hover:-translate-x-0.5"
+                            />
+                            <span class="line-clamp-1">{prev.title}</span>
+                        </a>
+                    ) : (
+                        <span />
+                    )
+                }
+                {
+                    next && (
+                        <a
+                            href={`/resources/changelog/${next.slug}`}
+                            class="group inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition hover:text-brand sm:text-right"
+                        >
+                            <span class="line-clamp-1">{next.title}</span>
+                            <Icon
+                                name="material-symbols:arrow-forward-rounded"
+                                class="size-4 transition-transform group-hover:translate-x-0.5"
+                            />
+                        </a>
+                    )
+                }
+            </div>
+        </div>
+    </section>
+</BaseLayout>
