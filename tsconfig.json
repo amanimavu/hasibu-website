@@ -6,7 +6,13 @@
         "jsx": "react-jsx",
         "jsxImportSource": "react",
         "paths": {
-            "@/*": ["./src/*"]
+            "@/*": ["./src/*"],
+            "@screenshots/desktop/*": [
+                "./src/assets/images/desktop/screenshots/*"
+            ],
+            "@screenshots/mobile/*": [
+                "./src/assets/images/mobile/screenshots/*"
+            ]
         }
     }
 }
