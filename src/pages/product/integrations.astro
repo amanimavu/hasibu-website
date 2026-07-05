@@ -3,8 +3,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import { Image } from "astro:assets";
 import { Icon } from "astro-icon/components";
 import ProductHero from "../../components/ProductHero.astro";
-import integrationsDesktop from "../../assets/images/desktop/screenshots/hasibu-integrations-module.png";
-import integrationsMobile from "../../assets/images/mobile/screenshots/hasibu-integrations-module.png";
+import IntegrationsHub from "../../components/IntegrationsHub.astro";
 
 import mpesa from "../../assets/images/integrations/mpesa.svg";
 import airtel from "../../assets/images/integrations/airtel-money.svg";
@@ -19,17 +18,12 @@ import whatsapp from "../../assets/images/integrations/whatsapp.svg";
 // Confirmed integrations only.
 const chips = [
     {
-        label: "M-Pesa native",
+        label: "Mobile money",
         icon: "material-symbols:smartphone",
         color: "text-green-600",
     },
     {
-        label: "Airtel & MTN MoMo",
-        icon: "material-symbols:account-balance-wallet",
-        color: "text-amber-500",
-    },
-    {
-        label: "Pesapal & card",
+        label: "Card",
         icon: "material-symbols:credit-card",
         color: "text-blue-600",
     },
@@ -128,8 +122,6 @@ const integrations = [
     <ProductHero
         badge="Payments & Integrations"
         chips={chips}
-        desktopImg={integrationsDesktop}
-        mobileImg={integrationsMobile}
         imgAlt="Hasibu integrations: M-Pesa, Airtel, MTN, Pesapal, card and KRA eTIMS"
         toolbarUrl="business.hasibu.africa/integrations"
     >
@@ -142,6 +134,7 @@ const integrations = [
             Hasibu and assigned to the right location, so payments and
             compliance just work.
         </Fragment>
+        <IntegrationsHub slot="graphic" />
     </ProductHero>
 
     <!-- Per-integration write-ups -->
