@@ -1,0 +1,227 @@
+---
+import { Icon } from "astro-icon/components";
+
+// "One live ledger" flow diagram — native HTML/SVG, animated.
+// Cards sit in a 3x3 grid around a central ledger hub. Arrows are drawn at
+// runtime from real element edges (so they always align). On scroll-in the
+// satellite cards slide out from under the hub; replays on every re-entry.
+const hub = {
+    title: "Live stock ledger",
+    icon: "hugeicons:book-02",
+    lines: [
+        "One source of truth.",
+        "On-hand · committed · incoming, per location.",
+        "Every movement posts here. Never goes negative.",
+    ],
+};
+
+// dir: in (→ hub) | out (hub →) | both (↔). `pos` = literal grid placement.
+const nodes = [
+    { key: "receive", pos: "col-start-1 row-start-1", dir: "in", icon: "hugeicons:package-delivered", title: "Receive (GRN)", desc: "Goods received from suppliers against a delivery note. Adds to stock." },
+    { key: "sell", pos: "col-start-3 row-start-1", dir: "out", icon: "hugeicons:shopping-cart-01", title: "Sell (POS)", desc: "Every sale drops on-hand the instant it is rung up." },
+    { key: "transfer", pos: "col-start-1 row-start-2", dir: "both", icon: "hugeicons:arrow-data-transfer-horizontal", title: "Transfer", desc: "Move stock between shops, stores and warehouses." },
+    { key: "adjust", pos: "col-start-3 row-start-2", dir: "both", icon: "hugeicons:pencil-edit-02", title: "Adjust", desc: "Stock counts and breakage. Corrects up or down, with a reason." },
+    { key: "production", pos: "col-start-1 row-start-3", dir: "in", icon: "hugeicons:package-process", title: "Production", desc: "Build finished goods from raw materials. Raw down, finished up." },
+    { key: "returns", pos: "col-start-3 row-start-3", dir: "in", icon: "hugeicons:package-remove", title: "Returns", desc: "Customer returns come back into stock." },
+];
+
+// Direction tag: glowing coloured text. IN adds stock, OUT removes it, ± both.
+// (± reads smaller than letters, so give it a larger size.)
+const tag: Record<string, { label: string; cls: string }> = {
+    in: { label: "IN", cls: "text-[10px] text-green-500 [text-shadow:0_0_8px_rgba(34,197,94,0.55)]" },
+    out: { label: "OUT", cls: "text-[10px] text-rose-500 [text-shadow:0_0_8px_rgba(244,63,94,0.55)]" },
+    both: { label: "±", cls: "text-[15px] leading-none text-amber-500 [text-shadow:0_0_9px_rgba(245,158,11,0.6)]" },
+};
+---
+
+<div class="inventory-flow mx-auto w-full max-w-3xl">
+    <!-- Desktop / tablet: grid diagram -->
+    <div class="flow-wrap relative hidden aspect-square sm:block">
+        <!-- Cards -->
+        <div class="relative grid h-full grid-cols-[1fr_1.3fr_1fr] grid-rows-3 gap-x-10 gap-y-4">
+            {
+                nodes.map((n, i) => (
+                    <article
+                        class={`flow-card ${n.pos} self-center`}
+                        data-key={n.key}
+                        style={`--delay:${i * 0.09}s;--bob:${(i % 3) * 0.7 + 0.2}s`}
+                    >
+                        <div class="flow-box relative rounded-2xl bg-white px-4 pb-4 pt-6 ring-1 ring-slate-200/70">
+                            <!-- icon chip straddling the top-left border -->
+                            <span class="absolute -left-3 -top-3 z-10 flex size-9 items-center justify-center rounded-full bg-white text-brand ring-1 ring-slate-200/70">
+                                <Icon name={n.icon} class="size-5" />
+                            </span>
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-sm font-semibold text-brand-dark">
+                                    {n.title}
+                                </h3>
+                                <span
+                                    class={`ml-auto font-bold ${tag[n.dir].cls}`}
+                                >
+                                    {tag[n.dir].label}
+                                </span>
+                            </div>
+                            <p class="mt-1.5 text-xs leading-relaxed text-slate-500">
+                                {n.desc}
+                            </p>
+                        </div>
+                    </article>
+                ))
+            }
+
+            <!-- Hub -->
+            <article
+                class="flow-hub col-start-2 row-start-2 relative flex flex-col justify-center self-center rounded-2xl bg-brand-dark px-7 pb-7 pt-8 text-center text-white shadow-[0_25px_60px_-20px_rgba(11,27,52,0.6)]"
+            >
+                <!-- icon chip straddling the top-centre border -->
+                <span class="absolute -top-4 left-1/2 z-10 flex size-10 -translate-x-1/2 items-center justify-center rounded-full bg-brand-dark text-white ring-1 ring-white/15">
+                    <Icon name={hub.icon} class="size-5" />
+                </span>
+                <h3 class="text-base font-bold text-brand">{hub.title}</h3>
+                <p class="mt-1 text-xs font-medium text-blue-50/70">
+                    One source of truth
+                </p>
+                <div class="mt-4 space-y-2.5 border-t border-white/10 pt-4">
+                    <p class="text-xs leading-relaxed text-blue-50/85">
+                        On-hand · committed · incoming, per location.
+                    </p>
+                    <p class="text-xs leading-relaxed text-blue-50/85">
+                        Every movement posts here.
+                        <span class="font-semibold text-white">
+                            Never goes negative.
+                        </span>
+                    </p>
+                </div>
+            </article>
+        </div>
+    </div>
+
+    <!-- Mobile: stacked list -->
+    <div class="space-y-3 sm:hidden">
+        <article class="rounded-2xl bg-brand-dark p-5 text-white">
+            <h3 class="text-sm font-bold text-brand">{hub.title}</h3>
+            {hub.lines.map((l) => <p class="mt-1 text-xs text-blue-50/80">{l}</p>)}
+        </article>
+        {
+            nodes.map((n) => (
+                <article class="flex gap-3 rounded-2xl border border-slate-200 bg-white p-4">
+                    <Icon name={n.icon} class="mt-0.5 size-5 shrink-0 text-brand" />
+                    <div>
+                        <h3 class="text-sm font-semibold text-brand-dark">
+                            {n.title}
+                        </h3>
+                        <p class="mt-1 text-xs leading-relaxed text-slate-500">
+                            {n.desc}
+                        </p>
+                    </div>
+                </article>
+            ))
+        }
+    </div>
+</div>
+
+<style>
+    /* Satellite cards start beneath the hub (offset set per card by the script
+       as --tx/--ty), then slide out to their grid slots when .in is added. */
+    /* Start beneath the hub (offset set per card by the script). No transition
+       here, so setting the offset snaps instantly instead of animating. */
+    .flow-card {
+        z-index: 0;
+        opacity: 0;
+        transform: translate(var(--tx, 0px), var(--ty, 0px)) scale(0.6);
+    }
+    .flow-hub {
+        z-index: 10;
+    }
+    /* Transition lives on the .in state, so only the slide-out animates. */
+    .inventory-flow.in .flow-card {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+        transition:
+            transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+            opacity 0.45s ease;
+        transition-delay: var(--delay, 0s);
+    }
+    /* Idle float: a slow bob on the inner box (separate element so it never
+       clashes with the slide-in transform on .flow-card). */
+    .flow-box {
+        animation: bob 4.5s ease-in-out infinite;
+        animation-delay: var(--bob, 0s);
+        will-change: transform;
+    }
+    @keyframes bob {
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-7px);
+        }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .flow-card {
+            opacity: 1;
+            transform: none;
+            transition: none;
+        }
+        .flow-box {
+            animation: none;
+        }
+    }
+</style>
+
+<script>
+    const root = document.querySelector<HTMLElement>(".inventory-flow");
+    const wrap = root?.querySelector<HTMLElement>(".flow-wrap");
+    const hub = wrap?.querySelector<HTMLElement>(".flow-hub");
+    const cards = wrap
+        ? [...wrap.querySelectorAll<HTMLElement>(".flow-card")]
+        : [];
+
+    // Set each card's slide-out origin: the offset that would move it onto the
+    // hub, so it appears to emerge from beneath the ledger card.
+    const layout = () => {
+        if (!wrap || !hub) return;
+        if (!wrap.clientWidth || !wrap.clientHeight) return; // hidden (mobile)
+        // Use offset* (layout position, NOT affected by the current transform)
+        // so the offset is correct even when a card still has its slide
+        // transform applied. getBoundingClientRect would include the transform
+        // and make the computed offset cancel out on alternate entries.
+        const centre = (el: HTMLElement) => ({
+            cx: el.offsetLeft + el.offsetWidth / 2,
+            cy: el.offsetTop + el.offsetHeight / 2,
+        });
+        const hb = centre(hub);
+        cards.forEach((card) => {
+            const cb = centre(card);
+            card.style.setProperty("--tx", `${hb.cx - cb.cx}px`);
+            card.style.setProperty("--ty", `${hb.cy - cb.cy}px`);
+        });
+    };
+
+    if (root && wrap) {
+        layout();
+        window.addEventListener("resize", layout, { passive: true });
+        // Replay each time the diagram scrolls into / out of view.
+        const io = new IntersectionObserver(
+            (entries) => {
+                for (const e of entries) {
+                    if (e.isIntersecting) {
+                        // Restart the slide deterministically: reset to the base
+                        // (under-hub) state, set offsets, force a reflow so that
+                        // state is committed, then add .in to animate out. No
+                        // rAF, so fast scroll in/out can't leave it half-applied.
+                        root.classList.remove("in");
+                        layout();
+                        void wrap.offsetWidth; // force reflow
+                        root.classList.add("in");
+                    } else {
+                        root.classList.remove("in");
+                    }
+                }
+            },
+            { threshold: 0.35 },
+        );
+        io.observe(root);
+    }
+</script>

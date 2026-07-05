@@ -2,8 +2,7 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { Icon } from "astro-icon/components";
 import ProductHero from "../../components/ProductHero.astro";
-import inventoryDesktop from "../../assets/images/desktop/screenshots/hasibu-inventory-module.png";
-import inventoryMobile from "../../assets/images/mobile/screenshots/hasibu-inventory-module.png";
+import InventoryFlow from "../../components/InventoryFlow.astro";
 
 // Trust chips under the hero copy.
 const chips = [
@@ -71,9 +70,7 @@ const features = [
     <ProductHero
         badge="Inventory & Stock"
         chips={chips}
-        desktopImg={inventoryDesktop}
-        mobileImg={inventoryMobile}
-        imgAlt="Hasibu inventory module: stock ledger, batches and transfers"
+        imgAlt="Hasibu inventory: one live stock ledger"
         toolbarUrl="business.hasibu.africa/inventory"
     >
         <Fragment slot="title">
@@ -85,6 +82,7 @@ const features = [
             with batch and expiry, variants, transfers and the costing method
             your business runs on.
         </Fragment>
+        <InventoryFlow slot="graphic" />
     </ProductHero>
 
     <!-- Features -->
