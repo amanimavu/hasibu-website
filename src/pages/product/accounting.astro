@@ -2,8 +2,7 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { Icon } from "astro-icon/components";
 import ProductHero from "../../components/ProductHero.astro";
-import accountingDesktop from "../../assets/images/desktop/screenshots/accounting-module.png";
-import accountingMobile from "../../assets/images/mobile/screenshots/accounting-module.png";
+import AccountingFlow from "../../components/AccountingFlow.astro";
 
 // Trust chips under the hero copy.
 const chips = [
@@ -67,9 +66,7 @@ const features = [
     <ProductHero
         badge="Accounting & GL"
         chips={chips}
-        desktopImg={accountingDesktop}
-        mobileImg={accountingMobile}
-        imgAlt="Hasibu accounting module: general ledger, VAT, COGS and bank reconciliation"
+        imgAlt="Hasibu accounting: events post as balanced double-entry journals into the general ledger and financial statements"
         toolbarUrl="business.hasibu.africa/accounting"
     >
         <Fragment slot="title">
@@ -81,6 +78,7 @@ const features = [
             ledger, with VAT, cost of goods and bank reconciliation handled as
             you trade.
         </Fragment>
+        <AccountingFlow slot="graphic" />
     </ProductHero>
 
     <!-- Features -->
