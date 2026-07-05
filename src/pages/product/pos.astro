@@ -2,8 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { Icon } from "astro-icon/components";
 import ProductHero from "../../components/ProductHero.astro";
-import posDesktop from "../../assets/images/desktop/screenshots/pos-module.png";
-import posMobile from "../../assets/images/mobile/screenshots/pos-module.png";
+import posDesktop from "@screenshots/desktop/pos-module.png";
+import posMobile from "@screenshots/mobile/pos-module.png";
 
 // Trust chips shown under the hero copy.
 const chips = [
@@ -84,6 +84,68 @@ const features = [
             Hasibu POS gives retail and hospitality a blazing-fast checkout,
             with M-Pesa, Airtel Money, MTN MoMo, card and cash settled on one
             screen and synced to your books in real time.
+        </Fragment>
+
+        <!-- Floating callouts over the screenshot (float + pulsing icons) -->
+        <Fragment slot="overlay">
+            <!-- Speed -->
+            <div
+                class="hero-callout absolute -top-4 left-6 hidden items-center gap-2.5 rounded-xl border border-slate-100 bg-white px-3.5 py-2.5 shadow-xl lg:flex"
+                style="--fd:.1s"
+            >
+                <span class="flex size-8 items-center justify-center rounded-full bg-blue-50 text-brand">
+                    <Icon name="material-symbols:bolt" class="hero-ico-zip size-5" />
+                </span>
+                <div class="leading-tight">
+                    <p class="text-sm font-semibold text-brand-dark">
+                        Seconds per sale
+                    </p>
+                    <p class="text-xs text-slate-400">Blazing-fast checkout</p>
+                </div>
+            </div>
+
+            <!-- Multiple payment methods -->
+            <div
+                class="hero-callout absolute top-1/3 -right-6 hidden items-center gap-2.5 rounded-xl border border-slate-100 bg-white px-3.5 py-2.5 shadow-xl lg:flex"
+                style="--fd:.9s"
+            >
+                <span class="flex size-8 items-center justify-center rounded-full bg-green-50 text-green-600">
+                    <Icon
+                        name="material-symbols:account-balance-wallet"
+                        class="size-5"
+                    />
+                </span>
+                <div class="leading-tight">
+                    <p class="text-sm font-semibold text-brand-dark">
+                        Any payment
+                    </p>
+                    <div class="pay-cycle text-xs text-slate-400">
+                        <div class="pay-list">
+                            <span>M-Pesa</span>
+                            <span>Airtel Money</span>
+                            <span>MTN MoMo</span>
+                            <span>Card</span>
+                            <span>M-Pesa</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Merge & split bills -->
+            <div
+                class="hero-callout absolute -bottom-5 left-8 hidden items-center gap-2.5 rounded-xl border border-slate-100 bg-white px-3.5 py-2.5 shadow-xl lg:flex"
+                style="--fd:1.6s"
+            >
+                <span class="flex size-8 items-center justify-center rounded-full bg-amber-50 text-amber-600">
+                    <span class="split-motif"><i></i><i></i></span>
+                </span>
+                <div class="leading-tight">
+                    <p class="text-sm font-semibold text-brand-dark">
+                        Split & merge bills
+                    </p>
+                    <p class="text-xs text-slate-400">Tabs and tables</p>
+                </div>
+            </div>
         </Fragment>
     </ProductHero>
 
