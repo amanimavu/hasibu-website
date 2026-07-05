@@ -2,8 +2,7 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { Icon } from "astro-icon/components";
 import ProductHero from "../../components/ProductHero.astro";
-import payrollDesktop from "../../assets/images/desktop/screenshots/hasibu-payroll-module.png";
-import payrollMobile from "../../assets/images/mobile/screenshots/hasibu-payroll-module.png";
+import PayrollFlow from "../../components/PayrollFlow.astro";
 
 const chips = [
     {
@@ -66,9 +65,7 @@ const features = [
     <ProductHero
         badge="Payroll"
         chips={chips}
-        desktopImg={payrollDesktop}
-        mobileImg={payrollMobile}
-        imgAlt="Hasibu payroll module: salaries, commissions, advances and payroll runs"
+        imgAlt="Hasibu payroll: a salary run producing payslips with PAYE, NHIF and NSSF deductions"
         toolbarUrl="business.hasibu.africa/finance/payroll"
     >
         <Fragment slot="title">
@@ -80,6 +77,7 @@ const features = [
             plus commissions, advances and loans, all from one place inside
             Hasibu.
         </Fragment>
+        <PayrollFlow slot="graphic" />
     </ProductHero>
 
     <!-- Features -->
