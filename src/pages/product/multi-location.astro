@@ -2,8 +2,7 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { Icon } from "astro-icon/components";
 import ProductHero from "../../components/ProductHero.astro";
-import locationsDesktop from "../../assets/images/desktop/screenshots/hasibu-locations-module.png";
-import locationsMobile from "../../assets/images/mobile/screenshots/hasibu-locations-module.png";
+import MultiLocationFlow from "../../components/MultiLocationFlow.astro";
 
 // Trust chips under the hero copy.
 const chips = [
@@ -71,9 +70,7 @@ const features = [
     <ProductHero
         badge="Multi-Location"
         chips={chips}
-        desktopImg={locationsDesktop}
-        mobileImg={locationsMobile}
-        imgAlt="Hasibu locations module: shops, stores and transfers"
+        imgAlt="Hasibu multi-location: shops, stores, transfers and consolidated reports"
         toolbarUrl="business.hasibu.africa/locations"
     >
         <Fragment slot="title">
@@ -85,6 +82,7 @@ const features = [
             per-location stock, pricing, printing and staff that still roll up
             to a single view of the whole company.
         </Fragment>
+        <MultiLocationFlow slot="graphic" />
     </ProductHero>
 
     <!-- Features -->
