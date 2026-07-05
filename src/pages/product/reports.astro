@@ -2,8 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { Icon } from "astro-icon/components";
 import ProductHero from "../../components/ProductHero.astro";
-import reportsDesktop from "../../assets/images/desktop/screenshots/hasibu-reports-module.png";
-import reportsMobile from "../../assets/images/mobile/screenshots/hasibu-report-module.png";
+import reportsDesktop from "@screenshots/desktop/reports-page.png";
+import reportsMobile from "@screenshots/mobile/hasibu-report-module.png";
 
 // Trust chips under the hero copy.
 const chips = [
@@ -85,6 +85,123 @@ const features = [
             filter to the answer you need, and export it as a branded report in
             a click.
         </Fragment>
+
+        <!-- Floating annotated callouts over the screenshot -->
+        <Fragment slot="overlay">
+            <!-- Build any report yourself -->
+            <div
+                class="hero-callout absolute -top-5 left-6 hidden max-w-[13rem] items-start gap-2.5 rounded-xl border border-slate-100 bg-white px-3 py-2.5 shadow-xl lg:flex"
+                style="--fd:.1s"
+            >
+                <span class="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-brand">
+                    <svg
+                        class="tune-ico size-4"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        aria-hidden="true"
+                    >
+                        <path d="M4 7 H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        <path d="M4 12 H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        <path d="M4 17 H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        <circle class="knob k1" cx="9" cy="7" r="2.6" fill="white" stroke="currentColor" stroke-width="2" />
+                        <circle class="knob k2" cx="15" cy="12" r="2.6" fill="white" stroke="currentColor" stroke-width="2" />
+                        <circle class="knob k3" cx="8" cy="17" r="2.6" fill="white" stroke="currentColor" stroke-width="2" />
+                    </svg>
+                </span>
+                <div class="leading-tight">
+                    <p class="text-sm font-semibold text-brand-dark">Build it yourself</p>
+                    <p class="text-xs text-slate-400">Any metric, sliced any way</p>
+                </div>
+            </div>
+
+            <!-- Scheduled to your inbox -->
+            <div
+                class="hero-callout absolute -top-5 right-4 hidden max-w-[13rem] items-start gap-2.5 rounded-xl border border-slate-100 bg-white px-3 py-2.5 shadow-xl lg:flex"
+                style="--fd:.5s"
+            >
+                <span class="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-lg bg-teal-50 text-teal-600">
+                    <Icon name="material-symbols:schedule-send-outline" class="size-4" />
+                </span>
+                <div class="leading-tight">
+                    <p class="text-sm font-semibold text-brand-dark">Scheduled to inbox</p>
+                    <p class="text-xs text-slate-400">Daily, weekly, on shift close</p>
+                </div>
+            </div>
+
+            <!-- Every branch, separately or combined -->
+            <div
+                class="hero-callout absolute top-1/3 -left-6 hidden max-w-[12rem] items-start gap-2.5 rounded-xl border border-slate-100 bg-white px-3 py-2.5 shadow-xl lg:flex"
+                style="--fd:.9s"
+            >
+                <span class="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-brand">
+                    <Icon name="material-symbols:store-outline" class="size-4" />
+                </span>
+                <div class="leading-tight">
+                    <p class="text-sm font-semibold text-brand-dark">Any branch, or all</p>
+                    <p class="text-xs text-slate-400">Filter by location</p>
+                </div>
+            </div>
+
+            <!-- Tap to drill in -->
+            <div
+                class="hero-callout absolute top-2/3 -right-6 hidden max-w-[12rem] items-start gap-2.5 rounded-xl border border-slate-100 bg-white px-3 py-2.5 shadow-xl lg:flex"
+                style="--fd:1.3s"
+            >
+                <span class="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-lg bg-purple-50 text-purple-600">
+                    <Icon name="material-symbols:touch-app-outline" class="size-4" />
+                </span>
+                <div class="leading-tight">
+                    <p class="text-sm font-semibold text-brand-dark">Tap to drill in</p>
+                    <p class="text-xs text-slate-400">Top 10 to the sales behind</p>
+                </div>
+            </div>
+
+            <!-- Branded export -->
+            <div
+                class="hero-callout absolute -bottom-5 left-10 hidden max-w-[12rem] items-start gap-2.5 rounded-xl border border-slate-100 bg-white px-3 py-2.5 shadow-xl lg:flex"
+                style="--fd:1.7s"
+            >
+                <span class="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-lg bg-slate-50">
+                    <svg
+                        class="dl-ico size-4"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        aria-hidden="true"
+                    >
+                        <!-- arrow: shaft + head (same teal as the tray) -->
+                        <rect
+                            class="dl-shaft"
+                            x="10.9"
+                            y="2.5"
+                            width="2.2"
+                            height="12.5"
+                            rx="1.1"
+                            fill="#06b6d4"
+                        />
+                        <path
+                            class="dl-head"
+                            d="M7 12.5 L12 17 L17 12.5"
+                            stroke="#06b6d4"
+                            stroke-width="2.2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+                        <!-- tray (teal U, wider) -->
+                        <path
+                            d="M4.5 17 v3.5 h15 v-3.5"
+                            stroke="#06b6d4"
+                            stroke-width="2.2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+                    </svg>
+                </span>
+                <div class="leading-tight">
+                    <p class="text-sm font-semibold text-brand-dark">Branded export</p>
+                    <p class="text-xs text-slate-400">PDF or Excel, one tap</p>
+                </div>
+            </div>
+        </Fragment>
     </ProductHero>
 
     <!-- Features -->
@@ -155,3 +272,55 @@ const features = [
         </div>
     </section>
 </BaseLayout>
+
+<style>
+    /* Download icon: the arrow shaft lengthens downward toward the tray, the
+       head follows, then resets. */
+    .dl-shaft {
+        transform-box: fill-box;
+        transform-origin: center top;
+        animation: dl-grow 2s ease-in-out infinite;
+    }
+    .dl-head {
+        transform-box: fill-box;
+        animation: dl-drop 2s ease-in-out infinite;
+    }
+    @keyframes dl-grow {
+        0% { transform: scaleY(0.45); }
+        50%, 78% { transform: scaleY(1); }
+        100% { transform: scaleY(0.45); }
+    }
+    @keyframes dl-drop {
+        0% { transform: translateY(-7px); }
+        50%, 78% { transform: translateY(0); }
+        100% { transform: translateY(-7px); }
+    }
+    /* Sliders icon: knobs slide along their tracks. */
+    .k1 { animation: knob-a 4s ease-in-out infinite -0.6s; }
+    .k2 { animation: knob-b 4.8s ease-in-out infinite -2.4s; }
+    .k3 { animation: knob-c 3.6s ease-in-out infinite -1.3s; }
+    /* slide to a value, hold, slide back, hold — like a real adjustment */
+    @keyframes knob-a {
+        0%, 18% { transform: translateX(0); }
+        40%, 58% { transform: translateX(6px); }
+        80%, 100% { transform: translateX(0); }
+    }
+    @keyframes knob-b {
+        0%, 18% { transform: translateX(0); }
+        40%, 58% { transform: translateX(-5px); }
+        80%, 100% { transform: translateX(0); }
+    }
+    @keyframes knob-c {
+        0%, 18% { transform: translateX(0); }
+        40%, 58% { transform: translateX(4px); }
+        80%, 100% { transform: translateX(0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .dl-shaft,
+        .dl-head,
+        .knob {
+            animation: none;
+        }
+    }
+</style>
