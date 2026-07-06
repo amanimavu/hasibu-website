@@ -35,8 +35,5 @@
     "devDependencies": {
         "@iconify-json/hugeicons": "^1.2.29",
         "@iconify-json/material-symbols": "^1.2.78"
-    },
-    "overrides": {
-        "vite": "^7"
     }
 }
