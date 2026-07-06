@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { SIGNUP_URL } from "../../lib/site";
 import { Icon } from "astro-icon/components";
 import ProductHero from "../../components/ProductHero.astro";
 import reportsDesktop from "@screenshots/desktop/reports-page.png";
@@ -256,7 +257,7 @@ const features = [
                 </div>
                 <div class="flex flex-col gap-3 sm:flex-row">
                     <a
-                        href="https://app.hasibu.africa/signup"
+                        href={SIGNUP_URL}
                         class="inline-flex items-center justify-center rounded-lg bg-brand px-6 py-3 text-sm font-medium text-white shadow-sm transition hover:opacity-90"
                     >
                         Start Free Trial
