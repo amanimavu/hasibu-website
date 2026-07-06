@@ -2,99 +2,76 @@
 import { Icon } from "astro-icon/components";
 import { Image } from "astro:assets";
 import brandLogo from "../assets/images/brand/hasibu-brand-black.svg";
+import { industries, roles } from "../data/solutions";
+import { SIGNUP_URL, LOGIN_URL } from "../lib/site";
+import { moduleGroups } from "../data/modules";
 
-// Simple nav links (Product has its own mega menu, handled separately).
+// Simple nav links (Product, Solutions and Resources have their own mega menus).
 const nav = [
-    { href: "/solutions", label: "Solutions" },
     { href: "/pricing", label: "Pricing" },
-    { href: "/resources/blog", label: "Resources" },
     { href: "/company/about", label: "Company" },
 ];
 
-// Product mega menu: 4 columns.
-const mega = [
+// Product mega menu: canonical module list (shared with /product and the footer).
+const mega = moduleGroups;
+
+// Solutions mega menu: two axes, sourced from the solutions data.
+const solutionsMega = [
     {
-        title: "Core Operations",
+        title: "By industry",
         color: "text-green-600",
         icon: "hugeicons:store-01",
-        items: [
-            {
-                label: "Point of Sale (POS)",
-                href: "/product/pos",
-                icon: "hugeicons:shopping-cart-01",
-            },
-            {
-                label: "Inventory & Stock",
-                href: "/product/inventory",
-                icon: "hugeicons:package",
-            },
-            {
-                label: "Multi-Location",
-                href: "/product/multi-location",
-                icon: "hugeicons:location-01",
-            },
-        ],
+        items: industries.map((s) => ({
+            label: s.name,
+            href: `/solutions/${s.slug}`,
+            icon: s.icon,
+        })),
     },
     {
-        title: "Finance & Commerce",
-        color: "text-orange-500",
-        icon: "hugeicons:analytics-up",
-        items: [
-            {
-                label: "Accounting & GL",
-                href: "/product/accounting",
-                icon: "hugeicons:invoice-01",
-            },
-            {
-                label: "eCommerce / Storefront",
-                href: "/product/online-store",
-                icon: "hugeicons:hand-bag-01",
-            },
-            {
-                label: "Payroll",
-                href: "/product/payroll",
-                icon: "hugeicons:wallet-01",
-            },
-        ],
-    },
-    {
-        title: "Insights",
-        color: "text-sky-600",
-        icon: "hugeicons:analytics-01",
-        items: [
-            {
-                label: "Reports & Analytics",
-                href: "/product/reports",
-                icon: "hugeicons:analytics-01",
-            },
-        ],
-    },
-    {
-        title: "B2B & Supply",
+        title: "By role",
         color: "text-blue-600",
-        icon: "hugeicons:delivery-truck-01",
+        icon: "hugeicons:user-group",
+        items: roles.map((s) => ({
+            label: s.name,
+            href: `/solutions/${s.slug}`,
+            icon: s.icon,
+        })),
+    },
+];
+
+// Resources mega menu.
+const resourcesMega = [
+    {
+        title: "Learn",
+        color: "text-purple-600",
+        icon: "hugeicons:book-open-01",
         items: [
             {
-                label: "Hasibu Trade Network",
-                href: "/product/trade",
-                icon: "hugeicons:distribution",
+                label: "Blog",
+                href: "/resources/blog",
+                icon: "hugeicons:news-01",
             },
             {
-                label: "Supplier Portal",
-                href: "/product/supplier-portal",
-                icon: "hugeicons:delivery-box-01",
+                label: "Guides & Tutorials",
+                href: "/resources/guides",
+                icon: "hugeicons:mortarboard-02",
             },
         ],
     },
     {
-        title: "Productivity",
-        color: "text-purple-600",
-        icon: "hugeicons:flash",
+        title: "Support & updates",
+        color: "text-teal-600",
+        icon: "hugeicons:customer-support",
         items: [
             {
-                label: "Integrations",
-                href: "/product/integrations",
-                icon: "hugeicons:plug-01",
+                label: "Help Center",
+                href: "/resources/help",
+                icon: "hugeicons:help-circle",
+            },
+            {
+                label: "Changelog",
+                href: "/resources/changelog",
+                icon: "hugeicons:megaphone-01",
             },
         ],
     },
@@ -126,6 +103,34 @@ const mega = [
                     class="size-4 text-slate-400 transition-transform"
                 />
             </button>
+            <button
+                id="solutions-trigger"
+                type="button"
+                aria-controls="mega-solutions"
+                aria-expanded="false"
+                class="inline-flex items-center gap-0.5 text-sm font-medium text-slate-600 transition hover:text-brand aria-expanded:text-brand"
+            >
+                Solutions
+                <Icon
+                    id="solutions-caret"
+                    name="material-symbols:keyboard-arrow-down"
+                    class="size-4 text-slate-400 transition-transform"
+                />
+            </button>
+            <button
+                id="resources-trigger"
+                type="button"
+                aria-controls="mega-resources"
+                aria-expanded="false"
+                class="inline-flex items-center gap-0.5 text-sm font-medium text-slate-600 transition hover:text-brand aria-expanded:text-brand"
+            >
+                Resources
+                <Icon
+                    id="resources-caret"
+                    name="material-symbols:keyboard-arrow-down"
+                    class="size-4 text-slate-400 transition-transform"
+                />
+            </button>
             {
                 nav.map((n) => (
                     <a
@@ -141,13 +146,13 @@ const mega = [
         <!-- Desktop actions -->
         <div class="hidden items-center gap-5 lg:flex">
             <a
-                href="https://app.hasibu.africa/login"
-                class="text-sm font-medium text-slate-600 transition hover:text-brand px-4 py-2 border rounded-lg border-neutral-400"
+                href={LOGIN_URL}
+                class="text-sm font-medium text-slate-600 transition hover:text-brand hover:border-brand px-4 py-2 border rounded-lg border-neutral-400"
             >
                 Login
             </a>
             <a
-                href="https://app.hasibu.africa/signup"
+                href={SIGNUP_URL}
                 class="rounded-lg bg-brand px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:opacity-90"
             >
                 Get Started
@@ -176,6 +181,94 @@ const mega = [
             <div class="mx-auto grid max-w-6xl grid-cols-5 gap-8 px-6 py-8">
                 {
                     mega.map((col) => (
+                        <div>
+                            <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
+                                <Icon
+                                    name={col.icon}
+                                    class={`size-4 ${col.color}`}
+                                />
+                                <span
+                                    class={`text-xs font-semibold uppercase tracking-wide ${col.color}`}
+                                >
+                                    {col.title}
+                                </span>
+                            </div>
+                            <ul class="mt-4 space-y-3">
+                                {col.items.map((it) => (
+                                    <li>
+                                        <a
+                                            href={it.href}
+                                            class="flex items-center gap-2 text-sm text-slate-600 transition hover:text-brand"
+                                        >
+                                            <Icon
+                                                name={it.icon}
+                                                class="size-4 text-slate-400"
+                                            />
+                                            {it.label}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Solutions mega menu (desktop) -->
+    <div
+        id="mega-solutions"
+        class="invisible absolute left-0 top-full hidden w-full opacity-0 transition-opacity duration-200 lg:block"
+    >
+        <div class="border-t border-slate-100 bg-white shadow-xl">
+            <div class="mx-auto grid max-w-4xl grid-cols-2 gap-8 px-6 py-8">
+                {
+                    solutionsMega.map((col) => (
+                        <div>
+                            <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
+                                <Icon
+                                    name={col.icon}
+                                    class={`size-4 ${col.color}`}
+                                />
+                                <span
+                                    class={`text-xs font-semibold uppercase tracking-wide ${col.color}`}
+                                >
+                                    {col.title}
+                                </span>
+                            </div>
+                            <ul class="mt-4 grid grid-cols-2 gap-x-6 gap-y-3">
+                                {col.items.map((it) => (
+                                    <li>
+                                        <a
+                                            href={it.href}
+                                            class="flex items-center gap-2 text-sm text-slate-600 transition hover:text-brand"
+                                        >
+                                            <Icon
+                                                name={it.icon}
+                                                class="size-4 text-slate-400"
+                                            />
+                                            {it.label}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Resources mega menu (desktop) -->
+    <div
+        id="mega-resources"
+        class="invisible absolute left-0 top-full hidden w-full opacity-0 transition-opacity duration-200 lg:block"
+    >
+        <div class="border-t border-slate-100 bg-white shadow-xl">
+            <div class="mx-auto grid max-w-3xl grid-cols-2 gap-8 px-6 py-8">
+                {
+                    resourcesMega.map((col) => (
                         <div>
                             <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
                                 <Icon
@@ -251,33 +344,121 @@ const mega = [
                     />
                 </summary>
                 <div class="pb-4">
-                    {mega.map((col) => (
-                        <div class="mt-5 first:mt-3">
-                            <span
-                                class={`flex items-center gap-2 text-xs font-semibold uppercase tracking-wide ${col.color}`}
-                            >
-                                <Icon name={col.icon} class="size-4" />
-                                {col.title}
-                            </span>
-                            <ul class="mt-2 space-y-1 pl-6">
-                                {col.items.map((it) => (
-                                    <li>
-                                        <a
-                                            href={it.href}
-                                            data-nav-link
-                                            class="flex items-center gap-2 py-1.5 text-sm text-slate-600 transition hover:text-brand"
-                                        >
-                                            <Icon
-                                                name={it.icon}
-                                                class="size-4 text-slate-400"
-                                            />
-                                            {it.label}
-                                        </a>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    ))}
+                    {
+                        mega.map((col) => (
+                            <div class="mt-5 first:mt-3">
+                                <span
+                                    class={`flex items-center gap-2 text-xs font-semibold uppercase tracking-wide ${col.color}`}
+                                >
+                                    <Icon name={col.icon} class="size-4" />
+                                    {col.title}
+                                </span>
+                                <ul class="mt-2 space-y-1 pl-6">
+                                    {col.items.map((it) => (
+                                        <li>
+                                            <a
+                                                href={it.href}
+                                                data-nav-link
+                                                class="flex items-center gap-2 py-1.5 text-sm text-slate-600 transition hover:text-brand"
+                                            >
+                                                <Icon
+                                                    name={it.icon}
+                                                    class="size-4 text-slate-400"
+                                                />
+                                                {it.label}
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        ))
+                    }
+                </div>
+            </details>
+            <!-- Solutions (collapsible, mirrors the desktop mega menu) -->
+            <details class="group border-b border-slate-100">
+                <summary
+                    class="flex cursor-pointer list-none items-center justify-between py-3 text-base font-medium text-slate-700 transition hover:text-brand [&::-webkit-details-marker]:hidden"
+                >
+                    Solutions
+                    <Icon
+                        name="material-symbols:keyboard-arrow-down"
+                        class="size-5 text-slate-400 transition-transform group-open:rotate-180"
+                    />
+                </summary>
+                <div class="pb-4">
+                    {
+                        solutionsMega.map((col) => (
+                            <div class="mt-5 first:mt-3">
+                                <span
+                                    class={`flex items-center gap-2 text-xs font-semibold uppercase tracking-wide ${col.color}`}
+                                >
+                                    <Icon name={col.icon} class="size-4" />
+                                    {col.title}
+                                </span>
+                                <ul class="mt-2 space-y-1 pl-6">
+                                    {col.items.map((it) => (
+                                        <li>
+                                            <a
+                                                href={it.href}
+                                                data-nav-link
+                                                class="flex items-center gap-2 py-1.5 text-sm text-slate-600 transition hover:text-brand"
+                                            >
+                                                <Icon
+                                                    name={it.icon}
+                                                    class="size-4 text-slate-400"
+                                                />
+                                                {it.label}
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        ))
+                    }
+                </div>
+            </details>
+            <!-- Resources (collapsible, mirrors the desktop mega menu) -->
+            <details class="group border-b border-slate-100">
+                <summary
+                    class="flex cursor-pointer list-none items-center justify-between py-3 text-base font-medium text-slate-700 transition hover:text-brand [&::-webkit-details-marker]:hidden"
+                >
+                    Resources
+                    <Icon
+                        name="material-symbols:keyboard-arrow-down"
+                        class="size-5 text-slate-400 transition-transform group-open:rotate-180"
+                    />
+                </summary>
+                <div class="pb-4">
+                    {
+                        resourcesMega.map((col) => (
+                            <div class="mt-5 first:mt-3">
+                                <span
+                                    class={`flex items-center gap-2 text-xs font-semibold uppercase tracking-wide ${col.color}`}
+                                >
+                                    <Icon name={col.icon} class="size-4" />
+                                    {col.title}
+                                </span>
+                                <ul class="mt-2 space-y-1 pl-6">
+                                    {col.items.map((it) => (
+                                        <li>
+                                            <a
+                                                href={it.href}
+                                                data-nav-link
+                                                class="flex items-center gap-2 py-1.5 text-sm text-slate-600 transition hover:text-brand"
+                                            >
+                                                <Icon
+                                                    name={it.icon}
+                                                    class="size-4 text-slate-400"
+                                                />
+                                                {it.label}
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        ))
+                    }
                 </div>
             </details>
             {
@@ -295,14 +476,14 @@ const mega = [
 
         <div class="mt-6 flex flex-col gap-3">
             <a
-                href="https://app.hasibu.africa/login"
+                href={LOGIN_URL}
                 data-nav-link
-                class="rounded-lg border border-neutral-400 px-4 py-2.5 text-center text-sm font-medium text-slate-600 transition hover:text-brand"
+                class="rounded-lg border border-neutral-400 px-4 py-2.5 text-center text-sm font-medium text-slate-600 transition hover:text-brand hover:border-brand"
             >
                 Login
             </a>
             <a
-                href="https://app.hasibu.africa/signup"
+                href={SIGNUP_URL}
                 data-nav-link
                 class="rounded-lg bg-brand px-4 py-2.5 text-center text-sm font-medium text-white shadow-sm transition hover:opacity-90"
             >
@@ -367,45 +548,61 @@ const mega = [
         if (e.key === "Escape") close();
     });
 
-    // Product mega menu (desktop)
-    const trigger = document.getElementById("product-trigger");
-    const mega = document.getElementById("mega-product");
-    const caret = document.getElementById("product-caret");
-    let megaTimer: ReturnType<typeof setTimeout>;
+    // Desktop mega menus (Product, Solutions). Each trigger opens its own panel;
+    // opening one closes the others.
+    const wireMega = (triggerId: string, megaId: string, caretId: string) => {
+        const trigger = document.getElementById(triggerId);
+        const mega = document.getElementById(megaId);
+        const caret = document.getElementById(caretId);
+        if (!trigger || !mega) return null;
+        let timer: ReturnType<typeof setTimeout>;
 
-    const megaOpen = () => {
-        clearTimeout(megaTimer);
-        mega?.classList.remove("invisible");
-        requestAnimationFrame(() => mega?.classList.remove("opacity-0"));
-        trigger?.setAttribute("aria-expanded", "true");
-        caret?.classList.add("rotate-180");
-    };
-    const megaClose = () => {
-        mega?.classList.add("opacity-0");
-        trigger?.setAttribute("aria-expanded", "false");
-        caret?.classList.remove("rotate-180");
-        megaTimer = setTimeout(() => mega?.classList.add("invisible"), 200);
-    };
-    // small delay so the gap between trigger and panel doesn't close it
-    const scheduleClose = () => {
-        megaTimer = setTimeout(megaClose, 150);
+        const openM = () => {
+            clearTimeout(timer);
+            closeOthers(megaId);
+            mega.classList.remove("invisible");
+            requestAnimationFrame(() => mega.classList.remove("opacity-0"));
+            trigger.setAttribute("aria-expanded", "true");
+            caret?.classList.add("rotate-180");
+        };
+        const closeM = () => {
+            mega.classList.add("opacity-0");
+            trigger.setAttribute("aria-expanded", "false");
+            caret?.classList.remove("rotate-180");
+            timer = setTimeout(() => mega.classList.add("invisible"), 200);
+        };
+        // small delay so the gap between trigger and panel doesn't close it
+        const scheduleClose = () => {
+            timer = setTimeout(closeM, 150);
+        };
+
+        trigger.addEventListener("mouseenter", openM);
+        trigger.addEventListener("mouseleave", scheduleClose);
+        trigger.addEventListener("focus", openM);
+        mega.addEventListener("mouseenter", () => clearTimeout(timer));
+        mega.addEventListener("mouseleave", scheduleClose);
+        trigger.addEventListener("click", () =>
+            trigger.getAttribute("aria-expanded") === "true"
+                ? closeM()
+                : openM(),
+        );
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") closeM();
+        });
+        document.addEventListener("click", (e) => {
+            const t = e.target as Node;
+            if (!trigger.contains(t) && !mega.contains(t)) closeM();
+        });
+        return { id: megaId, close: closeM };
     };
 
-    trigger?.addEventListener("mouseenter", megaOpen);
-    trigger?.addEventListener("mouseleave", scheduleClose);
-    trigger?.addEventListener("focus", megaOpen);
-    mega?.addEventListener("mouseenter", () => clearTimeout(megaTimer));
-    mega?.addEventListener("mouseleave", scheduleClose);
-    trigger?.addEventListener("click", () =>
-        trigger.getAttribute("aria-expanded") === "true"
-            ? megaClose()
-            : megaOpen(),
-    );
-    document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") megaClose();
-    });
-    document.addEventListener("click", (e) => {
-        const t = e.target as Node;
-        if (!trigger?.contains(t) && !mega?.contains(t)) megaClose();
-    });
+    const megas: Array<{ id: string; close: () => void }> = [];
+    const closeOthers = (keepId: string) =>
+        megas.forEach((m) => m.id !== keepId && m.close());
+
+    [
+        wireMega("product-trigger", "mega-product", "product-caret"),
+        wireMega("solutions-trigger", "mega-solutions", "solutions-caret"),
+        wireMega("resources-trigger", "mega-resources", "resources-caret"),
+    ].forEach((m) => m && megas.push(m));
 </script>
