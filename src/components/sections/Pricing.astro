@@ -1,7 +1,14 @@
 ---
 import { Icon } from "astro-icon/components";
-import { directus, readItems } from "../../lib/directus";
+import { directus, readItems, readSingleton } from "../../lib/directus";
 import type { PricingTier } from "../../lib/directus";
+import { SIGNUP_URL } from "../../lib/site";
+
+interface Props {
+    // Pages with their own decorated header (e.g. /pricing) hide this.
+    showHeader?: boolean;
+}
+const { showHeader = true } = Astro.props;
 
 interface Feature {
     label: string;
@@ -11,70 +18,80 @@ interface Row {
     name: string;
     blurb: string;
     monthly: { price: string; billed: string };
+    quarterly: { price: string; billed: string };
     annual: { price: string; billed: string };
+    limits: string;
     popular: boolean;
     cta: { label: string; href: string; style: "outline" | "solid" | "dark" };
     features: Feature[];
 }
 
-// Fallback seed (sample numbers). Real plans come from Directus `pricing_tiers`.
-// Owners haven't finalized plans yet and there may be up to 5.
+// Fallback seed (real Kenya plans, ex-VAT). Live plans come from Directus
+// `pricing_tiers`; there may be up to 5.
 const seed: Row[] = [
     {
         name: "Starter",
-        blurb: "For micro and solo-run businesses just getting started.",
-        monthly: { price: "$19", billed: "Billed monthly" },
-        annual: { price: "$15", billed: "Billed annually" },
+        blurb: "Get selling, stay compliant. For a single shop getting started.",
+        monthly: { price: "KES 2,000", billed: "Billed monthly, excl. VAT" },
+        quarterly: { price: "KES 1,800", billed: "Billed quarterly (KES 5,400/qtr), excl. VAT" },
+        annual: { price: "KES 1,700", billed: "Billed annually (KES 20,400/yr), excl. VAT" },
+        limits: "3 users · 1 shop",
         popular: false,
-        cta: { label: "Start Free Trial", href: "/get-started/signup", style: "outline" },
+        cta: { label: "Start Free Trial", href: SIGNUP_URL, style: "outline" },
         features: [
-            { label: "1 location", included: true },
-            { label: "POS & Inventory (basic)", included: true },
-            { label: "Up to 3 users", included: true },
-            { label: "Mobile money integrations", included: true },
-            { label: "Accounting module", included: false },
-            { label: "Multi-currency", included: false },
-            { label: "HR & Payroll", included: false },
-        ],
+            "POS, products & inventory",
+            "eTIMS + M-Pesa payments",
+            "Suppliers, customers, SMS & email",
+        ].map((label) => ({ label, included: true })),
     },
     {
         name: "Growth",
-        blurb: "For growing SMEs with multiple staff and locations.",
-        monthly: { price: "$49", billed: "Billed monthly" },
-        annual: { price: "$39", billed: "Billed annually" },
+        blurb: "Run the whole operation. For a growing business with stock & staff.",
+        monthly: { price: "KES 4,500", billed: "Billed monthly, excl. VAT" },
+        quarterly: { price: "KES 4,050", billed: "Billed quarterly (KES 12,150/qtr), excl. VAT" },
+        annual: { price: "KES 3,825", billed: "Billed annually (KES 45,900/yr), excl. VAT" },
+        limits: "8 users · 1 shop · unlimited stores",
         popular: true,
-        cta: { label: "Start Free Trial", href: "/get-started/signup", style: "solid" },
+        cta: { label: "Start Free Trial", href: SIGNUP_URL, style: "solid" },
         features: [
-            "Up to 5 locations",
-            "Full POS & Inventory",
-            "Up to 20 users",
-            "Accounting & invoicing",
-            "Multi-currency support",
-            "Sales CRM",
-            "HR & Payroll",
+            "Everything in Starter",
+            "Purchases, production, variants",
+            "Expenses, AR/AP, petty cash",
+            "Quotes, orders, commissions",
         ].map((label) => ({ label, included: true })),
     },
     {
         name: "Enterprise",
-        blurb: "For distributors, chains, and enterprise SMEs.",
-        monthly: { price: "$129", billed: "Billed monthly" },
-        annual: { price: "$103", billed: "Billed annually" },
+        blurb: "Scale on your terms. For multi-branch & advanced needs.",
+        monthly: { price: "Let's talk", billed: "Custom quote" },
+        quarterly: { price: "Let's talk", billed: "Custom quote" },
+        annual: { price: "Let's talk", billed: "Custom quote" },
+        limits: "Custom users, shops & limits",
         popular: false,
         cta: { label: "Contact Sales", href: "/get-started/contact-sales", style: "dark" },
         features: [
-            "Unlimited locations",
-            "All modules included",
-            "Unlimited users",
-            "HR, Payroll & compliance",
-            "Custom API integrations",
-            "Dedicated account manager",
-            "SLA & priority support",
+            "Everything in Growth",
+            "Advanced finance (assets, JVs)",
+            "API & custom integrations",
+            "Dedicated onboarding & SLA",
         ].map((label) => ({ label, included: true })),
     },
 ];
 
+// Footnote as discrete, scannable facts (rendered dot-separated). In the CMS,
+// `pricing_settings.note` holds them one per line (or pipe-separated).
+const seedNoteItems = [
+    "30-day free trial",
+    "10% off quarterly",
+    "15% off annual",
+    "Add a shop: KES 4,500/mo",
+    "Add a user: KES 500/mo",
+    "Prices exclude VAT (16% at billing)",
+];
+
 // Build-time fetch from Directus, falling back to the seed.
 let rows: Row[] = seed;
+let noteItems = seedNoteItems;
 let usingSeed = true;
 try {
     const data = (await directus.request(
@@ -88,7 +105,9 @@ try {
             name: t.name,
             blurb: t.blurb ?? "",
             monthly: { price: t.price_monthly, billed: t.billed_monthly },
+            quarterly: { price: t.price_quarterly, billed: t.billed_quarterly },
             annual: { price: t.price_annual, billed: t.billed_annual },
+            limits: t.limits ?? "",
             popular: t.popular,
             cta: { label: t.cta_label, href: t.cta_href, style: t.cta_style },
             features: t.features ?? [],
@@ -97,6 +116,13 @@ try {
     }
 } catch {
     console.warn("[Pricing] Directus unavailable, using seed pricing.");
+}
+
+try {
+    const settings = await directus.request(readSingleton("pricing_settings"));
+    if (settings?.notes?.length) noteItems = settings.notes;
+} catch {
+    // keep seed note items
 }
 
 // Up to 5 plans: show 3 by default, reveal the rest. The window is centered on the
@@ -122,56 +148,70 @@ const ctaClass: Record<string, string> = {
 
 <section class="bg-slate-50 py-20 lg:py-28">
     <div class="mx-auto max-w-6xl px-6">
-        <!-- Heading -->
-        <div class="mx-auto max-w-2xl text-center">
-            <span
-                class="inline-block rounded-full bg-blue-50 px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-brand"
-            >
-                Pricing
-            </span>
-            <h2
-                class="mt-3 text-3xl font-bold tracking-tight text-brand-dark sm:text-4xl"
-            >
-                Simple, transparent pricing<br class="hidden sm:block" /> for every
-                stage.
-            </h2>
-            <p class="mt-4 text-slate-500">
-                No hidden fees. Pay in your local currency. Cancel anytime.
-            </p>
-        </div>
+        {showHeader && (
+            <div class="mx-auto max-w-2xl text-center">
+                <span class="inline-block rounded-full bg-blue-50 px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-brand">
+                    Pricing
+                </span>
+                <h2 class="mt-3 text-3xl font-bold tracking-tight text-brand-dark sm:text-4xl">
+                    Simple, transparent pricing<br class="hidden sm:block" /> for
+                    every stage.
+                </h2>
+                <p class="mt-4 text-slate-500">
+                    No hidden fees. Pay in your local currency. Cancel anytime.
+                </p>
+            </div>
+        )}
 
-        <!-- Billing toggle -->
-        <div class="mt-8 flex items-center justify-center gap-3">
-            <span
-                id="lbl-monthly"
-                class="text-sm font-medium text-brand-dark transition-colors"
-            >
-                Monthly
-            </span>
-            <button
-                id="billing-toggle"
-                type="button"
-                role="switch"
-                aria-checked="false"
-                aria-label="Toggle annual billing"
-                class="relative h-6 w-11 rounded-full bg-brand transition-colors"
+        <!-- Billing segmented control -->
+        <div class="mt-8 flex justify-center">
+            <div
+                id="billing-seg"
+                role="tablist"
+                aria-label="Billing cadence"
+                class="relative inline-flex rounded-full bg-slate-100 p-1 text-sm font-medium"
             >
                 <span
-                    id="billing-knob"
-                    class="absolute left-0.5 top-0.5 size-5 rounded-full bg-white shadow transition-transform"
+                    id="seg-thumb"
+                    class="pointer-events-none absolute bottom-1 left-1 top-1 rounded-full bg-white shadow-sm transition-all duration-300 ease-out"
+                    style="width:0"
                 ></span>
-            </button>
-            <span
-                id="lbl-annual"
-                class="text-sm font-medium text-slate-400 transition-colors"
-            >
-                Annual
-            </span>
-            <span
-                class="rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700"
-            >
-                Save 20%
-            </span>
+                <!-- Floats up + fades when a discounted cadence is picked. -->
+                <span
+                    id="seg-float"
+                    aria-hidden="true"
+                    class="pointer-events-none absolute top-0 z-20 whitespace-nowrap rounded-full bg-green-100 px-2 py-0.5 text-[10px] font-semibold text-green-700 opacity-0"
+                ></span>
+                <button
+                    type="button"
+                    role="tab"
+                    data-mode="monthly"
+                    aria-selected="true"
+                    class="seg-btn relative z-10 cursor-pointer rounded-full px-4 py-1.5 text-brand-dark transition-colors"
+                >
+                    Monthly
+                </button>
+                <button
+                    type="button"
+                    role="tab"
+                    data-mode="quarterly"
+                    data-save="Save 10%"
+                    aria-selected="false"
+                    class="seg-btn relative z-10 cursor-pointer rounded-full px-4 py-1.5 text-slate-500 transition-colors"
+                >
+                    Quarterly
+                </button>
+                <button
+                    type="button"
+                    role="tab"
+                    data-mode="annual"
+                    data-save="Save 15%"
+                    aria-selected="false"
+                    class="seg-btn relative z-10 cursor-pointer rounded-full px-4 py-1.5 text-slate-500 transition-colors"
+                >
+                    Annual
+                </button>
+            </div>
         </div>
 
         <!-- Cards: flex-wrap centers any count from 1 to 5 -->
@@ -207,6 +247,7 @@ const ctaClass: Record<string, string> = {
                                 class="text-4xl font-bold text-brand-dark"
                                 data-price
                                 data-monthly={t.monthly.price}
+                                data-quarterly={t.quarterly.price}
                                 data-annual={t.annual.price}
                             >
                                 {t.monthly.price}
@@ -220,10 +261,17 @@ const ctaClass: Record<string, string> = {
                             class="mt-1 text-xs text-slate-400"
                             data-billed
                             data-monthly={t.monthly.billed}
+                            data-quarterly={t.quarterly.billed}
                             data-annual={t.annual.billed}
                         >
                             {t.monthly.billed}
                         </p>
+
+                        {t.limits && (
+                            <p class="mt-3 text-xs font-medium text-slate-500">
+                                {t.limits}
+                            </p>
+                        )}
 
                         <a
                             href={t.cta.href}
@@ -276,9 +324,25 @@ const ctaClass: Record<string, string> = {
             )
         }
 
+        {noteItems.length > 0 && (
+            <ul class="mx-auto mt-10 flex max-w-3xl flex-wrap items-center justify-center gap-x-2.5 gap-y-1.5 text-xs text-slate-500">
+                {noteItems.map((it, i) => (
+                    <li class="flex items-center gap-2.5">
+                        {i > 0 && (
+                            <span
+                                aria-hidden="true"
+                                class="size-1 shrink-0 rounded-full bg-slate-400"
+                            />
+                        )}
+                        <span>{it}</span>
+                    </li>
+                ))}
+            </ul>
+        )}
+
         {
             usingSeed && (
-                <p class="mt-8 text-center text-xs text-slate-400">
+                <p class="mt-3 text-center text-xs text-slate-400">
                     Sample pricing. Final plans are managed in the CMS.
                 </p>
             )
@@ -287,30 +351,74 @@ const ctaClass: Record<string, string> = {
 </section>
 
 <script>
-    // Billing monthly / annual toggle
-    const toggle = document.getElementById("billing-toggle");
-    const knob = document.getElementById("billing-knob");
-    const lblMonthly = document.getElementById("lbl-monthly");
-    const lblAnnual = document.getElementById("lbl-annual");
+    // Billing segmented control: monthly / quarterly / annual with a sliding thumb
+    const seg = document.getElementById("billing-seg");
+    const thumb = document.getElementById("seg-thumb");
+    const segBtns = seg
+        ? [...seg.querySelectorAll<HTMLButtonElement>(".seg-btn")]
+        : [];
 
-    const setMode = (annual: boolean) => {
-        toggle?.setAttribute("aria-checked", String(annual));
-        knob?.classList.toggle("translate-x-5", annual);
-        lblMonthly?.classList.toggle("text-brand-dark", !annual);
-        lblMonthly?.classList.toggle("text-slate-400", annual);
-        lblAnnual?.classList.toggle("text-brand-dark", annual);
-        lblAnnual?.classList.toggle("text-slate-400", !annual);
-        const key = annual ? "annual" : "monthly";
+    const moveThumb = (btn: HTMLButtonElement) => {
+        if (!thumb) return;
+        thumb.style.left = `${btn.offsetLeft}px`;
+        thumb.style.width = `${btn.offsetWidth}px`;
+    };
+
+    const float = document.getElementById("seg-float");
+    const popFloat = (btn: HTMLButtonElement) => {
+        if (!float) return;
+        const save = btn.dataset.save;
+        if (!save) return; // monthly has no discount
+        float.textContent = save;
+        // Center over the active button (measured after it may have moved).
+        float.style.left = `${btn.offsetLeft + btn.offsetWidth / 2}px`;
+        float.classList.remove("pop");
+        void float.offsetWidth; // reflow to restart the animation
+        float.classList.add("pop");
+    };
+
+    const setMode = (mode: string) => {
+        let active = segBtns[0];
+        segBtns.forEach((b) => {
+            const on = b.dataset.mode === mode;
+            if (on) active = b;
+            b.setAttribute("aria-selected", String(on));
+            b.classList.toggle("text-brand-dark", on);
+            b.classList.toggle("text-slate-500", !on);
+        });
+        if (active) {
+            moveThumb(active);
+            popFloat(active);
+        }
         document
             .querySelectorAll<HTMLElement>("[data-price], [data-billed]")
             .forEach((el) => {
-                const val = el.dataset[key];
+                const val = el.dataset[mode];
                 if (val) el.textContent = val;
             });
     };
-    toggle?.addEventListener("click", () =>
-        setMode(toggle.getAttribute("aria-checked") !== "true"),
+    segBtns.forEach((b) =>
+        b.addEventListener("click", () => setMode(b.dataset.mode ?? "monthly")),
     );
+
+    // Place the thumb under the initial selection without animating the first paint.
+    const initThumb = () => {
+        const active =
+            segBtns.find((b) => b.getAttribute("aria-selected") === "true") ??
+            segBtns[0];
+        if (!thumb || !active) return;
+        thumb.style.transition = "none";
+        moveThumb(active);
+        void thumb.offsetWidth; // reflow
+        thumb.style.transition = "";
+    };
+    initThumb();
+    window.addEventListener("resize", () => {
+        const active =
+            segBtns.find((b) => b.getAttribute("aria-selected") === "true") ??
+            segBtns[0];
+        if (active) moveThumb(active);
+    });
 
     // See all plans
     const seeAll = document.getElementById("see-all-plans");
@@ -327,3 +435,38 @@ const ctaClass: Record<string, string> = {
         seeAll.querySelector("svg")?.classList.toggle("rotate-180", next);
     });
 </script>
+
+<style>
+    /* Discount pill rises above the active segment and fades out. Base transform
+       keeps it centered (X) while the animation drives the Y rise. */
+    #seg-float {
+        transform: translate(-50%, -60%);
+    }
+    #seg-float.pop {
+        animation: seg-float 2.2s ease-out forwards;
+    }
+    @keyframes seg-float {
+        0% {
+            opacity: 0;
+            transform: translate(-50%, -30%) scale(0.85);
+        }
+        14% {
+            opacity: 1;
+            transform: translate(-50%, -95%) scale(1);
+        }
+        70% {
+            opacity: 1;
+            transform: translate(-50%, -110%) scale(1);
+        }
+        100% {
+            opacity: 0;
+            transform: translate(-50%, -175%) scale(1);
+        }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        #seg-float.pop {
+            animation: none;
+            opacity: 0;
+        }
+    }
+</style>

@@ -1,0 +1,377 @@
+---
+import { Icon } from "astro-icon/components";
+import { directus, readItems } from "../../lib/directus";
+import type { PlanFeature } from "../../lib/directus";
+
+// Plan comparison table (§3 of the pricing doc). Rows come from Directus
+// `plan_features`; falls back to this seed so the page always renders.
+// Cell value convention: "✓" -> check, "–"/"" -> dash, else literal text.
+type Feat = Pick<
+    PlanFeature,
+    "group" | "label" | "starter" | "growth" | "enterprise"
+>;
+
+const seed: Feat[] = [
+    // Sales & point of sale
+    {
+        group: "Sales & point of sale",
+        label: "Point of Sale (POS)",
+        starter: "✓",
+        growth: "✓",
+        enterprise: "✓",
+    },
+    {
+        group: "Sales & point of sale",
+        label: "Sale quotes",
+        starter: "–",
+        growth: "✓",
+        enterprise: "✓",
+    },
+    {
+        group: "Sales & point of sale",
+        label: "Sale orders",
+        starter: "–",
+        growth: "✓",
+        enterprise: "✓",
+    },
+    {
+        group: "Sales & point of sale",
+        label: "Discounts (advanced)",
+        starter: "–",
+        growth: "✓",
+        enterprise: "✓",
+    },
+    {
+        group: "Sales & point of sale",
+        label: "Commissions",
+        starter: "–",
+        growth: "✓",
+        enterprise: "✓",
+    },
+    {
+        group: "Sales & point of sale",
+        label: "Modifiers / add-ons",
+        starter: "–",
+        growth: "✓",
+        enterprise: "✓",
+    },
+    {
+        group: "Sales & point of sale",
+        label: "Workshifts (shift control)",
+        starter: "–",
+        growth: "✓",
+        enterprise: "✓",
+    },
+    // Products & inventory
+    {
+        group: "Products & inventory",
+        label: "Products catalogue",
+        starter: "✓",
+        growth: "✓",
+        enterprise: "✓",
+    },
+    {
+        group: "Products & inventory",
+        label: "Inventory (Stock Counts, GRNs)",
+        starter: "✓",
+        growth: "✓",
+        enterprise: "✓",
+    },
+    {
+        group: "Products & inventory",
+        label: "Product variants",
+        starter: "–",
+        growth: "✓",
+        enterprise: "✓",
+    },
+    {
+        group: "Products & inventory",
+        label: "Advanced products (expiry, batches, serials)",
+        starter: "–",
+        growth: "✓",
+        enterprise: "✓",
+    },
+    {
+        group: "Products & inventory",
+        label: "Purchases (PO, GRN, PI)",
+        starter: "–",
+        growth: "✓",
+        enterprise: "✓",
+    },
+    {
+        group: "Products & inventory",
+        label: "Production module",
+        starter: "–",
+        growth: "✓",
+        enterprise: "✓",
+    },
+    // Money & finance
+    {
+        group: "Money & finance",
+        label: "Payments (via network / M-Pesa)",
+        starter: "✓",
+        growth: "✓",
+        enterprise: "✓",
+    },
+    {
+        group: "Money & finance",
+        label: "Expenses",
+        starter: "–",
+        growth: "✓",
+        enterprise: "✓",
+    },
+    {
+        group: "Money & finance",
+        label: "Petty cash",
+        starter: "–",
+        growth: "✓",
+        enterprise: "✓",
+    },
+    {
+        group: "Money & finance",
+        label: "Receivables (AR)",
+        starter: "–",
+        growth: "✓",
+        enterprise: "✓",
+    },
+    {
+        group: "Money & finance",
+        label: "Payables (AP)",
+        starter: "–",
+        growth: "✓",
+        enterprise: "✓",
+    },
+    {
+        group: "Money & finance",
+        label: "Advanced finance (assets, JVs)",
+        starter: "Add-on",
+        growth: "Add-on",
+        enterprise: "Included",
+    },
+    // Relationships & engagement
+    {
+        group: "Relationships & engagement",
+        label: "Suppliers",
+        starter: "✓",
+        growth: "✓",
+        enterprise: "✓",
+    },
+    {
+        group: "Relationships & engagement",
+        label: "Customers",
+        starter: "✓",
+        growth: "✓",
+        enterprise: "✓",
+    },
+    {
+        group: "Relationships & engagement",
+        label: "Appointments / reservations",
+        starter: "–",
+        growth: "✓",
+        enterprise: "✓",
+    },
+    // Compliance, reporting & comms
+    {
+        group: "Compliance, reporting & comms",
+        label: "eTIMS (KRA) integration",
+        starter: "✓",
+        growth: "✓",
+        enterprise: "✓",
+    },
+    {
+        group: "Compliance, reporting & comms",
+        label: "Communication (SMS & Email)",
+        starter: "✓",
+        growth: "✓",
+        enterprise: "✓",
+    },
+    {
+        group: "Compliance, reporting & comms",
+        label: "Reports",
+        starter: "Limited",
+        growth: "Full",
+        enterprise: "Full + custom",
+    },
+    {
+        group: "Compliance, reporting & comms",
+        label: "API & custom integrations",
+        starter: "–",
+        growth: "–",
+        enterprise: "✓",
+    },
+    {
+        group: "Compliance, reporting & comms",
+        label: "Priority support / SLA",
+        starter: "Email",
+        growth: "Priority",
+        enterprise: "Dedicated + SLA",
+    },
+    // Scale & limits
+    {
+        group: "Scale & limits",
+        label: "Users included",
+        starter: "3",
+        growth: "8",
+        enterprise: "Custom",
+    },
+    {
+        group: "Scale & limits",
+        label: "Shops (POS branches) included",
+        starter: "1",
+        growth: "1",
+        enterprise: "Multi / custom",
+    },
+    {
+        group: "Scale & limits",
+        label: "Stores (stock locations)",
+        starter: "0",
+        growth: "Unlimited",
+        enterprise: "Unlimited",
+    },
+    {
+        group: "Scale & limits",
+        label: "Extra user",
+        starter: "+KES 500/mo",
+        growth: "+KES 500/mo",
+        enterprise: "Custom",
+    },
+    {
+        group: "Scale & limits",
+        label: "Extra shop",
+        starter: "+KES 4,500/mo",
+        growth: "+KES 4,500/mo",
+        enterprise: "Custom",
+    },
+];
+
+let feats: Feat[] = seed;
+try {
+    const data = (await directus.request(
+        readItems("plan_features", {
+            filter: { status: { _eq: "published" } },
+            sort: ["sort"],
+        }),
+    )) as PlanFeature[];
+    if (data.length) {
+        feats = data.map((f) => ({
+            group: f.group,
+            label: f.label,
+            starter: f.starter,
+            growth: f.growth,
+            enterprise: f.enterprise,
+        }));
+    }
+} catch {
+    console.warn(
+        "[PricingComparison] Directus unavailable, using seed matrix.",
+    );
+}
+
+// Group consecutive rows, preserving order.
+const groups: { name: string; rows: Feat[] }[] = [];
+for (const f of feats) {
+    let g = groups.at(-1);
+    if (!g || g.name !== f.group) {
+        g = { name: f.group, rows: [] };
+        groups.push(g);
+    }
+    g.rows.push(f);
+}
+
+const plans = ["Starter", "Growth", "Enterprise"] as const;
+const cols: Array<keyof Feat> = ["starter", "growth", "enterprise"];
+const isCheck = (v: string) => v === "✓";
+const isDash = (v: string) => v === "–" || v === "-" || v === null;
+---
+
+<section class="bg-white py-20 lg:py-28">
+    <div class="mx-auto max-w-5xl px-6">
+        <div class="mx-auto max-w-2xl text-center">
+            <h2
+                class="text-3xl font-bold tracking-tight text-brand-dark sm:text-4xl"
+            >
+                Compare plans in detail
+            </h2>
+            <p class="mt-4 text-slate-500">
+                Everything each plan includes. Enterprise is everything in
+                Growth, plus its own additions.
+            </p>
+        </div>
+
+        <div class="mt-12 overflow-x-auto">
+            <table class="w-full min-w-3xl border-collapse text-sm">
+                <thead>
+                    <tr>
+                        <th class="w-2/5 py-3 pr-4 text-left"></th>
+                        {
+                            plans.map((p) => (
+                                <th
+                                    class:list={[
+                                        "px-4 py-3 text-center text-base font-semibold",
+                                        p === "Growth"
+                                            ? "text-brand"
+                                            : "text-brand-dark",
+                                    ]}
+                                >
+                                    {p}
+                                    {p === "Growth" && (
+                                        <span class="ml-1.5 rounded-full bg-blue-50 px-2 py-0.5 align-middle text-[10px] font-medium text-brand">
+                                            Popular
+                                        </span>
+                                    )}
+                                </th>
+                            ))
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        groups.map((g) => (
+                            <>
+                                <tr>
+                                    <th
+                                        colspan="4"
+                                        class="bg-slate-50 px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wide text-slate-500"
+                                    >
+                                        {g.name}
+                                    </th>
+                                </tr>
+                                {g.rows.map((f) => (
+                                    <tr class="border-b border-slate-100 transition-colors hover:bg-slate-50">
+                                        <td class="py-3 pr-4 text-slate-600">
+                                            {f.label}
+                                        </td>
+                                        {cols.map((c) => (
+                                            <td
+                                                class:list={[
+                                                    "px-4 py-3 text-center",
+                                                    c === "growth" &&
+                                                        "bg-blue-50/40",
+                                                ]}
+                                            >
+                                                {isCheck(f[c]) ? (
+                                                    <Icon
+                                                        name="material-symbols:check-rounded"
+                                                        class="inline size-4 text-brand"
+                                                    />
+                                                ) : isDash(f[c]) ? (
+                                                    <span class="text-slate-300">
+                                                        –
+                                                    </span>
+                                                ) : (
+                                                    <span class="text-xs font-medium text-slate-600">
+                                                        {f[c]}
+                                                    </span>
+                                                )}
+                                            </td>
+                                        ))}
+                                    </tr>
+                                ))}
+                            </>
+                        ))
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
