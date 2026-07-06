@@ -14,6 +14,7 @@ import {
  */
 export interface Schema {
     site_settings: SiteSettings; // singleton
+    pricing_settings: PricingSettings; // singleton
     pages: Page[];
     product_modules: ProductModule[];
     solutions: Solution[];
@@ -21,12 +22,20 @@ export interface Schema {
     integrations: Integration[];
     testimonials: Testimonial[];
     pricing_tiers: PricingTier[];
+    plan_features: PlanFeature[];
 }
 
 export interface SiteSettings {
     site_name: string;
     default_meta_title: string;
     default_meta_description: string;
+}
+
+// Pricing-wide content that is not per-tier (footnote, badges). Singleton.
+export interface PricingSettings {
+    // Footnote facts under the pricing cards, rendered dot-separated.
+    // JSON/list field (repeater or Tags interface) in Directus.
+    notes: string[] | null;
 }
 
 export interface Page {
@@ -94,15 +103,34 @@ export interface PricingTier {
     sort: number;
     name: string;
     blurb: string | null;
-    price_monthly: string; // e.g. "$49"
-    price_annual: string; // e.g. "$39"
-    billed_monthly: string; // e.g. "Billed monthly"
-    billed_annual: string; // e.g. "Billed annually"
+    // Per-month figure shown for each billing cadence (e.g. "KES 2,000").
+    price_monthly: string;
+    price_quarterly: string;
+    price_annual: string;
+    // Small caption under the price (e.g. "Billed quarterly (KES 5,400/qtr)").
+    billed_monthly: string;
+    billed_quarterly: string;
+    billed_annual: string;
+    limits: string | null; // e.g. "3 users · 1 shop"
     popular: boolean;
     cta_label: string;
     cta_href: string;
     cta_style: "outline" | "solid" | "dark";
     features: PricingFeature[] | null;
+}
+
+// One row of the plan comparison table (§3). Cell values are plain strings:
+// "✓" renders a check, "–"/"" a dash, anything else the literal text
+// ("Add-on", "Limited", "+KES 500/mo", ...).
+export interface PlanFeature {
+    id: string;
+    status: "published" | "draft" | "archived";
+    sort: number;
+    group: string; // section header, e.g. "Sales & point of sale"
+    label: string; // row label, e.g. "Sale quotes"
+    starter: string;
+    growth: string;
+    enterprise: string;
 }
 
 const url = import.meta.env.DIRECTUS_URL ?? "";
