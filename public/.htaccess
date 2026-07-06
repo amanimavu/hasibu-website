@@ -1,0 +1,2 @@
+# Serve Astro's static 404 page for unknown routes.
+ErrorDocument 404 /404.html
