@@ -1,13 +1,16 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { SIGNUP_URL } from "../lib/site";
 import PricingSection from "../components/sections/Pricing.astro";
+import PricingComparison from "../components/sections/PricingComparison.astro";
+import GridDecor from "../components/GridDecor.astro";
 import { Icon } from "astro-icon/components";
 
 const faqs = [
     {
         icon: "material-symbols:rocket-launch-outline",
         q: "Is there a free trial?",
-        a: "Yes. Every plan starts with a 14-day free trial and no credit card required. You only pay once the trial ends and you choose to continue.",
+        a: "Yes. Every plan starts with a 30-day free trial and no credit card required. You only pay once the trial ends and you choose to continue.",
     },
     {
         icon: "material-symbols:swap-horiz-rounded",
@@ -34,6 +37,16 @@ const faqs = [
         q: "Can I bring my existing data?",
         a: "Yes. You can bulk-import your products and customers, so you are up and running without re-keying everything.",
     },
+    {
+        icon: "material-symbols:store-outline",
+        q: "What is the difference between a shop and a store?",
+        a: "A shop is a POS sales branch; a store is a stock-only location like a warehouse. Growth includes one shop and unlimited stores, and extra shops are added per branch.",
+    },
+    {
+        icon: "material-symbols:extension-outline",
+        q: "Can I add payroll or an online store?",
+        a: "Yes. HR & Payroll, an online Storefront, and Advanced Finance are optional add-ons you can layer on top of any plan.",
+    },
 ];
 
 // Show this many before the "Load more" button appears.
@@ -45,7 +58,31 @@ const hasMoreFaqs = faqs.length > FAQ_LIMIT;
     title="Pricing — Hasibu"
     description="Simple, transparent Hasibu pricing. Start with a 14-day free trial, pay in your local currency, and cancel anytime."
 >
-    <PricingSection />
+    <!-- Decorated header -->
+    <section
+        class="relative overflow-clip bg-linear-to-b from-blue-50/70 via-white to-white pt-28 pb-10 lg:pt-36 lg:pb-12"
+    >
+        <GridDecor />
+        <div class="relative mx-auto max-w-2xl px-6 text-center">
+            <span
+                class="inline-block rounded-full bg-blue-50 px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-brand"
+            >
+                Pricing
+            </span>
+            <h1
+                class="mt-3 text-4xl font-bold tracking-tight text-brand-dark sm:text-5xl"
+            >
+                Simple, transparent pricing<br class="hidden sm:block" /> for every
+                stage.
+            </h1>
+            <p class="mt-4 text-lg text-slate-500">
+                No hidden fees. Pay in your local currency. Cancel anytime.
+            </p>
+        </div>
+    </section>
+
+    <PricingSection showHeader={false} />
+    <PricingComparison />
 
     <!-- FAQ -->
     <section class="bg-white py-20 lg:py-28">
@@ -149,7 +186,7 @@ const hasMoreFaqs = faqs.length > FAQ_LIMIT;
                 </div>
                 <div class="flex flex-col gap-3 sm:flex-row">
                     <a
-                        href="https://app.hasibu.africa/signup"
+                        href={SIGNUP_URL}
                         class="inline-flex items-center justify-center rounded-lg bg-brand px-6 py-3 text-sm font-medium text-white shadow-sm transition hover:opacity-90"
                     >
                         Start Free Trial
