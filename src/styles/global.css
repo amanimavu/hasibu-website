@@ -7,6 +7,61 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 }
 
+/* Product-hero overlay callout cards: gentle float + pulsing icons. Pages opt
+   in with `hero-callout` (card) and `hero-ico` (icon); stagger via --fd. */
+.hero-callout {
+  animation: hero-bob 4s ease-in-out infinite;
+  animation-delay: var(--fd, 0s);
+  will-change: transform;
+}
+@keyframes hero-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+.hero-ico {
+  animation: hero-ico 2s ease-in-out infinite;
+  transform-origin: center;
+}
+@keyframes hero-ico {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.22); }
+}
+
+/* Speed: a quick electric double-flash. */
+.hero-ico-zip { animation: hero-zip 2.6s ease-in-out infinite; transform-origin: center; }
+@keyframes hero-zip {
+  0%, 70%, 100% { transform: scale(1); filter: none; }
+  76% { transform: scale(1.25); filter: drop-shadow(0 0 5px rgba(0, 102, 255, 0.7)); }
+  82% { transform: scale(0.92); }
+  88% { transform: scale(1.18); filter: drop-shadow(0 0 5px rgba(0, 102, 255, 0.7)); }
+  94% { transform: scale(1); filter: none; }
+}
+
+/* Payments: cycle the label through the methods. */
+.pay-cycle { height: 1rem; overflow: hidden; }
+.pay-cycle .pay-list { animation: pay-roll 7s cubic-bezier(0.7, 0, 0.3, 1) infinite; }
+.pay-cycle .pay-list span { display: block; height: 1rem; line-height: 1rem; }
+@keyframes pay-roll {
+  0%, 17% { transform: translateY(0); }
+  20%, 37% { transform: translateY(-20%); }
+  40%, 57% { transform: translateY(-40%); }
+  60%, 77% { transform: translateY(-60%); }
+  80%, 100% { transform: translateY(-80%); }
+}
+
+/* Split & merge: two bars diverge, then merge. */
+.split-motif { position: relative; width: 20px; height: 20px; }
+.split-motif i { position: absolute; left: 50%; top: 50%; width: 10px; height: 3px; border-radius: 2px; background: currentColor; }
+.split-motif i:nth-child(1) { animation: split-a 3s ease-in-out infinite; }
+.split-motif i:nth-child(2) { animation: split-b 3s ease-in-out infinite; }
+@keyframes split-a { 0%, 100% { transform: translate(-50%, -50%); } 45%, 55% { transform: translate(-50%, -170%); } }
+@keyframes split-b { 0%, 100% { transform: translate(-50%, -50%); } 45%, 55% { transform: translate(-50%, 70%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-callout, .hero-ico, .hero-ico-zip,
+  .pay-cycle .pay-list, .split-motif i { animation: none; }
+}
+
 /* Component-level vars (not Tailwind tokens) live outside @theme. */
 :root {
   /* Mask for the hero text panel: fades top, bottom and right to transparent,
