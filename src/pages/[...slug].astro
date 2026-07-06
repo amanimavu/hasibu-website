@@ -1,0 +1,141 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { Icon } from "astro-icon/components";
+import { directus, readItems } from "../lib/directus";
+import type { Page } from "../lib/directus";
+
+// Catch-all for editor-authored pages from the Directus `pages` collection.
+// Each published row becomes a static page at its `slug`, rendered from its
+// `blocks`. Astro gives more specific routes (index, product/*, ...) priority,
+// so this only serves CMS slugs. Avoid CMS slugs that collide with real routes.
+export async function getStaticPaths() {
+    let pages: Page[] = [];
+    try {
+        pages = (await directus.request(
+            readItems("pages", {
+                filter: { status: { _eq: "published" } },
+                limit: -1,
+            }),
+        )) as Page[];
+    } catch {
+        // CMS not reachable yet: build no dynamic pages.
+    }
+    return pages.map((page) => ({ params: { slug: page.slug }, props: { page } }));
+}
+
+const { page } = Astro.props;
+const blocks = (page.blocks ?? []) as any[];
+
+// Feature-icon keywords -> icon names (extend as blocks use more).
+const ICONS: Record<string, string> = {
+    shield: "hugeicons:shield-energy",
+    receipt: "material-symbols:receipt-long",
+    book: "hugeicons:book-open-01",
+    bolt: "material-symbols:bolt",
+    check: "material-symbols:check-circle",
+    store: "hugeicons:store-01",
+    money: "hugeicons:smart-phone-01",
+};
+const iconFor = (k?: string) => ICONS[k ?? ""] ?? "material-symbols:check-circle";
+---
+
+<BaseLayout
+    title={`${page.title} — Hasibu`}
+    description={page.meta_description ?? undefined}
+>
+    {
+        blocks.map((b) =>
+            b.type === "hero" ? (
+                <section class="relative overflow-clip bg-linear-60 from-[#F8FAFC] from-0% via-[#FFFFFF] via-50% to-[#EFF6FF]/40 to-100% pt-28 pb-20 lg:pt-36 lg:pb-28">
+                    <div class="mx-auto max-w-3xl px-6 text-center">
+                        {b.badge && (
+                            <span class="inline-block rounded-full bg-blue-100/70 px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-brand">
+                                {b.badge}
+                            </span>
+                        )}
+                        <h1 class="mt-6 text-4xl font-bold leading-[1.1] tracking-tight text-brand-dark sm:text-5xl">
+                            {b.heading}
+                        </h1>
+                        {b.subheading && (
+                            <p class="mx-auto mt-6 max-w-xl text-lg text-slate-500">
+                                {b.subheading}
+                            </p>
+                        )}
+                        {b.cta_label && (
+                            <a
+                                href={b.cta_href ?? "#"}
+                                class="mt-8 inline-flex items-center justify-center rounded-lg bg-brand px-6 py-3 font-medium text-white shadow-sm transition hover:opacity-90"
+                            >
+                                {b.cta_label}
+                            </a>
+                        )}
+                    </div>
+                </section>
+            ) : b.type === "features" ? (
+                <section class="bg-white py-20 lg:py-28">
+                    <div class="mx-auto max-w-6xl px-6">
+                        {b.title && (
+                            <h2 class="mx-auto max-w-2xl text-center text-3xl font-bold tracking-tight text-brand-dark sm:text-4xl">
+                                {b.title}
+                            </h2>
+                        )}
+                        <div class="mt-12 grid gap-px overflow-hidden rounded-2xl bg-slate-200 sm:grid-cols-2 lg:grid-cols-3">
+                            {(b.items ?? []).map((it: any) => (
+                                <div class="flex flex-col bg-white p-6 lg:p-8">
+                                    <div class="flex size-11 items-center justify-center rounded-xl bg-blue-50 text-brand">
+                                        <Icon name={iconFor(it.icon)} class="size-6" />
+                                    </div>
+                                    <h3 class="mt-4 text-lg font-semibold text-brand-dark">
+                                        {it.title}
+                                    </h3>
+                                    <p class="mt-2 text-sm leading-relaxed text-slate-500">
+                                        {it.text}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            ) : b.type === "testimonial" ? (
+                <section class="bg-slate-50 py-20 lg:py-28">
+                    <figure class="mx-auto max-w-3xl px-6 text-center">
+                        <blockquote class="text-2xl font-medium leading-relaxed text-brand-dark">
+                            “{b.quote}”
+                        </blockquote>
+                        <figcaption class="mt-6 text-sm text-slate-500">
+                            <span class="font-semibold text-brand-dark">
+                                {b.author}
+                            </span>
+                            {b.company && <span> · {b.company}</span>}
+                        </figcaption>
+                    </figure>
+                </section>
+            ) : b.type === "richtext" ? (
+                <section class="bg-white py-16 lg:py-20">
+                    <div
+                        class="mx-auto max-w-3xl space-y-5 px-6 leading-relaxed text-slate-600"
+                        set:html={b.html}
+                    />
+                </section>
+            ) : b.type === "cta" ? (
+                <section class="bg-white py-10 lg:py-14">
+                    <div class="mx-auto max-w-6xl px-6">
+                        <div class="flex flex-col gap-6 rounded-2xl bg-linear-to-r from-blue-50 to-blue-100/50 p-8 md:flex-row md:items-center md:justify-between lg:p-10">
+                            <h2 class="text-2xl font-bold text-brand-dark">
+                                {b.heading}
+                            </h2>
+                            {b.cta_label && (
+                                <a
+                                    href={b.cta_href ?? "#"}
+                                    class="inline-flex items-center justify-center rounded-lg bg-brand px-6 py-3 text-sm font-medium text-white shadow-sm transition hover:opacity-90"
+                                >
+                                    {b.cta_label}
+                                </a>
+                            )}
+                        </div>
+                    </div>
+                </section>
+            ) : null,
+        )
+    }
+</BaseLayout>
