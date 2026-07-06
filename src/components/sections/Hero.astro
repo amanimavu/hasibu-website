@@ -1,36 +1,41 @@
 ---
 import { Image } from "astro:assets";
 import { Icon } from "astro-icon/components";
-import dashboardDesktop from "../../assets/images/desktop/screenshots/hasibu-dashboard.png";
-import dashboardMobile from "../../assets/images/mobile/screenshots/hasibu-dashboard.png";
+import dashboardDesktop from "@screenshots/desktop/dashboard-page.png";
 import brushStroke from "../../assets/images/brush_stroke.svg";
+import { SIGNUP_URL } from "../../lib/site";
+
+// Social-proof logo strip. Representative SME names across the markets.
+const clients = [
+    { name: "Tujuane Mart", icon: "hugeicons:store-01" },
+    { name: "Lagos Fresh Co.", icon: "hugeicons:shopping-basket-01" },
+    { name: "Accra Distributors", icon: "hugeicons:warehouse" },
+    { name: "Kigali Retail Hub", icon: "hugeicons:shopping-cart-01" },
+    { name: "Nairobi Logistics", icon: "hugeicons:delivery-truck-01" },
+];
 ---
 
 <section
-    class="relative min-h-screen overflow-clip bg-linear-60 from-[#F8FAFC] from-0% via-[#FFFFFF] via-50% to-[#EFF6FF]/40 to-100%"
+    class="relative overflow-clip bg-linear-60 from-[#F8FAFC] from-0% via-[#FFFFFF] via-50% to-[#EFF6FF]/40 to-100%"
 >
     <div
-        class="absolute aspect-square w-96 -right-20 -top-48 rounded-full bg-[#DBEAFE]/10 blur-xl"
+        class="absolute aspect-square w-96 -right-24 -top-40 rounded-full bg-[#DBEAFE]/20 blur-2xl"
     >
     </div>
     <div
-        class="absolute aspect-square w-48 -left-10 top-[85%] rounded-full bg-[#DBEAFE]/20 blur-xl"
+        class="absolute aspect-square w-72 -left-20 top-1/2 rounded-full bg-[#DBEAFE]/15 blur-2xl"
     >
     </div>
 
-    <div class="pt-20">
-        <!-- Copy (right, faded glass panel like the product heroes) -->
-        <div class="relative z-10 ml-auto max-w-3xl px-6 py-15 not-sm:py-5">
-            <!-- Faded white panel behind the text (top/bottom/left dissolve) -->
-            <div
-                class="pointer-events-none absolute inset-0 -z-10 bg-linear-to-r from-white from-0% to-transparent to-100% backdrop-blur-lg mask-(--hero-mask) mask-intersect [-webkit-mask-image:var(--hero-mask)] [-webkit-mask-composite:source-in]"
-            >
-            </div>
-
+    <div
+        class="relative mx-auto grid max-w-7xl items-center gap-12 px-6 pt-28 pb-12 lg:grid-cols-2 lg:gap-12 lg:pt-32 lg:pb-16"
+    >
+        <!-- Copy + CTAs (left) -->
+        <div>
             <span
-                class="inline-flex items-center gap-1.5 rounded-full bg-blue-100/70 px-3 py-1 text-xs font-semibold tracking-wide text-brand"
+                class="inline-flex items-center gap-1.5 rounded-full bg-blue-100/70 px-3 py-1.5 text-xs font-semibold tracking-wide text-brand"
             >
-                <Icon name="material-symbols:bolt" class="size-3.5" />
+                <span class="size-1.5 rounded-full bg-brand"></span>
                 PAN-AFRICAN ERP &amp; POS PLATFORM
             </span>
 
@@ -49,17 +54,21 @@ import brushStroke from "../../assets/images/brush_stroke.svg";
             </h1>
 
             <p class="mt-6 max-w-lg text-lg text-slate-500">
-                One platform for inventory, POS, accounting, HR, and sales —
-                with local currencies, mobile money, and compliance built for
-                Kenya, Rwanda and DR Congo.
+                One platform for inventory, POS, accounting, HR and sales, with
+                local currencies, mobile money and compliance built for Kenya,
+                Rwanda and DR Congo.
             </p>
 
             <div class="mt-8 flex flex-col gap-3 sm:flex-row">
                 <a
-                    href="https://app.hasibu.africa/signup"
-                    class="inline-flex items-center justify-center rounded-lg bg-brand px-6 py-3 font-medium text-white shadow-sm transition hover:opacity-90"
+                    href={SIGNUP_URL}
+                    class="group inline-flex items-center justify-center gap-2 rounded-lg bg-brand px-6 py-3 font-medium text-white shadow-sm transition hover:opacity-90"
                 >
                     Start Free Trial
+                    <Icon
+                        name="material-symbols:arrow-forward-rounded"
+                        class="size-5 transition-transform group-hover:translate-x-0.5"
+                    />
                 </a>
                 <a
                     href="/get-started/demo"
@@ -75,9 +84,9 @@ import brushStroke from "../../assets/images/brush_stroke.svg";
 
             <!-- Social proof -->
             <div
-                class="mt-6 pb-2 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-slate-500"
+                class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-slate-500"
             >
-                <span class="flex items-center gap-1.5">
+                <span class="flex items-center gap-2">
                     <span class="flex text-amber-400">
                         <Icon name="material-symbols:star" class="size-4" />
                         <Icon name="material-symbols:star" class="size-4" />
@@ -85,25 +94,22 @@ import brushStroke from "../../assets/images/brush_stroke.svg";
                         <Icon name="material-symbols:star" class="size-4" />
                         <Icon name="material-symbols:star" class="size-4" />
                     </span>
-                    100+ SMEs across Africa
+                    <span><strong class="text-brand-dark">100+</strong> SMEs across Africa</span>
                 </span>
                 <span class="flex items-center gap-1.5">
                     <Icon
                         name="material-symbols:check-circle"
-                        class="size-4 text-slate-300"
+                        class="size-4 text-green-500"
                     />
                     No credit card required
                 </span>
             </div>
         </div>
 
-        <!-- Real dashboard screenshot: below the copy on mobile, offset left on desktop -->
-        <div
-            class="relative z-9 mt-8 max-w-5xl px-6 lg:absolute lg:top-30 not-sm:pb-10"
-        >
-            <!-- Desktop: framed in a browser chrome -->
+        <!-- Dashboard screenshot in browser chrome, with floating accent cards (right) -->
+        <div class="relative lg:justify-self-end">
             <div
-                class="mr-10 hidden overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 shadow-2xl sm:block"
+                class="overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 shadow-2xl"
             >
                 <div
                     class="flex items-center gap-1.5 border-b border-slate-100 bg-white px-4 py-3"
@@ -111,8 +117,10 @@ import brushStroke from "../../assets/images/brush_stroke.svg";
                     <span class="size-3 rounded-full bg-red-400"></span>
                     <span class="size-3 rounded-full bg-amber-400"></span>
                     <span class="size-3 rounded-full bg-green-400"></span>
-                    <span class="ml-3 text-xs text-slate-400">
-                        business.hasibu.africa
+                    <span
+                        class="ml-3 truncate rounded-md bg-slate-100 px-2 py-0.5 text-xs text-slate-400"
+                    >
+                        business.hasibu.africa/dashboard
                     </span>
                 </div>
                 <Image
@@ -125,55 +133,53 @@ import brushStroke from "../../assets/images/brush_stroke.svg";
                 />
             </div>
 
-            <!-- Mobile -->
-            <Image
-                src={dashboardMobile}
-                alt="Hasibu dashboard on mobile"
-                class="mx-auto w-full max-w-75 rounded-2xl border border-slate-200 bg-slate-100 shadow-xl sm:hidden"
-                priority
-                width={400}
-                densities={[1, 2]}
-            />
+            <!-- Floating: live sync pill (top-right) -->
+            <div
+                class="absolute -top-4 right-6 hidden items-center gap-1.5 rounded-full bg-brand px-3 py-1.5 text-xs font-semibold text-white shadow-lg sm:flex"
+            >
+                <Icon name="material-symbols:bolt" class="size-3.5" />
+                Live sync
+            </div>
+
+            <!-- Floating: mobile-money card (bottom-left) -->
+            <div
+                class="absolute -bottom-5 -left-4 hidden items-center gap-3 rounded-xl border border-slate-100 bg-white px-4 py-3 shadow-xl sm:flex"
+            >
+                <span
+                    class="flex size-8 items-center justify-center rounded-full bg-green-50 text-green-600"
+                >
+                    <Icon name="material-symbols:check-rounded" class="size-5" />
+                </span>
+                <div class="leading-tight">
+                    <p class="text-sm font-semibold text-brand-dark">
+                        Mobile money
+                    </p>
+                    <p class="text-xs text-slate-400">M-Pesa, Airtel, MTN</p>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- <div
-        class="flex gap-5 flex-col text-center pb-6 lg:border-none border-b border-b-neutral-200"
-    >
-        <h5 class="uppercase text-sm font-semibold text-neutral-400 mt-4">
-            Trusted by SMEs across Africa
-        </h5>
-        <div
-            class="sme-clients flex flex-wrap justify-center gap-y-6 gap-x-10 lg:gap-14"
-        >
-            <div class="flex gap-2 items-center text-neutral-300">
-                <Icon
-                    name="material-symbols:storefront-outline"
-                    class="text-3xl"
-                />
-                <span class="font-medium text-lg">Tujuane Mart</span>
-            </div>
-            <div class="flex gap-2 items-center text-neutral-300">
-                <Icon
-                    name="material-symbols:storefront-outline"
-                    class="text-3xl"
-                />
-                <span class="font-medium text-lg">Tujuane Mart</span>
-            </div>
-            <div class="flex gap-2 items-center text-neutral-300">
-                <Icon
-                    name="material-symbols:storefront-outline"
-                    class="text-3xl"
-                />
-                <span class="font-medium text-lg">Tujuane Mart</span>
-            </div>
-            <div class="flex gap-2 items-center text-neutral-300">
-                <Icon
-                    name="material-symbols:storefront-outline"
-                    class="text-3xl"
-                />
-                <span class="font-medium text-lg">Tujuane Mart</span>
+    <!-- Trusted by -->
+    <div class="mx-auto max-w-7xl px-6 pb-16">
+        <div class="border-t border-slate-100 pt-10">
+            <p
+                class="text-center text-xs font-semibold uppercase tracking-wider text-slate-400"
+            >
+                Trusted by SMEs across Africa
+            </p>
+            <div
+                class="mt-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-4 lg:gap-x-14"
+            >
+                {
+                    clients.map((c) => (
+                        <div class="flex items-center gap-2 text-slate-300 transition hover:text-slate-400">
+                            <Icon name={c.icon} class="size-6" />
+                            <span class="text-base font-medium">{c.name}</span>
+                        </div>
+                    ))
+                }
             </div>
         </div>
-    </div> -->
+    </div>
 </section>

@@ -1,5 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
+import { SIGNUP_URL } from "../../lib/site";
 ---
 
 <section class="bg-white pb-20 lg:pb-28">
@@ -19,7 +20,7 @@ import { Icon } from "astro-icon/components";
 
             <div class="flex flex-col gap-3 sm:flex-row">
                 <a
-                    href="https://app.hasibu.africa/signup"
+                    href={SIGNUP_URL}
                     class="inline-flex items-center justify-center gap-1.5 rounded-lg bg-brand px-6 py-3 text-sm font-medium text-white shadow-sm transition hover:opacity-90"
                 >
                     Start Free Trial
