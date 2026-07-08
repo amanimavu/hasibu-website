@@ -16,4 +16,5 @@ export default defineConfig({
         // (from a different vite install) doesn't structurally match. Runtime is fine.
         plugins: [/** @type {any} */ (tailwindcss())],
     },
+    prefetch: true,
 });
