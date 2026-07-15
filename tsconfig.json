@@ -12,7 +12,11 @@
             ],
             "@screenshots/mobile/*": [
                 "./src/assets/images/mobile/screenshots/*"
-            ]
+            ],
+            "@components/*": ["./src/components/*"],
+            "@data/*": ["./src/data/*"],
+            "@lib/*": ["./src/lib/*"],
+            "@images/*": ["./src/assets/images/*"]
         }
     }
 }
