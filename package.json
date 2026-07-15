@@ -6,7 +6,7 @@
         "dev": "astro dev --background",
         "dev:stop": "astro dev stop",
         "dev:status": "astro dev status",
-        "dev:logs": "astro dev logs",
+        "dev:logs": "astro dev logs -f",
         "build": "astro build",
         "preview": "astro preview",
         "astro": "astro",
@@ -20,7 +20,9 @@
     "description": "",
     "dependencies": {
         "@astrojs/check": "^0.9.9",
+        "@astrojs/node": "^11.0.2",
         "@astrojs/react": "^6.0.1",
+        "@astrojs/sitemap": "^3.7.3",
         "@directus/sdk": "^22.0.0",
         "@tailwindcss/vite": "^4.3.1",
         "@types/react": "^19.2.17",
