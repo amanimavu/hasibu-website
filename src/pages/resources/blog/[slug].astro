@@ -1,0 +1,101 @@
+---
+import type { GetStaticPaths } from "astro";
+import { loadPosts, type BlogPost } from "@/data/blog";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { Icon } from "astro-icon/components";
+import GridDecor from "@components/GridDecor.astro";
+
+export const getStaticPaths = (() => {
+    return loadPosts().then((posts) => {
+        return posts.map((post) => {
+            return {
+                params: { slug: post.slug },
+                props: { post },
+            };
+        });
+    });
+}) satisfies GetStaticPaths;
+
+interface Props {
+    post: BlogPost;
+}
+const { post } = Astro.props;
+const { title, description, body, category, publishedAt, author, tags } = post;
+
+const formattedDate = new Date(publishedAt).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+});
+
+// Prevent a single word on the last line of the title (orphans).
+const displayTitle = title.replace(/ ([^ ]*)$/, "\u00A0$1");
+---
+
+<BaseLayout title={`${title} — Hasibu Blog`} description={description}>
+    <section
+        class="relative overflow-clip bg-linear-to-b from-blue-50/70 via-white to-white pt-28 pb-20 lg:pt-36 lg:pb-28"
+    >
+        <GridDecor />
+        <div
+            class="relative mx-auto grid max-w-5xl gap-y-10 px-6 lg:grid-cols-[200px_1fr] lg:gap-x-16"
+        >
+            <!-- Metadata Sidebar -->
+            <aside class="flex flex-col gap-y-6 text-sm lg:pt-2">
+                {
+                    category && (
+                        <div class="flex flex-col gap-1.5">
+                            <span class="font-semibold text-slate-400">
+                                Category
+                            </span>
+                            <span class="font-medium text-brand">
+                                {category}
+                            </span>
+                        </div>
+                    )
+                }
+                <div class="flex flex-col gap-1.5">
+                    <span class="font-semibold text-slate-400">Published</span>
+                    <time datetime={publishedAt} class="text-slate-500">
+                        {formattedDate}
+                    </time>
+                </div>
+                <div class="flex flex-col gap-1.5">
+                    <span class="font-semibold text-slate-400">Author</span>
+                    <span class="text-slate-500">{author}</span>
+                </div>
+            </aside>
+
+            <!-- Title & Body -->
+            <article>
+                <h1
+                    class="text-4xl font-bold leading-tight tracking-tight text-brand-dark sm:text-5xl"
+                >
+                    {displayTitle}
+                </h1>
+                <div
+                    class="prose prose-slate mt-8 max-w-none lg:prose-lg prose-h2:font-bold prose-h2:tracking-tight prose-h3:font-semibold prose-h3:tracking-tight prose-a:text-brand prose-a:font-medium prose-a:no-underline hover:prose-a:underline"
+                >
+                    <Fragment set:html={body} />
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <section class="bg-white pb-20 lg:pb-28">
+        <div class="mx-auto max-w-5xl px-6">
+            <div class="border-t border-slate-200 pt-10 text-center">
+                <a
+                    href="/resources/blog"
+                    class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-6 py-3 font-medium text-slate-700 transition hover:border-brand hover:text-brand"
+                >
+                    <Icon
+                        name="material-symbols:arrow-back-rounded"
+                        class="size-5"
+                    />
+                    Back to Blog
+                </a>
+            </div>
+        </div>
+    </section>
+</BaseLayout>
