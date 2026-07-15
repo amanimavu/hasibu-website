@@ -11,6 +11,7 @@ export interface BlogPost {
     slug: string;
     title: string;
     excerpt: string;
+    description: string;
     body: string; // HTML or markdown from the API
     coverImage: string | null;
     author: string | null;
@@ -45,6 +46,7 @@ function normalizePost(raw: any): BlogPost {
     return {
         slug: raw.slug ?? String(raw.id),
         title: raw.title ?? "",
+        description: raw?.description ?? "",
         excerpt: raw.excerpt ?? raw.summary ?? "",
         body: raw.body ?? raw.content ?? "",
         coverImage: raw.cover_image ?? raw.image ?? null,
