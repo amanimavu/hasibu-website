@@ -2,7 +2,8 @@
 import { Image } from "astro:assets";
 import { Icon } from "astro-icon/components";
 import dashboardDesktop from "@screenshots/desktop/dashboard-page.png";
-import brushStroke from "../../assets/images/brush_stroke.svg";
+import dashboardMobile from "@screenshots/mobile/hasibu-dashboard.png";
+import brushStroke from "@images/brush_stroke.svg";
 import { SIGNUP_URL } from "../../lib/site";
 
 // Social-proof logo strip. Representative SME names across the markets.
@@ -94,7 +95,10 @@ const clients = [
                         <Icon name="material-symbols:star" class="size-4" />
                         <Icon name="material-symbols:star" class="size-4" />
                     </span>
-                    <span><strong class="text-brand-dark">100+</strong> SMEs across Africa</span>
+                    <span
+                        ><strong class="text-brand-dark">100+</strong> SMEs across
+                        Africa</span
+                    >
                 </span>
                 <span class="flex items-center gap-1.5">
                     <Icon
@@ -107,31 +111,44 @@ const clients = [
         </div>
 
         <!-- Dashboard screenshot in browser chrome, with floating accent cards (right) -->
-        <div class="relative lg:justify-self-end">
-            <div
-                class="overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 shadow-2xl"
-            >
+        <div class="relative mt-12 lg:mt-0 lg:justify-self-end">
+            <!-- Desktop screenshot (with browser chrome) -->
+            <div class="hidden lg:block">
                 <div
-                    class="flex items-center gap-1.5 border-b border-slate-100 bg-white px-4 py-3"
+                    class="overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 shadow-2xl"
                 >
-                    <span class="size-3 rounded-full bg-red-400"></span>
-                    <span class="size-3 rounded-full bg-amber-400"></span>
-                    <span class="size-3 rounded-full bg-green-400"></span>
-                    <span
-                        class="ml-3 truncate rounded-md bg-slate-100 px-2 py-0.5 text-xs text-slate-400"
+                    <div
+                        class="flex items-center gap-1.5 border-b border-slate-100 bg-white px-4 py-3"
                     >
-                        business.hasibu.africa/dashboard
-                    </span>
+                        <span class="size-3 rounded-full bg-red-400"></span>
+                        <span class="size-3 rounded-full bg-amber-400"></span>
+                        <span class="size-3 rounded-full bg-green-400"></span>
+                        <span
+                            class="ml-3 truncate rounded-md bg-slate-100 px-2 py-0.5 text-xs text-slate-400"
+                        >
+                            business.hasibu.africa/dashboard
+                        </span>
+                    </div>
+                    <Image
+                        src={dashboardDesktop}
+                        alt="Hasibu dashboard showing revenue, orders, low stock alerts and recent mobile-money transactions"
+                        class="w-full"
+                        priority
+                        width={1280}
+                        densities={[1, 2]}
+                    />
                 </div>
-                <Image
-                    src={dashboardDesktop}
-                    alt="Hasibu dashboard showing revenue, orders, low stock alerts and recent mobile-money transactions"
-                    class="w-full"
-                    priority
-                    width={1280}
-                    densities={[1, 2]}
-                />
             </div>
+
+            <!-- Mobile screenshot (no browser chrome) -->
+            <Image
+                src={dashboardMobile}
+                alt="Hasibu dashboard showing performance over time on a mobile device"
+                class="block w-full rounded-2xl shadow-2xl lg:hidden"
+                width={400}
+                densities={[1, 2]}
+                loading="eager"
+            />
 
             <!-- Floating: live sync pill (top-right) -->
             <div
@@ -148,7 +165,10 @@ const clients = [
                 <span
                     class="flex size-8 items-center justify-center rounded-full bg-green-50 text-green-600"
                 >
-                    <Icon name="material-symbols:check-rounded" class="size-5" />
+                    <Icon
+                        name="material-symbols:check-rounded"
+                        class="size-5"
+                    />
                 </span>
                 <div class="leading-tight">
                     <p class="text-sm font-semibold text-brand-dark">
